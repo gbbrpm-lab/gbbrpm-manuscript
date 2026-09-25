@@ -1,0 +1,404 @@
+\section{Introduction}
+
+\subsection{Background of the Study}\label{background-of-the-study}
+
+Urban drainage networks are essential infrastructure for managing
+stormwater and reducing rainfall-induced flooding. Because drainage
+components are physically connected and flow is directional, the
+condition of one component can have consequences beyond the location
+where the disturbance is first observed. Studies on drainage
+malfunction, clogging, and blockage show that impaired components can
+reduce effective conveyance, alter flood behavior, and contribute to
+wider system consequences rather than remaining purely local events
+\citep{haghbin2026}, \citep{funke2025,iqbal2024,wang2025}. This makes drainage assessment a network
+problem rather than only a collection of isolated local inspections.
+
+Previous drainage studies already demonstrate the practical value of
+prioritization. Complex-network and graph-based methods have been used
+to identify critical pipes, vulnerable components, weak links, and
+high-risk pathways by combining network structure with information such
+as hydraulic relevance, runoff, capacity, storage, discharge, failure
+combinations, or siltation condition \citep{simone2022,simone2023,reyes2020,dastgir2023,dastgir2024,meijer2023,zhang2025}. At the same
+time, computer-vision and monitoring approaches can identify local
+blockage, debris, or component condition at individual assets
+\citep{vandaele2024,iqbal2021,patil2023}. These two research directions address different
+parts of the decision problem. Local monitoring can show how impaired a
+component is at the point of observation, while graph-based approaches
+can show where a component is structurally or functionally important.
+The literature therefore supports the distinction between local
+condition information and network-context prioritization rather than
+treating them as interchangeable outputs \citep{simone2022}, \citep{dastgir2023},
+\citep{meijer2023,zhang2025,vandaele2024,iqbal2021,patil2023}.
+
+This distinction is important for inspection and maintenance decisions.
+In a network containing many connected components, decision-makers may
+need to determine which locations deserve earlier inspection,
+maintenance, or higher-fidelity analysis. Drainage studies on
+critical-pipe identification, weakest-link analysis, siltation chains,
+and multiple-pipe failure show that component importance can change when
+flow paths, capacity, network structure, or interacting failures are
+considered \citep{dastgir2023,dastgir2024,meijer2023,zhang2025}. Consequently, two components with similar
+local disturbance may differ in network-level importance, while a
+structurally central component may not necessarily carry the highest
+current modeled risk under the present disturbance and operating
+conditions. The practical need addressed by this study is therefore not
+simply to detect blockage or rank structural importance, but to compare
+components according to a risk state that incorporates both local and
+propagated network context.
+
+The broader propagation literature shows that this modeling issue
+extends beyond drainage. Influence-diffusion models propagate
+activation, epidemic models propagate compartment or infection states,
+cascading-failure models propagate load or failure, attack-graph and
+cyber-risk approaches propagate reachable compromise or risk, and
+financial and infrastructure models propagate exposure, loss, stress, or
+related system states \citep{kempe2003,kermack1927,pastor2001,humphries2021,buldyrev2010,he2019,shuang2017,sheyner2002,munoz2017,kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}. These model families
+demonstrate that network propagation is well established, but they also
+show that the quantity being propagated differs substantially across
+applications. The update and aggregation rules used in each model are
+therefore tied to the semantics of that state rather than being
+automatically transferable to a bounded comparative risk-index task
+\citep{kempe2003}, \citep{buldyrev2010}, \citep{sheyner2002,munoz2017,kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}.
+
+Across these model families, several recurring mechanisms are
+nevertheless evident. Topology establishes where interaction may occur;
+transmission or influence represents how strongly an effect transfers;
+susceptibility, capacity, vulnerability, or tolerance modifies how a
+relation or receiving context responds; current state influences later
+propagation; and incoming contributions require an aggregation rule
+consistent with the meaning of the propagated quantity \citep{kempe2003},
+\citep{buldyrev2010,he2019,shuang2017,sheyner2002,munoz2017,kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}. Drainage studies reinforce the same distinction by
+showing that structural measures are often augmented with hydraulic
+relevance, capacity, runoff, storage, discharge, or other operating
+information when functional importance is being assessed
+\citep{simone2022,simone2023,reyes2020,dastgir2023,dastgir2024,meijer2023,zhang2025}. These mechanisms provide useful building blocks, but
+the reviewed evidence does not clearly establish their particular
+integration into a lightweight directed-graph architecture whose primary
+output is a bounded continuous non-probabilistic comparative risk state.
+
+The present study therefore proposes the \textbf{Graph-Based Bounded Risk
+Propagation Model (GBBRPM)}. The term bounded describes a core property
+of the model rather than a drainage-specific disturbance: the model
+represents node risk as a normalized state constrained to the interval
+{[}0,1{]}. The architecture is generic in formulation, while its
+parameter definitions remain domain-specific. In a drainage
+instantiation, for example, local disturbance may represent blockage
+severity and susceptibility may be derived from load relative to
+effective capacity. A different domain may use the same core only if it
+can defensibly define its own nodes, directed relations, disturbance,
+susceptibility, transmission, and comparative risk semantics. The study
+therefore claims generic formulation rather than universal empirical
+generalizability.
+
+\subsection{Statement of the Problem}\label{statement-of-the-problem}
+
+The study addresses the problem of \textit{comparative risk prioritization in
+interconnected directed networks}, initially motivated by urban drainage.
+Existing detection and monitoring approaches can identify the condition
+of an individual drainage component, including visual blockage or
+obstruction, but these outputs are principally local to the monitored
+asset \citep{vandaele2024,iqbal2021,patil2023}. A local blockage score may therefore indicate
+that a component is impaired without directly showing how that condition
+should be prioritized once upstream influence, downstream connectivity,
+or relation-specific operating conditions are considered.
+
+Graph-based structural approaches provide an important second
+perspective because they use network topology to identify critical or
+vulnerable components. However, drainage studies show that structural
+importance and functional or operating response are not equivalent.
+Simone et al. and Reyes-Silva et al. show that structural centrality may
+diverge from hydraulically meaningful importance, while later
+critical-pipe and weakest-link studies augment graph structure with
+runoff, capacity, storage, discharge, or other domain information
+\citep{simone2022,simone2023,reyes2020,dastgir2023,dastgir2024,meijer2023}. Siltation-risk analysis similarly combines
+centrality, pipeline risk, edge vulnerability, and propagation pathways
+rather than relying on topology alone \citep{zhang2025}. Centrality can therefore
+identify structurally important locations, but it does not by itself
+model how a current disturbance recursively changes as it moves through
+relation-specific operating conditions.
+
+Existing propagation models address network influence from other
+directions, but their state semantics are commonly designed for
+different analytical questions. Influence-diffusion models use
+activation states \citep{kempe2003}, epidemic models use infection or compartment
+states \citep{kermack1927,pastor2001,humphries2021}, cascading-failure models use load, capacity, or
+failure states \citep{buldyrev2010,he2019,shuang2017}, attack-graph approaches use reachable
+compromise or probability \citep{sheyner2002}, \citep{munoz2017}, and cyber, finance,
+transportation, and infrastructure models use other forms of risk,
+exposure, loss, or dynamic system state \citep{kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}. These
+formulations are appropriate for their intended purposes, but they do
+not directly provide the bounded continuous non-probabilistic
+comparative risk state targeted in the present study.
+
+Taken together, the literature reveals an architectural and integrative
+research problem. The individual mechanisms relevant to the target task
+already exist: directed reachability is established in graph models;
+recursive current-state updating appears across contagion and cascading
+processes; capacity, vulnerability, susceptibility, or related response
+factors appear in infrastructure and risk models; and multiple forms of
+aggregation are used according to state semantics \citep{kempe2003,kermack1927,pastor2001,humphries2021,buldyrev2010,he2019,shuang2017,sheyner2002,munoz2017,kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}.
+Drainage research additionally demonstrates the practical importance of
+combining structural and operating information for prioritization
+\citep{simone2022,simone2023,reyes2020,dastgir2023,dastgir2024,meijer2023,zhang2025}. Within the reviewed evidence, however, these
+mechanisms are not clearly consolidated into one lightweight and
+interpretable architecture specifically intended to produce a bounded
+comparative risk state from local disturbance and propagated network
+context.
+
+The central problem of the study is therefore how to formulate a
+directed-graph model that combines local disturbance with recursively
+propagated network context so that nodes can be compared according to
+their current modeled risk state, while keeping topology,
+susceptibility, optional transmission, aggregation, and dependence
+conceptually distinct. Consistent with this central problem, the study
+addresses the following research questions:
+
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item How can local disturbance, current upstream risk,
+relation-specific susceptibility, optional transmission, directed
+reachability, and bounded multi-source aggregation be integrated into
+an interpretable directed-graph architecture?
+\item Does the resulting formulation preserve boundedness,
+monotonicity, and expected comparative-ranking behavior under
+controlled network conditions?
+\item How sensitive, robust, and computationally scalable is the model
+under changes in disturbance severity, susceptibility, topology,
+disturbance location, and multi-source configuration?
+\item Can the same bounded propagation architecture be instantiated
+coherently in drainage, software-dependency, and electrical-network
+cases without redefining its core update rule?
+\item What evidence does each domain provide for model behavior,
+structural applicability, preprocessing feasibility, and the boundary
+between comparative graph risk and domain-specific outcome prediction?
+\end{enumerate}
+
+\subsection{Objectives of the Study}\label{objectives-of-the-study}
+
+\subsubsection{General Objective}\label{general-objective}
+
+The general objective of the study is to design and computationally
+evaluate a \textbf{Graph-Based Bounded Risk Propagation Model (GBBRPM)}
+for interpretable comparative node-risk prioritization in directed
+networks and to examine its cross-domain applicability through drainage,
+software-dependency, and electrical-network cases.
+
+\subsubsection{Specific Objectives}\label{specific-objectives}
+
+Specifically, the study aims to:
+
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item synthesize the limitations and recurring mechanisms of local
+condition assessment, graph-based prioritization, and existing
+propagation models that are relevant to comparative network-risk
+prioritization;
+\item formulate a bounded continuous non-probabilistic recursive
+architecture that explicitly distinguishes local disturbance,
+relation-specific susceptibility, optional transmission, directed
+reachability, current-state updating, bounded multi-source aggregation,
+and dependence;
+\item computationally validate the generic GBBRPM architecture using
+controlled and reconstructed networks in terms of boundedness,
+monotonicity, ranking behavior, sensitivity, robustness, reconvergence
+effects, and computational scalability;
+\item instantiate the frozen architecture in drainage,
+software-dependency, and electrical-network cases using traceable
+topology and domain-appropriate disturbance, susceptibility, and
+transmission definitions; and
+\item compare the resulting evidence across domains while distinguishing
+behavioral validation, structural applicability, baseline-data
+verification, and independent outcome validation, and identify the
+model's scope boundaries and requirements for further refinement.
+\end{enumerate}
+
+\subsection{Significance of the Study}\label{significance-of-the-study}
+
+The study is significant because it addresses a decision-support space
+between purely local or structural prioritization and high-fidelity
+domain simulation. Drainage literature demonstrates both the usefulness
+of lightweight graph-based screening and the added physical detail
+provided by hydrodynamic and learned hydraulic models \citep{simone2022},
+\citep{dastgir2023}, \citep{meijer2023}, \citep{zhang2024}. GBBRPM does not attempt to replace those
+higher-fidelity approaches. Instead, it is intended to produce a bounded
+comparative risk state that allows components to be ranked relative to
+one another under a common network and parameterization.
+
+For urban drainage research, the study provides a way to connect local
+disturbance information with network context for preliminary
+prioritization of locations that may merit inspection, maintenance, or
+higher-fidelity hydraulic analysis. This positioning is consistent with
+drainage studies that use graph methods for critical-pipe or
+weakest-link screening while retaining hydrodynamic models for richer
+physical assessment \citep{dastgir2023}, \citep{meijer2023}. The model is therefore intended
+as a complementary prioritization layer rather than a hydraulic
+prediction model.
+
+For graph-based risk and propagation research, the study provides an
+explicit architecture in which topology, susceptibility, transmission,
+local disturbance, aggregation, and dependence are treated as
+conceptually distinct mechanisms rather than being collapsed into one
+undifferentiated coefficient. This separation follows recurring
+distinctions observed across influence, cascade, cyber-risk, financial,
+and infrastructure propagation models \citep{kempe2003}, \citep{buldyrev2010,he2019,shuang2017,sheyner2002,munoz2017,kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}. For
+the drainage application and any future domain-specific application, the
+model provides a reusable core propagation structure while requiring
+each instantiation to justify its own parameter definitions and any
+additional refinement layer.
+
+The study is also significant methodologically because interpretability
+is retained throughout the propagation process. A high modeled risk
+state at a node can be traced to the current upstream state,
+relation-specific susceptibility, optional transmission, local
+disturbance, and the bounded aggregation mechanism. This traceability is
+especially relevant to comparative prioritization because the purpose is
+not only to produce an ordering, but also to explain why one component
+receives a higher modeled risk state than another.
+
+\subsection{Scope and Limitations}\label{scope-and-limitations}
+
+The study focuses on the design, computational validation, and
+cross-domain evaluation of GBBRPM as a lightweight directed-graph
+architecture for comparative bounded-risk propagation. The generic core represents a node
+risk state, a local disturbance, relation-specific susceptibility,
+optional transmission or influence, and an edge contribution. The risk
+state and the model's bounded parameters are represented on normalized
+{[}0,1{]} scales.
+
+The evaluation has two complementary layers. The first evaluates the
+generic formulation on directed acyclic graphs using one-pass topological
+processing, controlled synthetic networks, diagnostic baselines,
+perturbation trials, mathematical property tests, and scalability tests.
+The second examines cross-domain instantiation through drainage,
+software-dependency, and electrical-network cases. Drainage supplies
+behavioral tests and a SWMM external-reference comparison; software
+supplies real-topology structural applicability and transmission
+sensitivity evidence; and electrical data supply real-topology and
+baseline-preprocessing verification. Event-centered electrical outcome
+validation remains pending because the available baseline measurements
+cover normal operation rather than the documented switching events.
+
+The study does not interpret the bounded risk state as a calibrated
+probability of failure, blockage, or any other event. The base model
+also does not represent cycles, bidirectional feedback, explicit
+temporal dynamics, hydraulic backwater, surcharge, ponding, flow
+redistribution, or common-cause dependence correction. These exclusions
+are important because drainage and broader propagation literature show
+that feedback, shared dependencies, and richer physical state
+interactions may require iterative, probabilistic, or high-fidelity
+formulations beyond a one-pass lightweight graph model \citep{buldyrev2010},
+\citep{shuang2017}, \citep{wu2026}, \citep{petrone2018}, \citep{dastgir2024}, \citep{zhang2024}. Where heterogeneous
+transmission cannot yet be empirically justified, the baseline
+transmission term is kept neutral. Likewise, drainage-specific
+susceptibility mappings such as load relative to effective capacity are
+treated as instantiation choices rather than universal components of the
+generic model.
+
+The study claims generic formulation and demonstrated cross-domain
+instantiability within the three evaluated cases, not universal empirical
+generalizability. The cases test different claims and do not provide
+equivalent outcome-validation strength. A domain may instantiate the core
+only if it can provide defensible definitions for nodes, directed
+relations, local disturbance, susceptibility, optional transmission, and
+comparative risk. Domain-specific prediction, calibration, and operational
+usefulness must be justified and validated separately from the generic
+core.
+
+\subsection{Conceptual Framework}\label{conceptual-framework}
+
+The conceptual framework of the study begins with local disturbance and
+directed network context. The current risk state at an upstream node is
+transformed into a relation-specific contribution according to
+susceptibility and, where justified, optional transmission. Multiple
+incoming contributions are then combined with any local disturbance at
+the receiving node using a bounded aggregation rule, producing an
+updated comparative risk state. That updated state can in turn influence
+later downstream relations, allowing the modeled risk state to evolve
+recursively through the network. The resulting node states provide the
+basis for comparative prioritization.
+
+Figure~\ref{fig:conceptual-framework} distinguishes the domain-supplied
+inputs, the generic bounded propagation core, and the comparative
+decision-support output.
+
+\input{figures/fig_conceptual_framework}
+
+For a directed relation $i\to j$, the generic edge contribution is:
+
+\[Q_{ij}=S_{ij}\tau_{ij}R_i\eqtag{1-1}\]
+
+where $R_i$ is the current upstream normalized risk state, $S_{ij}$ is
+relation-specific susceptibility, and $\tau_{ij}$ is optional transmission or
+influence.
+
+The receiving-node state is:
+
+\[R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})\eqtag{1-2}\]
+
+where $B_j$ is the local disturbance and $P(j)$ is the set of predecessors of
+node $j$. The multiplicative-complement form is used as a bounded
+saturating aggregation mechanism. Although it is algebraically similar
+to noisy-OR, it is not interpreted as a probabilistic union because the
+inputs are bounded risk contributions rather than calibrated
+probabilities.
+
+The resulting $R_j$ is the node's current modeled risk state. It may then
+serve as the upstream state for later relations, allowing risk to be
+recursively updated through the network. Node ranking is therefore a
+decision-support output derived from the resulting risk states rather
+than the propagation mechanism itself.
+
+\subsection{Definition of Terms}\label{definition-of-terms}
+ 
+{\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{@{}p{\dimexpr0.28\linewidth-\tabcolsep\relax}p{\dimexpr0.72\linewidth-\tabcolsep\relax}@{}}
+\toprule
+Term & Definition \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+ 
+Comparative risk prioritization. &
+Ranking components according to their modeled risk states relative to one another under the same network and parameterization. \\
+\addlinespace
+ 
+GBBRPM. &
+Graph-Based Bounded Risk Propagation Model, the generically formulated directed-graph architecture proposed in this study. \\
+\addlinespace
+ 
+Normalized risk state. &
+A dimensionless continuous value in $[0,1]$ representing the current modeled level of network-context risk at a node. It is not a calibrated probability of an event. \\
+\addlinespace
+ 
+Local disturbance. &
+A bounded input representing risk or disturbance introduced directly at a node according to the selected domain. \\
+\addlinespace
+ 
+Susceptibility. &
+A bounded relation-specific factor representing how strongly a relation or receiving context responds under the evaluated condition. \\
+\addlinespace
+ 
+Transmission or influence. &
+An optional bounded factor describing how strongly influence transfers along an existing directed relation. \\
+\addlinespace
+ 
+Edge contribution. &
+The relation-specific contribution generated from current upstream risk, susceptibility, and optional transmission. \\
+\addlinespace
+ 
+Topology or reachability. &
+The directed network structure that determines which nodes and relations can participate in propagation. \\
+\addlinespace
+ 
+Bounded aggregation. &
+The multiplicative-complement mechanism used to combine local disturbance and multiple incoming contributions while preserving the $[0,1]$ state range. \\
+\addlinespace
+ 
+Domain-specific instantiation. &
+The process of defining the generic model's nodes, edges, disturbance, susceptibility, transmission, and any optional refinement parameters according to a particular application domain. \\
+\addlinespace
+ 
+Generic formulation. &
+A model architecture whose core propagation logic is not hard-coded to one application domain. Generic formulation does not imply that the model has been empirically evaluated across all domains. \\
+ 
+\end{longtable}
+}

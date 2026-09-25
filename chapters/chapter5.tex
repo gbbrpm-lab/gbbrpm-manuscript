@@ -1,0 +1,116 @@
+\section{Summary and Conclusion}\label{summary-and-conclusion}
+
+\subsection{Overview}
+
+This study designed and evaluated GBBRPM v1 as a bounded recursive model
+for comparative node-risk prioritization in directed acyclic networks.
+The evidence combines controlled architecture tests with three
+domain-specific cases: drainage, software dependency, and electrical
+networks. The cases intentionally support different claims and are not
+presented as equivalent forms of outcome validation.
+
+\subsection{Summary of Findings}
+
+\subsubsection{Architecture Behavior}
+
+Across the controlled N1--N5 experiments, GBBRPM preserved the declared
+$[0,1]$ bounds and monotone response to increases in local disturbance
+and susceptibility. Recursive current-state propagation, heterogeneous
+edge conditions, disturbance location, and multi-source configuration
+materially affected both risk magnitude and ranking. Randomized property
+tests passed all 600 trials for boundedness, monotonicity, full local
+disturbance, and zero-susceptibility gating.
+
+Ranking robustness remained high under modest perturbations, although
+agreement among the highest-priority nodes declined faster than the
+overall Spearman ordering. The reconvergence diagnostic also showed that
+shared ancestry can be counted through multiple paths, especially in N5.
+This is a known boundary of the local multiplicative-complement
+aggregator rather than evidence of probabilistic independence.
+
+The sparse-DAG timing experiment was consistent with the expected
+one-pass $O(|V|+|E|)$ implementation. Median execution time increased
+from approximately 1.63 ms at 20 nodes to 16.65 ms at 1000 nodes under
+the reported environment.
+
+\subsubsection{Drainage Evidence and Hydraulic Boundary}
+
+The drainage case supplied the most complete behavioral evaluation. The
+controlled experiments demonstrated the effects of attenuation,
+branching, convergence, reconvergence, local disturbance, susceptibility,
+and multiple active sources. However, the 12-scenario SWMM comparison
+produced negative mean rank association and low top-20\% overlap for
+both maximum-depth and flooding outcomes. Hydraulic worsening also
+occurred outside the model's strictly downstream region.
+
+These findings do not support interpreting the GBBRPM index as a
+hydraulic predictor. Instead, they identify a clear scope boundary:
+GBBRPM represents lightweight downstream comparative propagation,
+whereas SWMM represents hydraulic mechanisms such as backwater,
+surcharge, ponding, and flow redistribution.
+
+\subsubsection{Software-Dependency Evidence}
+
+The Express 4.18.2 case instantiated the frozen core on a real topology
+of 71 packages and 128 dependency edges, with seven evidence-backed
+affected versions. Express root risk increased from 0.5000 to 0.9975
+across the transmission sweep and reached rank one by $\tau=0.50$.
+Ranking agreement with the $\tau=1$ reference remained high.
+
+This result supports real-topology structural applicability and expected
+sensitivity to transmission. It does not establish that the modeled
+index is an exploit probability or a predictor of future incidents.
+
+\subsubsection{Electrical-Network Evidence}
+
+The electrical case verified import and baseline preprocessing for 187
+bus records, 177 active directed connections, and 269 channel files.
+The workflow handled 38 empty archive members without terminating,
+reported mapping and missingness explicitly, identified 54 usable
+voltage channels, and measured 98.31\% overall timestamp coverage.
+
+The available magnitudes cover normal operation on November 14--15,
+2024, while the requested switching events occurred on November 13.
+Consequently, the case supports real-topology construction and baseline
+data-pipeline verification, but electrical event-response validation
+remains pending.
+
+\subsection{Conclusions}
+
+Within the tested scope, the study concludes that:
+
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+  \item GBBRPM v1 provides a deterministic, bounded, and interpretable
+  recursive architecture for comparative risk prioritization on DAGs.
+  \item Network structure and heterogeneous relation conditions can
+  change prioritization beyond what local disturbance alone indicates.
+  \item The model is broadly robust to modest input perturbations, but
+  exact membership of the highest-priority set becomes less stable as
+  uncertainty increases.
+  \item The same frozen propagation rule can be instantiated coherently
+  in the tested drainage, software, and electrical network structures.
+  This supports cross-domain instantiability, not universal validity.
+  \item The SWMM disagreement establishes that GBBRPM should not be used
+  as a substitute for hydraulic simulation.
+  \item The current electrical evidence verifies topology and baseline
+  preprocessing only; event-centered validation cannot be claimed until
+  temporally aligned measurements are obtained.
+\end{enumerate}
+
+\subsection{Limitations}
+
+GBBRPM v1 is limited to directed acyclic graphs and one-pass propagation.
+It does not model cycles, feedback, bidirectional influence, explicit
+time evolution, or common-cause dependence correction. The bounded risk
+state is a comparative index rather than a calibrated probability.
+Domain-specific disturbance, susceptibility, and transmission mappings
+remain dependent on the quality and defensibility of their input
+evidence.
+
+The drainage case uses controlled networks and simulated hydraulic
+reference outcomes rather than a calibrated operational field study.
+The software case demonstrates structural applicability and sensitivity
+rather than observed incident prediction. The electrical case contains
+substantial baseline coverage but no measurements aligned with the
+requested event windows. The three cases therefore cannot be pooled as
+if they offered identical empirical strength.

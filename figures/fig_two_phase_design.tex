@@ -1,0 +1,166 @@
+\begin{figure}[H]
+\centering
+\resizebox{0.96\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily\footnotesize,
+  proc/.style={
+    draw=gbgray,
+    line width=.8pt,
+    fill=white,
+    minimum width=4.7cm,
+    minimum height=.9cm,
+    align=center
+  },
+  phase/.style={
+    draw=gbnavy,
+    line width=1.1pt,
+    fill=gblight,
+    minimum width=4.7cm,
+    minimum height=1cm,
+    align=center
+  },
+  gate/.style={
+    diamond,
+    draw=gbnavy,
+    line width=1pt,
+    fill=white,
+    aspect=2.5,
+    minimum width=3.7cm,
+    minimum height=.9cm,
+    align=center
+  },
+  side/.style={
+    draw=gbgray,
+    line width=.8pt,
+    fill=white,
+    minimum width=3.7cm,
+    minimum height=.9cm,
+    align=center
+  },
+  arr/.style={
+    -{Latex[length=2mm]},
+    line width=.8pt,
+    draw=gbgray
+  },
+  branchlabel/.style={
+    font=\sffamily\scriptsize,
+    fill=white,
+    inner sep=1pt
+  }
+]
+
+% --------------------------------------------------
+% Phase 1: architecture validation
+% --------------------------------------------------
+
+\node[phase] (p1) {
+  \textbf{Phase 1 inputs}\\
+  synthetic DAGs, reconstructed inputs,\\
+  and SWMM reference
+};
+
+\node[proc, below=6mm of p1] (tests) {
+  Property tests, scenarios, baselines,\\
+  robustness, reconvergence, and scalability
+};
+
+\node[gate, below=7mm of tests] (g1) {
+  behavior consistent?
+};
+
+\node[phase, below=7mm of g1] (freeze) {
+  Freeze GBBRPM v1 core
+};
+
+\node[side, left=9mm of g1] (revise) {
+  Revise architecture or\\
+  declared assumptions
+};
+
+% --------------------------------------------------
+% Phase 2: real-data instantiation
+% --------------------------------------------------
+
+\node[proc, right=31mm of p1] (acquire) {
+  Online-first discovery and\\
+  targeted agency acquisition
+};
+
+\node[gate, below=7mm of acquire] (g2) {
+  eligibility gate passed?
+};
+
+\node[phase, below=7mm of g2] (p2) {
+  \textbf{Phase 2 instantiation}\\
+  construct $B_i,L_{ij},C_{ij},S_{ij}$\\
+  with documented provenance
+};
+
+\node[proc, below=6mm of p2] (eval) {
+  Execute propagation, rank nodes, and\\
+  compare with independent evidence
+};
+
+\node[side, right=9mm of g2] (missing) {
+  Request missing fields,\\
+  select another case, or exclude
+};
+
+% --------------------------------------------------
+% Phase 1 connections
+% --------------------------------------------------
+
+\draw[arr] (p1.south) -- (tests.north);
+\draw[arr] (tests.south) -- (g1.north);
+
+\draw[arr]
+  (g1.south)
+  -- node[branchlabel, right]{yes}
+  (freeze.north);
+
+\draw[arr]
+  (g1.west)
+  -- node[branchlabel, above]{no}
+  (revise.east);
+
+\draw[arr]
+  (revise.north)
+  |- (p1.west);
+
+% --------------------------------------------------
+% Transition from Phase 1 back upward to Phase 2
+% --------------------------------------------------
+
+\draw[arr]
+  (freeze.east)
+  -- ++(20mm,0)
+  |- (acquire.west);
+
+% --------------------------------------------------
+% Phase 2 connections
+% --------------------------------------------------
+
+\draw[arr] (acquire.south) -- (g2.north);
+
+\draw[arr]
+  (g2.south)
+  -- node[branchlabel, right]{yes}
+  (p2.north);
+
+\draw[arr] (p2.south) -- (eval.north);
+
+\draw[arr]
+  (g2.east)
+  -- node[branchlabel, above]{no}
+  (missing.west);
+
+\draw[arr]
+  (missing.north)
+  |- (acquire.east);
+
+\end{tikzpicture}%
+}
+
+\caption{Two-phase validation and application procedure, including the architecture-behavior decision and the real-data eligibility gate.}
+\label{fig:two-phase-design}
+\end{figure}

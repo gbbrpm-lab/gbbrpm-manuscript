@@ -1,0 +1,34 @@
+\begin{figure}[H]
+\centering
+\resizebox{0.92\textwidth}{!}{%
+\begin{tikzpicture}[
+  node distance=24mm,
+  entity/.style={circle,draw=gbnavy,line width=1pt,fill=gblight,
+    minimum size=15mm,align=center,font=\bfseries},
+  arr/.style={-{Latex[length=2.5mm]},line width=.9pt,draw=gbnavy},
+  note/.style={draw=gbgray,rounded corners,fill=white,align=center,
+    inner sep=5pt,font=\small},
+  local/.style={-{Latex[length=2mm]},dashed,draw=gbgray,line width=.8pt}
+]
+\node[entity] (n1) {$N_1$};
+\node[entity, right=of n1] (n2) {$N_2$};
+\node[entity, right=of n2] (n3) {$N_3$};
+\node[entity, above=18mm of n2] (n4) {$N_4$};
+
+\draw[arr] (n1) -- node[above,font=\small] {$S_{12},\tau_{12}$} (n2);
+\draw[arr] (n2) -- node[above,font=\small] {$S_{23},\tau_{23}$} (n3);
+\draw[arr] (n4) -- node[right,font=\small] {$S_{42},\tau_{42}$} (n2);
+
+\node[note, below=18mm of n1] (b1) {local input\\$B_1$};
+\node[note, below=18mm of n2] (b2) {local input\\$B_2$};
+\node[note, below=18mm of n3] (rank) {derived states\\$R_1,R_2,R_3,R_4$\\$\Downarrow$ comparative rank};
+\draw[local] (b1) -- (n1);
+\draw[local] (b2) -- (n2);
+\draw[arr] (n3) -- (rank);
+
+\node[note, above=7mm of n1] {upstream state $R_1$};
+\node[note, above=7mm of n3] {updated state $R_3$};
+\end{tikzpicture}}
+\caption{Generic directed-node example showing local inputs, relation-level modifiers, recursive state propagation, convergence at $N_2$, and ranking from the computed node states.}
+\label{fig:generic-node-example}
+\end{figure}

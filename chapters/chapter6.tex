@@ -1,0 +1,33 @@
+\section{Recommendations}\label{recommendations}
+
+The following recommendations follow directly from the evidence limits
+identified in the drainage, software-dependency, and electrical-network
+cases:
+
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+  \item Obtain authorized electrical measurements covering the four
+  requested November 13 event groups and execute the preregistered
+  event-window analysis.
+  \item Evaluate domain-specific rankings against independent outcomes
+  that were not used to construct the model inputs.
+  \item Obtain provenance-complete operational drainage observations so
+  that the controlled and SWMM-based findings can be compared with field
+  conditions rather than being interpreted as field validation.
+  \item Investigate ancestry-aware or dependence-aware aggregation for
+  reconvergent paths while retaining the current v1 formulation as the
+  comparison baseline.
+  \item Calibrate or justify heterogeneous transmission and
+  susceptibility functions separately within each domain.
+  \item Develop explicit extensions for cyclic, bidirectional, and
+  temporal networks rather than silently applying the DAG evaluator
+  outside its assumptions.
+  \item Repeat the cross-domain protocol on additional datasets to test
+  out-of-sample applicability without overstating generalizability.
+\end{enumerate}
+
+These recommendations preserve the distinction between the model's
+validated computational behavior and the empirical claims that still
+require domain-specific evidence. GBBRPM v1 is not a universal predictor,
+a hydraulic simulator, or a completed electrical event model; subsequent
+work should retain those interpretation boundaries while strengthening
+field evidence and dependence handling.

@@ -1,0 +1,468 @@
+\section{Methodology}\label{methodology}
+
+\hypertarget{research-design}{%
+\subsection{Research Design}\label{research-design}}
+
+The study adopts a \textbf{quantitative model-design,
+computational-validation, and cross-domain evaluation research design}.
+Its purpose is to formulate, implement, and evaluate the Graph-Based
+Bounded Risk Propagation Model (GBBRPM) as a lightweight directed-graph
+comparative-risk propagation and prioritization model. The first
+evaluation layer tests internal mathematical behavior, controlled
+mechanism isolation, comparative prioritization, robustness, dependence
+limitations, and computational efficiency. The second layer examines
+whether the frozen architecture can be mapped coherently to drainage,
+software-dependency, and electrical-network data without changing its
+core update rule. The design does not establish universal cross-domain
+performance or hydraulic or electrical predictive equivalence.
+
+The study does not use the synthetic networks to estimate universal model parameters. Instead, synthetic graph structures and bounded inputs are treated as \textbf{controlled mechanism-isolation inputs}. This permits recursive propagation, branching, convergence, reconvergence, susceptibility variation, local disturbance, and multi-source aggregation to be examined under reproducible conditions. The generic architecture remains fixed, whereas the meanings and calculations of local disturbance, susceptibility, and optional transmission belong to the selected domain instantiation and require domain-specific justification.
+
+\hypertarget{alignment-of-objectives-methods-and-outputs}{%
+\subsubsection{Alignment of Objectives, Methods, and Outputs}\label{alignment-of-objectives-methods-and-outputs}}
+
+The methodology is derived directly from the objectives established in Chapter 1. The following mapping makes explicit how each objective is operationalized and what evidence or output is produced.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.30}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.40}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.30}}@{}}
+\caption{Alignment of objectives, methods, and expected outputs.}\\
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Objective component
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Methodological response
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Expected evidence or output
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Synthesize limitations and recurring mechanisms relevant to comparative network-risk prioritization & Chapter 2 literature synthesis provides the pre-methodological basis for the variables, state semantics, comparison conditions, and scope boundaries adopted in this chapter. & Literature-supported design requirements and architectural research gap \\
+Formulate a bounded continuous non-probabilistic recursive architecture & Sections 3.2--3.4 define the graph assumptions, model components, equations, evaluation order, and ranking procedure. & Frozen GBBRPM equations, declared semantics, and deterministic evaluator \\
+Instantiate the generic core using domain-specific parameter definitions & Sections 3.5--3.7 use the drainage-motivated \(L/C\) mapping during controlled validation, while Section 3.14 defines the drainage, software, and electrical case protocols. & Reproducible controlled inputs and documented cross-domain mappings \\
+Evaluate mathematical behavior, ranking, sensitivity, robustness, reconvergence, and scalability & Sections 3.7--3.13 define diagnostic comparators, property tests, scenario sweeps, perturbation trials, dependence diagnostics, and runtime experiments. & Boundedness and monotonicity checks, node-risk rankings, sensitivity and robustness metrics, reconvergence findings, and runtime measurements \\
+Identify scope boundaries and requirements for later refinement or higher-fidelity validation & Sections 3.11, 3.14, and 3.15 separate dependence limitations, domain evidence roles, external-reference evaluation, and excluded behaviors. & Explicit interpretation limits and evidence-based extension requirements \\
+\end{longtable}
+
+\hypertarget{two-phase-validation-and-application-design}{%
+\subsubsection{Layered Validation and Cross-Domain Design}\label{two-phase-validation-and-application-design}}
+
+The study explicitly separates validation of the generic architecture
+from evaluation of domain-specific instantiations. The same equation is
+retained across layers, but each evidence source is interpreted only for
+the claim it can support.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\caption{Layered validation and cross-domain evaluation design.}\label{tab:two-phase-design}\\
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Phase
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Purpose
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Data basis
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Claim supported
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Layer 1 --- Architecture validation} & Determine whether the bounded recursive formulation behaves as mathematically and computationally intended. & Controlled synthetic DAGs, reconstructed validation inputs, bounded scenario values, perturbation trials, and scalability graphs & Internal behavior, mechanism isolation, ranking response, robustness, dependence limitations, and computational properties \\
+\textbf{Layer 2 --- Cross-domain evaluation} & Test whether the frozen generic roles can be instantiated coherently without changing the core rule. & Drainage and SWMM scenarios, a real software dependency graph with vulnerability evidence, and a real electrical topology with baseline measurements & Behavioral and reference evidence for drainage, structural and sensitivity evidence for software, and topology and preprocessing evidence for electrical data \\
+\end{longtable}
+
+Architecture validation and cross-domain evaluation answer different
+questions. Controlled tests establish intended behavior; domain cases
+test mapping and applicability within their available evidence. A case
+is not described as outcome validation unless an independent reference
+for the relevant outcome is available. This distinction is especially
+important for the electrical case, whose baseline measurements verify
+the importer and normal-operation coverage but do not cover the requested
+switching-event windows.
+
+\hypertarget{graph-representation-and-model-assumptions}{%
+\subsection{Graph Representation and Model Assumptions}\label{graph-representation-and-model-assumptions}}
+
+The generic model is defined on a directed graph: \[
+G=(V,E)
+\eqtag{3-1}\] where \(V\) is the set of entities and \(E\) is the set of directed relations. For GBBRPM v1, the evaluated graph is restricted to a \textbf{directed acyclic graph (DAG)} so that node states can be computed once in topological order from upstream to downstream. The topological sequence is a computational evaluation order and is not interpreted as physical time.
+
+Each node \(i\) carries a normalized continuous risk state: \[
+R_i\in[0,1]
+\eqtag{3-2}\] where \(R_i\) is a \textbf{dimensionless normalized risk index rather than a probability}. Accordingly, a value such as \(R_i=0.70\) indicates a relatively high modeled risk under the adopted normalization and does not represent a 70\% probability of failure.
+
+For each directed relation \(i\rightarrow j\), the incoming risk contribution is defined as: \[
+Q_{ij}=S_{ij}\tau_{ij}R_i
+\eqtag{3-3}\] where \(S_{ij}\in[0,1]\) is relation-specific operating susceptibility, \(\tau_{ij}\in[0,1]\) is an optional transmission or influence factor, and \(R_i\) is the current propagated upstream risk.
+
+The receiving-node risk is computed as: \[
+R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})
+\eqtag{3-4}\] where \(B_j\in[0,1]\) is the local disturbance severity and \(P(j)\) is the predecessor set of node \(j\).
+
+\hypertarget{interpretation-of-model-components}{%
+\subsection{Interpretation of Model Components}\label{interpretation-of-model-components}}
+
+GBBRPM separates five conceptual roles. \textbf{Topology or reachability} determines where influence can travel. \textbf{Transmission or influence} represents how strongly influence transfers along an existing relation. \textbf{Susceptibility} represents the relation-specific or receiving-context response under the evaluated condition. \textbf{Local disturbance} represents risk introduced directly at a node. \textbf{Dependence} refers to shared-origin, shared-path, or common-cause effects and is not assumed to be resolved by the local aggregation rule.
+
+The multiplicative-complement operator is used as a \textbf{bounded saturating aggregation function}. Its algebraic form is related to noisy-OR formulations, but it is not assigned probabilistic semantics in GBBRPM. Its suitability is evaluated through required mathematical behavior: boundedness, monotonicity, zero-contribution behavior, saturation, and simultaneous representation of inherited and local contributions.
+
+Figure~\ref{fig:generic-node-example} provides the generic node example
+requested during consultation. It deliberately uses abstract nodes rather
+than a drainage, software, or electrical topology. The figure shows how a
+local input enters a node, how the current upstream state is modified by
+relation-specific susceptibility and optional transmission, how multiple
+relations converge at a receiver, and how the final computed states become
+the basis for comparative ranking. Domain cases later replace these abstract
+labels with evidence-supported meanings without changing the core update
+rule.
+
+\input{figures/fig_generic_node_example}
+
+For the v1 baseline, neutral transmission is used: \[
+\tau_{ij}=1
+\eqtag{3-5}\] This avoids introducing unsupported heterogeneous transfer coefficients. Under this setting, transmission remains an explicit architectural interface but does not numerically differentiate edges. Consequently, v1 does not claim to demonstrate or validate heterogeneous transmission effects. The implemented baseline evaluates topology-defined reachability, susceptibility, current-state recursion, local disturbance, and bounded aggregation.
+
+\hypertarget{overall-methodological-and-computational-procedure}{%
+\subsection{Overall Methodological and Computational Procedure}\label{overall-methodological-and-computational-procedure}}
+
+\hypertarget{end-to-end-research-workflow}{%
+\subsubsection{End-to-End Research Workflow}\label{end-to-end-research-workflow}}
+
+The complete methodology follows a traceable sequence from input preparation to scope evaluation:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Select and document the input configuration.} Identify whether
+  the run uses a controlled synthetic topology, the historical
+  reconstructed validation inputs, the SWMM external-reference
+  configuration, the software-dependency case, or the electrical-network
+  case. Record the source, version or retrieval date, coverage, permitted
+  use, and whether each field is observed, documented, derived, or
+  assumed.
+\item
+  \textbf{Prepare and validate the graph data.} Load the node and edge tables, confirm unique identifiers and valid directed relations, check that bounded inputs lie within \([0,1]\), and verify that the graph is acyclic.
+\item
+  \textbf{Construct domain-specific parameters.} Assign node-level local disturbance \(B_i\). For the drainage instantiation, obtain or assign edge load \(L_{ij}\) and effective capacity \(C_{ij}\), calculate \(u_{ij}=L_{ij}/C_{ij}\), and derive \(S_{ij}=\min(1,u_{ij})\). The v1 baseline sets \(\tau_{ij}=1\).
+\item
+  \textbf{Execute bounded risk propagation.} Evaluate nodes in topological order, calculate incoming contributions \(Q_{ij}\), and compute final node states \(R_j\).
+\item
+  \textbf{Produce comparative prioritization.} Order final node states in descending order and retain ties explicitly.
+\item
+  \textbf{Run controlled scenarios and diagnostic comparators.} Apply the declared severity, susceptibility, location, multi-source, and intermediate-disturbance scenarios under local-only, uniform-susceptibility, and heterogeneous-susceptibility conditions.
+\item
+  \textbf{Evaluate mathematical behavior and robustness.} Perform boundedness, monotonicity, boundary, sensitivity, perturbation, ranking-stability, reconvergence, and scalability analyses.
+\item
+  \textbf{Conduct the external-reference comparison.} Compare GBBRPM ranking or modeled-risk patterns with independently generated SWMM outputs while preserving the difference between comparative graph risk and hydraulic state.
+\item
+  \textbf{Report results and scope boundaries.} Export inputs, configuration metadata, node-risk outputs, rankings, summary metrics, and limitations for interpretation in Chapter 4.
+\end{enumerate}
+
+  \textbf{Methodological flow:} Input provenance and preparation $\rightarrow$ graph construction and validation $\rightarrow$ parameter calculation $\rightarrow$ bounded propagation $\rightarrow$ comparative ranking $\rightarrow$ scenario and baseline testing $\rightarrow$ robustness and scalability analysis $\rightarrow$ external-reference comparison $\rightarrow$ scope interpretation.
+
+\hypertarget{gbbrpm-evaluation-algorithm}{%
+\subsubsection{GBBRPM Evaluation Algorithm}\label{gbbrpm-evaluation-algorithm}}
+
+The evaluator first verifies that the input graph is directed and acyclic and that all declared bounded inputs are valid. A topological ordering is then generated. For every node \(j\) in that order, the evaluator retrieves its local disturbance \(B_j\) and the current propagated states of all predecessors. Each incoming contribution is computed as: \[
+Q_{ij}=S_{ij}\tau_{ij}R_i
+\eqtag{3-6}\] The node state is then calculated using: \[
+R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})
+\eqtag{3-7}\] For a node with no predecessors, the empty product equals one, giving \(R_j=B_j\). Each computed state is stored immediately and becomes the current upstream state used by later downstream evaluations. This single-pass recursion therefore propagates the \textbf{current accumulated state} rather than repeatedly referencing only the original source disturbance.
+
+After all node states have been computed, comparative prioritization is obtained by ordering nodes in descending order of their final \(R_i\) values. Ranking is a derived output of propagation, not a separate propagation mechanism. Tied values receive the same risk standing and are reported explicitly rather than separated through an unsupported tie-breaking rule.
+
+\hypertarget{controlled-synthetic-network-set}{%
+\subsection{Controlled Synthetic Network Set}\label{controlled-synthetic-network-set}}
+
+Validation used five synthetic DAG structures selected to isolate distinct propagation behaviors.
+
+Figure~\ref{fig:network-set} shows the directed topology and principal diagnostic role of each controlled network.
+
+\input{figures/fig_network_set}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.20}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.35}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.45}}@{}}
+\caption{Controlled synthetic network set and diagnostic purpose.}\label{tab:network-set}\\
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Network
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Structure
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Primary purpose
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+N1 & Linear & Propagation depth and attenuation \\
+N2 & Branching & Divergence and downstream path differences \\
+N3 & Converging & Bounded multi-source aggregation \\
+N4 & Diamond / reconverging & Shared-origin overlap and dependence stress \\
+N5 & Mixed & Multiple sources, branching, convergence, intermediate disturbance, and heterogeneous susceptibility \\
+\end{longtable}
+
+The executable historical validation configuration used the recovered \textbf{historical reconstructed validation inputs} for these five networks. These inputs were originally reconstructed during earlier validation work and were computationally checked against preserved historical baseline and comparator behavior. They were therefore treated as the reproducible input set for the historical validation pipeline, while still being distinguished from any lost original raw edge-by-edge dataset.
+
+The synthetic structures are not calibrated representations of a specific physical drainage system. Their purpose is to provide transparent and reproducible test environments in which individual mechanisms can be examined separately before combined stress tests are performed. Graph topology and the bounded propagation equations test the generic core, while the historical \(L/C\)-based susceptibility values are treated explicitly as a drainage-motivated parameter instantiation rather than as a universal definition of susceptibility.
+
+\hypertarget{experimental-inputs-factors-and-scenario-design}{%
+\subsection{Experimental Inputs, Factors, and Scenario Design}\label{experimental-inputs-factors-and-scenario-design}}
+
+Each Phase 1 experimental case contained a directed node set, a directed edge set, node-level local disturbance values \(B_i\), and edge-level susceptibility values \(S_{ij}\). The generic evaluator accepts bounded susceptibility directly. For the frozen drainage baseline used by the historical validation workflow, susceptibility was derived from edge load \(L_{ij}\) and effective capacity \(C_{ij}\) as: \[
+u_{ij}=\frac{L_{ij}}{C_{ij}},\qquad S_{ij}=\min(1,u_{ij})
+\eqtag{3-8}\] with neutral transmission \(\tau_{ij}=1\). Thus, \(G\), \(B_i\), \(L_{ij}\), and \(C_{ij}\) are supplied inputs for this instantiation, while \(S_{ij}\), \(Q_{ij}\), \(R_i\), and the resulting node ranking are derived computationally. The \(L/C\) mapping is used because it is bounded, monotone, parameter-light, and interpretable within the drainage context; it is not asserted as a universal susceptibility construction.
+
+\hypertarget{data-classification-and-provenance}{%
+\subsubsection{Data Classification and Provenance}\label{data-classification-and-provenance}}
+
+The methodology distinguishes input origin from analytical role so that synthetic, reconstructed, simulated, and operational data are not treated as interchangeable.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\caption{Data provenance classification and methodological role.}\\
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Data component
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Current provenance classification
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Methodological role
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Permitted interpretation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+N1--N5 graph structures & Controlled synthetic DAGs & Isolate linear, branching, converging, reconverging, and mixed propagation behavior & Mechanism-oriented computational validation only \\
+Historical reconstructed node and edge inputs & Recovered reconstructed validation inputs verified against preserved historical behavior; not the lost original raw dataset & Reproduce the frozen 136-scenario validation workflow and comparator results & Reproducible historical experimental configuration, not field observation \\
+Drainage \(L_{ij}\) and \(C_{ij}\) values & Inputs associated with the selected historical drainage-motivated instantiation & Construct bounded susceptibility through the declared \(L/C\) mapping & Domain-specific parameterization; empirical representativeness depends on documented source provenance \\
+SWMM model and blockage scenarios & Independent hydraulic simulation configuration & External-reference and scope-boundary evaluation & Higher-fidelity simulated hydraulic response, not direct ground truth for \(R_i\) \\
+GBBRPM scenario, ranking, robustness, and runtime outputs & Computationally generated results & Evaluate behavior, prioritization, sensitivity, robustness, and scalability & Evidence about the implemented model under the declared inputs and assumptions \\
+\end{longtable}
+
+\textbf{Evidence-role requirement.} Reconstructed validation inputs and
+SWMM-generated outputs are not classified as operational field
+observations. Likewise, the electrical baseline is not classified as
+event-response evidence because its November 14--15, 2024 coverage does
+not overlap the requested November 13 switching windows. Each dataset is
+therefore reported according to its actual provenance and evidentiary
+role rather than being treated as interchangeable empirical validation.
+
+The working acquisition specification and formal request draft are maintained separately as the operational data-acquisition workspace.
+
+The computational experiments vary the following factors while holding unrelated inputs fixed whenever possible:
+
+\begin{itemize}
+\item
+  local disturbance severity \(B_j\);
+\item
+  source or disturbance location;
+\item
+  relation-specific susceptibility \(S_{ij}\);
+\item
+  number and placement of simultaneous sources;
+\item
+  intermediate local disturbance;
+\item
+  graph structure;
+\item
+  shared-origin reconvergence; and
+\item
+  small perturbations of bounded model inputs for robustness analysis.
+\end{itemize}
+
+The restored historical core protocol contains \textbf{136 controlled scenario runs} distributed as follows:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.35}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.45}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.20}}@{}}
+\caption{Controlled 136-run scenario protocol.}\\
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Scenario family
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Design
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Runs
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Source severity & Four severity levels across N1--N5 & 20 \\
+Drainage L/C stress & Five load-scaling levels across N1--N5 using the selected drainage susceptibility mapping & 25 \\
+Disturbance location & Historically selected local-disturbance locations by network & 36 \\
+Multi-source configuration & Multi-source configurations for N3 and N5 & 10 \\
+Intermediate disturbance & Three selected intermediate nodes $\times$ three disturbance severities across N1--N5 & 45 \\
+\textbf{Total} & \textbf{Restored controlled scenario protocol} & \textbf{136} \\
+\end{longtable}
+
+The severity sweep uses \(B\in\{0.25,0.50,0.75,1.00\}\). The drainage \(L/C\) stress sweep multiplies edge load values by \(\{0.50,0.75,1.00,1.25,1.50\}\), after which susceptibility is recomputed using the selected clipped-linear mapping. Disturbance-location experiments isolate one selected local disturbance at severity \(0.75\). Multi-source-configuration experiments preserve the historical source severities for the active source subset. Intermediate-disturbance experiments preserve the network's baseline local disturbances and impose the selected intermediate disturbance at severities \(0.25\), \(0.50\), and \(0.75\).
+
+Optional non-neutral \(\tau_{ij}\) variants are considered only when an independently defensible transmission construction is available; they are not part of the v1 baseline validation protocol.
+
+\hypertarget{baselines-and-comparative-experiments}{%
+\subsection{Baselines and Comparative Experiments}\label{baselines-and-comparative-experiments}}
+
+Three primary comparison conditions are used to determine what is added by condition-aware propagation:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Local-only baseline:} \(R_j=B_j\), with no propagated contribution.
+\item
+  \textbf{Uniform-susceptibility propagation:} the same recursive bounded architecture is retained, but all relations share a constant susceptibility value.
+\item
+  \textbf{Heterogeneous-susceptibility GBBRPM:} relation-specific susceptibility values are used while the baseline transmission factor remains \(\tau_{ij}=1\).
+\end{enumerate}
+
+These comparators are diagnostic baselines rather than ground truth. Their purpose is to determine whether heterogeneous relation conditions materially alter downstream magnitude and ranking beyond local scoring or uniform propagation.
+
+The comparator set is designed for \textbf{mechanism isolation}, not for claiming universal superiority over propagation models with different state semantics. Independent Cascade and Linear Threshold models represent activation processes, SIR-type models represent compartmental state transitions, centrality methods measure structural position, and hydraulic simulators represent physical system states. Their outputs are therefore not directly interchangeable with the bounded continuous non-probabilistic \(R_i\) state. Those approaches are compared conceptually in Chapter 2 to establish the research gap and design choices. The experimental baselines in this chapter instead hold most of the GBBRPM architecture constant while selectively removing propagation or heterogeneous susceptibility, allowing the added effect of each selected mechanism on magnitude and ranking to be interpreted directly.
+
+\hypertarget{mathematical-and-behavioral-validation}{%
+\subsection{Mathematical and Behavioral Validation}\label{mathematical-and-behavioral-validation}}
+
+The first validation layer tested whether the model behaved consistently with its declared state semantics and mathematical design.
+
+\textbf{Boundedness.} All computed node states must satisfy: \[
+0\le R_j\le1
+\eqtag{3-9}\] \textbf{Monotonicity.} Increasing a genuine risk contribution while holding other inputs fixed should not decrease the resulting node risk. For \(x_k=Q_{kj}\), \[
+\frac{\partial R_j}{\partial x_k}=(1-B_j)\prod_{i\ne k}(1-x_i)\ge0
+\eqtag{3-10}\] and \[
+\frac{\partial R_j}{\partial B_j}=\prod_i(1-x_i)\ge0
+\eqtag{3-11}\] which establishes local monotonicity of the aggregation rule over the declared bounded input space.
+
+Boundary tests additionally verified zero-contribution behavior, \(S_{ij}=0\) edge gating, and the expected limiting behavior when \(B_j=1\).
+
+\hypertarget{sensitivity-and-scenario-analysis}{%
+\subsection{Sensitivity and Scenario Analysis}\label{sensitivity-and-scenario-analysis}}
+
+Sensitivity analysis evaluated how risk magnitude, ranking, and propagation reach changed when model inputs were altered. Source severity was varied across bounded levels, and susceptibility was varied through controlled scaling or direct bounded test values. Multi-source configurations and intermediate disturbances were modified to observe how multi-source convergence and locally introduced risk affected downstream modeled risk.
+
+The analysis recorded node-level risk values together with summary indicators such as maximum risk, mean risk, affected-node count under explicitly declared reporting thresholds, propagation depth, top-ranked nodes, top-\(k\) overlap, and designated outlet risk where applicable. Reporting thresholds are analytical cutoffs only and are not interpreted as physical failure probabilities.
+
+\hypertarget{robustness-and-ranking-stability}{%
+\subsection{Robustness and Ranking Stability}\label{robustness-and-ranking-stability}}
+
+Input robustness was evaluated by perturbing bounded model parameters around a reference condition. Three perturbation magnitudes were used: \textbf{$\pm$5\%, $\pm$10\%, and $\pm$20\%}. For the historical validation protocol, each perturbation level was evaluated across \textbf{600 trials} using a fixed random seed of \textbf{41} to support reproducibility.
+
+Primary ranking metrics include \textbf{Spearman rank correlation} between the reference and perturbed rankings and \textbf{top-3 Jaccard similarity} for the highest-ranked nodes. The analysis may also record top-3 appearance frequency for individual nodes to identify whether high-priority nodes remain consistently represented under perturbation.
+
+This analysis distinguishes a model that produces stable prioritization under modest uncertainty from one whose rankings change substantially under small input variation. Ranking instability, when observed, is reported as a model characteristic rather than automatically treated as failure.
+
+\hypertarget{reconvergence-and-dependence-diagnostics}{%
+\subsection{Reconvergence and Dependence Diagnostics}\label{reconvergence-and-dependence-diagnostics}}
+
+Reconverging networks were used to evaluate shared-origin effects. When one upstream disturbance splits into multiple paths and later reconverges, the local bounded aggregator may treat those incoming path contributions as separate even though they share a common origin. This produces a possible overlap-inflation effect.
+
+Accordingly, reconvergence was evaluated separately from ordinary multi-source aggregation. The methodology adopts the principle: \[
+\text{bounded aggregation}\ne\text{dependence correction}
+\eqtag{3-12}\] The v1 model does not retain complete source ancestry and therefore does not claim to resolve common-cause or shared-path dependence.
+
+\hypertarget{computational-scalability}{%
+\subsection{Computational Scalability}\label{computational-scalability}}
+
+Computational cost was assessed on increasingly large sparse DAGs. Runtime was measured while graph size and edge count increased. Because the evaluator performs a topological traversal and processes each node and edge once under the implemented DAG formulation, the expected computational behavior is consistent with: \[
+O(|V|+|E|)
+\eqtag{3-13}\] for a one-pass implementation. Runtime measurements were reported as empirical implementation results rather than as proof of universal performance across all graph representations or software environments.
+
+\hypertarget{reproducibility-and-software-implementation}{%
+\subsection{Reproducibility and Software Implementation}\label{reproducibility-and-software-implementation}}
+
+The model is implemented as a deterministic Python workflow using structured node and edge input tables. Experiment scripts generate scenario outputs, comparator results, robustness summaries, property-test results, and scalability measurements. Randomized experiments use fixed seeds so that trial generation can be reproduced.
+
+The repository preserves the model evaluator, restored historical scenario runner, comparison routines, robustness tests, property checks, input tables, and result-export workflow under version control. The experiment runner supports explicit data-source selection so that the historical reconstructed validation inputs can be evaluated separately from an alternate recovered historical candidate dataset.
+
+The primary thesis-reproduction command uses the historical source configuration. Generated result files are traceable to the corresponding input source, code revision, scenario protocol, trial count, and random seed.
+
+\textbf{Data-provenance status.} The exact lost original raw edge-by-edge input table has not been independently recovered. However, the earlier \texttt{validation\_reconstructed\_edges} and \texttt{validation\_reconstructed\_nodes} inputs have been recovered and computationally verified to reproduce the preserved historical baseline and comparator behavior and to restore the 136-scenario protocol structure and run count. They are therefore treated as \textbf{historical reconstructed validation inputs}, not as newly invented fixtures and not as the lost original raw dataset. A separate recovered historical candidate dataset is retained for provenance comparison because it produces a different numerical configuration.
+
+\hypertarget{cross-domain-instantiation-and-evaluation}{%
+\subsection{Cross-Domain Instantiation and Evaluation}\label{cross-domain-instantiation-and-evaluation}}
+
+The frozen GBBRPM core was evaluated in three domains. The cases were
+selected to test complementary claims rather than to imply equal levels
+of empirical validation. Across all cases, nodes, directed relations,
+local evidence, relation-specific modifiers, and output semantics were
+documented before interpretation.
+
+\subsubsection{Drainage Case}
+
+The drainage case used the five controlled DAGs N1--N5, the restored
+136-run scenario protocol, robustness perturbations, and 12 SWMM
+blockage scenarios. The controlled experiments evaluated bounded
+behavior, recursive propagation, ranking sensitivity, robustness, and
+dependence limitations. The SWMM comparison used mean Spearman rank
+correlation, top-20\% Jaccard overlap, and the share of hydraulic
+worsening outside the downstream-only GBBRPM scope. SWMM outputs were
+treated as a hydraulic reference, not as observed field ground truth.
+
+\subsubsection{Software-Dependency Case}
+
+The software case represented packages as nodes and dependency-to-
+dependent relations as directed edges. The analyzed Express 4.18.2
+topology contained 71 packages and 128 directed dependency edges.
+Evidence-backed affected versions supplied bounded local disturbance
+levels based on advisory severity. A transmission-coefficient sweep
+used $\tau\in\{0,0.25,0.50,0.75,1.00\}$ while retaining the same core
+aggregation rule. Express root risk, maximum network risk, rank, Spearman
+agreement with the $\tau=1$ ranking, and top-20\% Jaccard overlap were
+reported. This case tests real-topology structural applicability and
+sensitivity; it does not claim prediction of future exploitation.
+
+\subsubsection{Electrical-Network Case}
+
+The electrical case represented bus records as nodes and active
+connections as directed edges. The imported topology contained 187 bus
+records and 177 active connections. Baseline magnitude archives were
+summarized in chunks, with empty CSV members recorded rather than causing
+the run to fail. Channel mapping, populated and empty files, inferred
+one-second timestamp gaps, meter-level voltage coverage, and usable
+voltage channels were reported. The available measurements cover normal
+operation on November 14--15, 2024. Four requested switching-event groups
+occur on November 13, so event-centered outcome validation is explicitly
+pending.
+
+\subsubsection{Evidence Separation and Reproducibility}
+
+The drainage, software, and electrical cases support different claims.
+Behavioral and external-reference evidence in drainage is not equated
+with software structural applicability or electrical importer
+verification. Generated paper figures and tables are produced from
+versioned inputs by \texttt{scripts/generate\_paper\_outputs.py}. The
+associated manifest records input hashes, output hashes, and the
+interpretation boundary used in reporting.
+
+\hypertarget{methodological-scope}{%
+\subsection{Methodological Scope}\label{methodological-scope}}
+
+The architecture-validation layer evaluates internal behavior,
+comparative-prioritization output, robustness, dependence limitations,
+and computational properties under controlled directed-graph conditions.
+The cross-domain layer evaluates instantiability within the three selected
+cases while preserving their distinct evidence roles.
+
+The methodology does not establish calibrated failure probabilities,
+universal physical parameter mappings, universal cross-domain
+performance, shared-path dependence correction, bidirectional or cyclic
+feedback behavior, hydraulic predictive equivalence, or electrical-event
+prediction. Dependence-aware aggregation, cyclic or feedback behavior,
+out-of-sample domain studies, and event-aligned outcome validation require
+separate evidence or future model extensions.

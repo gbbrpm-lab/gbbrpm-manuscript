@@ -1,0 +1,76 @@
+{\small
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.14\dimexpr\linewidth-8\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.17\dimexpr\linewidth-8\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.23\dimexpr\linewidth-8\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.22\dimexpr\linewidth-8\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.24\dimexpr\linewidth-8\tabcolsep\relax}@{}}
+\caption{Drainage prioritization evidence matrix}\label{tab:evidence-matrix}\\
+\toprule
+\textbf{Study} & \textbf{Primary task} & \textbf{Representative information used} & \textbf{Prioritization / output} & \textbf{Relevance to the present problem} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Study} & \textbf{Primary task} & \textbf{Representative information used} & \textbf{Prioritization / output} & \textbf{Relevance to the present problem} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+\citet{iqbal2021} &
+Culvert blockage classification &
+Image-derived visual features &
+Local blockage class &
+Provides local condition information but not propagated network context \\
+\addlinespace
+
+\citet{vandaele2024} &
+Trash-screen blockage monitoring &
+Camera imagery and learned blockage features &
+Asset-level blockage information for maintenance/flood management &
+Demonstrates operational value of automated local disturbance information \\
+\addlinespace
+
+\citet{simone2022} &
+Vulnerability and monitoring analysis &
+Topology, intrinsic relevance, flow direction &
+Tailored node/edge centrality ranking &
+Shows that raw topology alone may not represent functional importance \\
+\addlinespace
+
+\citet{simone2023} &
+Critical-pipe identification &
+Connectivity and relevance-based centrality &
+Pipe criticality ranking &
+Supports network-aware prioritization but not current disturbance propagation \\
+\addlinespace
+
+\citet{dastgir2023} &
+Critical-pipe analysis &
+Runoff paths, edge betweenness, capacity-related information &
+Critical-pipe ranking compared with hydrodynamic results &
+Demonstrates lightweight graph screening and its accuracy/complexity tradeoff \\
+\addlinespace
+
+\citet{meijer2023} &
+Weakest-link analysis &
+Storage, discharge capacity, and graph flow paths &
+Subsystem weakness / flood-performance screening &
+Shows that prioritization may combine structure with operating-capacity information \\
+\addlinespace
+
+\citet{zhang2025} &
+Siltation-chain risk analysis &
+Pipeline risk factors, centrality, edge vulnerability, propagation paths &
+Critical nodes and high-risk pathways &
+Closest drainage precedent for propagated risk-path prioritization, but with siltation-specific semantics \\
+\addlinespace
+
+\citet{zhang2024} &
+Hydraulic-state surrogate prediction &
+Graph topology, recent hydraulic states, runoff, control/boundary information &
+Predicted hydraulic variables rather than a direct risk ranking &
+Defines the learned/high-fidelity boundary of the proposed lightweight risk-index model \\
+
+\end{longtable}
+}

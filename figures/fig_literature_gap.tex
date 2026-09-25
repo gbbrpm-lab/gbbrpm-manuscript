@@ -1,0 +1,20 @@
+\begin{figure}[H]
+\centering
+\resizebox{0.85\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily,
+  stream/.style={draw=gbgray, line width=.8pt, fill=white, minimum width=4.2cm, minimum height=1.45cm, align=center},
+  gap/.style={draw=gbnavy, line width=1.1pt, fill=gblight, minimum width=7.8cm, minimum height=1.55cm, align=center},
+  arr/.style={-{Latex[length=2.4mm]}, line width=.8pt, draw=gbgray}
+]
+\node[stream] (local) {\textbf{Local condition assessment}\\blockage, debris, inspection\\\footnotesize limitation: asset-level state};
+\node[stream, right=8mm of local] (graph) {\textbf{Graph prioritization}\\centrality, paths, capacity\\\footnotesize limitation: structure $\neq$ current risk};
+\node[stream, right=8mm of graph] (prop) {\textbf{Propagation families}\\activation, infection, failure\\\footnotesize limitation: different state semantics};
+\node[gap, below=16mm of graph] (gap) {\textbf{Architectural and integrative gap}\\bounded comparative state + current-state recursion + separated mechanisms\\+ receiving-node disturbance + bounded convergence + explicit dependence limitation};
+\draw[arr] (local.south) -- (gap.north -| local.south);
+\draw[arr] (graph.south) -- (gap.north);
+\draw[arr] (prop.south) -- (gap.north -| prop.south);
+\end{tikzpicture}}
+\caption{Literature-derived synthesis of existing approach families and the remaining architectural gap.}
+\label{fig:literature-gap}
+\end{figure}

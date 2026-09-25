@@ -1,0 +1,47 @@
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily,
+  box/.style={draw=gbgray, line width=.8pt, fill=white, minimum width=3.6cm, minimum height=1.3cm, align=center},
+  core/.style={box, draw=gbnavy, line width=1.1pt, fill=gblight, minimum width=5.1cm, minimum height=2.6cm},
+  arr/.style={-{Latex[length=2.4mm]}, line width=.8pt, draw=gbgray},
+  note/.style={font=\sffamily\footnotesize, text=gbgray, align=center}
+]
+\node[box] (b) {Local disturbance\\$B_i\in[0,1]$};
+\node[box, below=8mm of b] (g) {Directed topology\\$G=(V,E)$};
+\node[box, below=8mm of g] (s) {Relation parameters\\$S_{ij},\;\tau_{ij}\in[0,1]$};
+\node[core, right=20mm of g] (core) {\textbf{GBBRPM propagation core}\\[2mm]
+$Q_{ij}=S_{ij}\tau_{ij}R_i$\\[1mm]
+$R_j=1-(1-B_j)\displaystyle\prod_{i\in P(j)}(1-Q_{ij})$};
+\node[box, right=20mm of core, yshift=10mm] (risk) {Current node states\\$R_i\in[0,1]$};
+\node[box, below=8mm of risk] (rank) {Comparative ranking\\descending $R_i$; ties retained};
+\node[note, below=5mm of rank] (decision) {Inspection, maintenance, or\\higher-fidelity-analysis support};
+
+% Distinct connection ports along the core's west edge
+\coordinate (core-in-top) at
+  ($(core.north west)!0.22!(core.south west)$);
+
+\coordinate (core-in-mid) at
+  ($(core.north west)!0.50!(core.south west)$);
+
+\coordinate (core-in-bottom) at
+  ($(core.north west)!0.78!(core.south west)$);
+
+% Input connections
+\draw[arr] (b.east) -- (core-in-top);
+\draw[arr] (g.east) -- (core-in-mid);
+\draw[arr] (s.east) -- (core-in-bottom);
+
+% Horizontal core-to-output connection
+\draw[arr] (core.east |- risk.west) -- (risk.west);
+
+% Remaining output flow
+\draw[arr] (risk.south) -- (rank.north);
+\draw[arr] (rank.south) -- (decision.north);
+
+\node[note, below=5mm of core] {Bounded, continuous, non-probabilistic state};
+\end{tikzpicture}}
+\caption{Conceptual framework of GBBRPM, distinguishing supplied domain inputs, the generic propagation core, and the comparative decision-support output.}
+\label{fig:conceptual-framework}
+\end{figure}

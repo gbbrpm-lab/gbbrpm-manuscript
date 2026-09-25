@@ -1,0 +1,49 @@
+{\small
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\dimexpr\linewidth-6\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.26\dimexpr\linewidth-6\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.22\dimexpr\linewidth-6\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.30\dimexpr\linewidth-6\tabcolsep\relax}@{}}
+\caption{Parameter patterns in existing approaches}\label{tab:parameter-patterns}\\
+\toprule
+\textbf{Example approach} & \textbf{Representative information used} & \textbf{Role in model} & \textbf{Literature-derived implication} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Example approach} & \textbf{Representative information used} & \textbf{Role in model} & \textbf{Literature-derived implication} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+Tailored centrality~\citep{simone2022,simone2023} &
+Topology, intrinsic relevance, flow direction &
+Improves structural ranking &
+Topology can be enriched, but added variables need clear semantics \\
+\addlinespace
+
+Critical-pipe graph method~\citep{dastgir2023} &
+Runoff/path information and capacity-related information &
+Approximates criticality/flooding consequence &
+Shows value of separating network paths from capacity response \\
+\addlinespace
+
+Weakest-link method~\citep{meijer2023} &
+Storage, discharge capacity, flow paths &
+Screens subsystem weakness &
+Domain variables may be combined without redefining the generic graph concept \\
+\addlinespace
+
+Siltation-chain analysis~\citep{zhang2025} &
+Pipeline risk, centrality, edge vulnerability, risk path &
+Ranks critical nodes and paths &
+Multiple parameters are justified when each represents a distinct mechanism \\
+\addlinespace
+
+GNN hydraulic surrogate~\citep{zhang2024} &
+Hydraulic states, runoff, boundary, control variables, and graph topology &
+Predicts physical hydraulic states &
+High parameter count supports richer prediction but changes the task and data burden \\
+
+\end{longtable}
+}

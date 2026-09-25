@@ -1,0 +1,24 @@
+\begingroup
+\small
+\begin{longtable}{@{}p{0.14\textwidth}p{0.15\textwidth}p{0.18\textwidth}p{0.17\textwidth}p{0.19\textwidth}@{}}
+\caption{Comparison of propagation-model families relevant to comparative network-risk prioritization.}\label{tab:model-families}\\
+\toprule
+Model family & Typical state & Propagation or update basis & Principal analytical use & Limitation for the present problem \\
+\midrule
+\endfirsthead
+\caption[]{Comparison of propagation-model families relevant to comparative network-risk prioritization (continued).}\\
+\toprule
+Model family & Typical state & Propagation or update basis & Principal analytical use & Limitation for the present problem \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Influence diffusion \citep{kempe2003} & Binary activation or threshold state & Edge influence probabilities or accumulated neighbor influence & Spread maximization and activation reach & Activation semantics do not directly represent a continuous comparative risk index. \\
+Epidemic propagation \citep{kermack1927,pastor2001,humphries2021} & Susceptible, infected, and recovered compartments or infection probabilities & Contact structure, infection rate, and recovery rate & Disease spread and intervention analysis & Epidemiological compartments and rates require domain-specific assumptions not implied by network priority. \\
+Cascading failure \citep{buldyrev2010,he2019,shuang2017} & Load, capacity, operational state, or failure state & Load redistribution, tolerance, and interdependence & Robustness and cascade consequence & Physical load conservation or failure thresholds are not generic comparative-risk semantics. \\
+Attack graph and Bayesian attack graph \citep{sheyner2002,munoz2017} & Reachable compromise state or compromise probability & Feasible attack steps, conditional probabilities, or logical relations & Security-path and compromise analysis & Probabilistic outputs require calibrated conditional assumptions and dependence treatment. \\
+Financial and infrastructure contagion \citep{faraji2026,zhou2023,wu2026} & Exposure, loss, stress, or service degradation & Dependency, exposure, vulnerability, and feedback & Systemic-risk and resilience assessment & Feedback and common exposure can require cyclic or dependence-aware dynamics. \\
+Graph-based drainage screening \citep{simone2022,simone2023,dastgir2023,meijer2023,zhang2025} & Centrality, criticality, capacity, or vulnerability score & Topology combined with relevance, runoff, capacity, or siltation information & Monitoring, maintenance, and critical-component screening & Scores differ in meaning and may omit recursive current-state propagation. \\
+Hydraulic simulation and learned surrogate \citep{reyes2020,dastgir2024,zhang2024} & Flow, depth, surcharge, flood volume, or learned hydraulic state & Governing physics or simulator-trained approximation & Physical consequence analysis and prediction & Greater data, calibration, or training requirements; outputs answer a different question from lightweight comparative risk. \\
+\end{longtable}
+\endgroup

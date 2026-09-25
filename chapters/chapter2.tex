@@ -1,0 +1,596 @@
+\section{Review of Related Literature}\label{review-of-related-literature}
+
+\subsection{Review Basis and Organization}\label{review-basis-and-organization}
+This chapter synthesizes two complementary evidence streams. The first
+concerns urban drainage monitoring, blockage, graph-based vulnerability
+assessment, critical-component analysis, and hydraulic or network-level
+prioritization. This literature establishes the practical origin of the
+research problem. The second concerns foundational and modern
+propagation models across influence diffusion, epidemics, cascading
+failure, cybersecurity, finance, transportation, and infrastructure.
+This literature establishes the mechanisms and state semantics that can
+inform a general graph-risk architecture.
+
+The review follows a two-stage synthesis. It first establishes the
+domain-specific problem through drainage monitoring and graph-based
+prioritization. It then situates that problem within the broader
+literature on propagation-state semantics, topology, transmission,
+susceptibility, recursion, aggregation, dependence, model complexity,
+and ranking. The final sections compare reusable architectures and
+domain-specific parameterization before synthesizing the research
+problems and the architectural gap addressed by the study.
+
+\subsection{Urban Drainage Networks as Interconnected
+Systems}\label{urban-drainage-networks-as-interconnected-systems}
+
+Urban drainage networks consist of connected conduits, junctions,
+inlets, screens, and other components whose behavior is influenced by
+flow direction, network structure, hydraulic condition, and local
+impairment. Blockage, clogging, siltation, structural defects, or
+reduced effective capacity can influence system behavior beyond the
+initially affected location. Numerical and network-based drainage
+studies show that the location and severity of impairment can alter
+hydraulic response, vulnerability, and the importance of connected
+components \citep{simone2022,simone2023,reyes2020,dastgir2023,dastgir2024,meijer2023,zhang2025}.
+
+This interconnected structure creates a practical prioritization
+problem. Inspection and maintenance resources are finite, so not every
+component can receive equal attention at the same time. Existing
+drainage studies explicitly frame critical-component identification as
+useful for targeted management, maintenance, monitoring, resilience, or
+dredging decisions \citep{simone2022}, \citep{simone2023}, \citep{dastgir2023,dastgir2024,meijer2023,zhang2025}. The practical
+decision problem is therefore not only to identify which components are
+locally impaired but also to determine which components deserve greater
+attention when the surrounding network is considered.
+
+This drainage-side evidence exposes a distinction between observation
+and prioritization. A local
+blockage or defect can be observed directly, but a maintenance decision
+often requires a broader question: whether that component remains
+important after the connected network, downstream pathways, relation
+conditions, and converging influences are considered. This distinction
+between local condition and network-context priority recurs in studies
+that combine inspection, topology, capacity, and hydraulic relevance
+\citep{simone2022,simone2023,dastgir2023,meijer2023,zhang2025}.
+
+\subsection{Local Monitoring and Component-Level Condition
+Assessment}\label{local-monitoring-and-component-level-condition-assessment}
+
+Computer-vision, sensor, and inspection studies have substantially
+improved the ability to identify local drainage condition. \citet{iqbal2021}, for example, formulate culvert blockage as an
+image-classification problem and evaluate several convolutional neural
+networks for classifying blockage from imagery. \citet{vandaele2024}
+similarly develop camera-based methods for automatically detecting
+blockage at trash screens for maintenance and flood-management use.
+These approaches demonstrate that local blockage information can be
+generated automatically and repeatedly at monitored assets.
+
+The outputs of these methods are valuable because they provide repeatable
+local condition or disturbance signals. However, a local score by itself
+does not determine network-context priority: it describes the monitored
+asset rather than the recursively accumulated state of the wider connected
+system \citep{iqbal2021,vandaele2024,simone2022}.
+
+This distinction matters when two components have similar observed local
+conditions but occupy different positions in the network. One may lie on
+a relation with high operating susceptibility or feed several important
+downstream paths, while another may have little propagated consequence
+under the same network configuration. Local assessment is therefore
+necessary for condition awareness, but it does not by itself answer which
+nodes warrant greater priority after network position and operating
+conditions are considered \citep{simone2022,dastgir2023,zhang2025}.
+
+The limitation should not be interpreted as a weakness of computer
+vision or sensing. Those methods solve the detection problem they were
+designed to solve. The unresolved issue is the interface between local
+condition information and network-level prioritization. This motivates
+the need for a propagation layer that can accept a local disturbance as
+input while separately representing network structure and
+relation-specific response \citep{simone2022,dastgir2023,meijer2023}.
+
+\subsection{Graph-Based Drainage Analysis and Structural
+Prioritization}\label{graph-based-drainage-analysis-and-structural-prioritization}
+
+Drainage research has increasingly used graph theory and complex-network
+analysis to identify critical or vulnerable components. \citet{simone2022} examine standard and tailored centrality metrics for
+vulnerability assessment, monitoring design, and contaminant or
+pathogenic spread. Their analysis shows that standard degree, harmonic,
+betweenness, and edge-betweenness measures do not always reproduce
+hydraulically meaningful importance, which motivates tailored metrics
+that incorporate intrinsic relevance and flow direction.
+
+\citet{simone2023} extends this idea using relevance-based centrality for
+critical-pipe identification. The method ranks nodes and pipes by
+combining network connectivity with intrinsic relevance rather than
+using plain topological centrality alone. This is significant for the
+present study because it demonstrates that even within a graph-only
+framework, useful prioritization can require information beyond raw
+connectivity.
+
+\citet{dastgir2023} propose a graph method for critical-pipe
+analysis based on runoff edge betweenness and capacity-related
+information. Their method is compared with hydrodynamic simulation and
+is intended to retain useful criticality information with lower
+computational and data requirements. The study also reports that
+graph-method accuracy decreases as network complexity, loop degree, and
+hydraulic stress increase, illustrating the tradeoff between lightweight
+structural approximation and richer physical behavior.
+
+\citet{dastgir2024} subsequently examine multiple-pipe failures in
+stormwater networks using graph-theoretic representations. Their work is
+particularly relevant to the present study because it shows that the
+consequences and prioritization of interacting failures cannot always be
+inferred from isolated single-component analysis. It therefore supports
+the explicit evaluation of multi-source configurations and converging
+effects while also reinforcing the need to distinguish graph-based
+screening from full hydraulic consequence prediction.
+
+\citet{meijer2023} develop a graph-based weakest-link method for
+urban drainage systems using flow-path analysis instead of repeated
+hydrodynamic simulation. Their work focuses on storage and
+discharge-capacity relationships and demonstrates that graph-based
+screening can make long rainfall-series analysis practically feasible.
+This provides further evidence that drainage research already seeks
+computationally efficient prioritization and vulnerability tools rather
+than relying exclusively on full hydraulic simulation.
+
+\citet{zhang2025} analyze siltation risk using complex-network
+concepts, centrality, pipeline risk factors, and edge vulnerability.
+Their study identifies critical nodes and high-risk propagation
+pathways, explicitly linking siltation-chain structure with maintenance
+and dredging prioritization. This is especially relevant because it
+shows that drainage risk prioritization may involve both structural
+importance and domain-specific condition information rather than a
+single metric.
+
+Taken together, these studies establish two important points. First,
+prioritization is already a legitimate drainage-network task; the
+novelty of the present study is therefore not the act of ranking nodes
+or pipes. Second, the literature repeatedly augments topology with
+runoff, hydraulic relevance, storage/discharge capacity, edge
+vulnerability, siltation condition, or other operational information.
+Structural position and operating response are therefore related but not
+equivalent \citep{simone2022,simone2023,dastgir2023,meijer2023,zhang2025}.
+
+\subsection{Propagation Models and State
+Semantics}\label{propagation-models-and-state-semantics}
+
+Broader network science provides several foundational propagation
+paradigms. Independent Cascade and Linear Threshold models represent
+influence through activation semantics \citep{kempe2003}. Epidemic models such as
+SIR and SIS propagate compartment or infection states \citep{kermack1927,pastor2001,humphries2021}.
+Cascading-failure models propagate physical load, capacity exceedance,
+or component failure \citep{buldyrev2010,he2019,shuang2017}. Attack graphs represent feasible
+attack paths and reachable compromise states, while Bayesian
+attack-graph approaches introduce probabilistic compromise semantics
+\citep{sheyner2002}, \citep{munoz2017}. Cyber-risk, finance, transportation, and
+infrastructure models introduce additional states such as accumulated
+risk, exposure, payment loss, systemic stress, or dynamic load
+\citep{kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}.
+
+The main lesson is that the meaning of the propagated state determines
+the valid update and aggregation rules. Binary activation answers
+whether a node changes state. Probability estimates event likelihood
+under a probabilistic model. Physical-load models track conserved or
+redistributed quantities. These states are appropriate for their
+intended questions, but they do not automatically answer the comparative
+question of which node carries greater comparative network-context risk
+under a common parameterization \citep{kempe2003,kermack1927,buldyrev2010,
+sheyner2002,kavallieratos2021}.
+
+The comparison indicates that any proposed propagation model must declare
+whether its state represents activation, probability, physical quantity,
+or a non-probabilistic index. Without that declaration, similarly bounded
+values may be interpreted incorrectly and rankings from different model
+families may appear comparable when they are not \citep{kempe2003,
+kermack1927,munoz2017,petrone2018}.
+
+Table~\ref{tab:model-families} compares the model families at the level
+emphasized during consultation: their structure, propagated state,
+update basis, analytical purpose, and limitation for a lightweight
+comparative-risk task. The comparison shows why no single family can be
+adopted merely because it uses a graph; the semantics of its state and
+the assumptions of its update rule must match the research question.
+
+\input{tables/table_model_families}
+
+\subsection{Topology, Reachability, and
+Transmission}\label{topology-reachability-and-transmission}
+
+Across propagation models, topology primarily determines which
+interactions are possible. An edge $i\to j$ indicates that influence may move
+from node i to node j, but the existence of the edge does not by itself
+define the strength of influence. Influence-diffusion models, attack
+graphs, cyber-risk models, and weighted infrastructure models commonly
+distinguish the existence of a pathway from the weight, probability,
+exposure, or transfer mechanism associated with that pathway
+\citep{kempe2003,sheyner2002,kavallieratos2021,faraji2026,petrone2018}.
+
+This distinction is particularly important for interpreting centrality.
+Centrality uses global graph structure and can identify structurally
+important nodes or edges, but it does not directly simulate the
+propagation of a current disturbance under current relation-specific
+conditions. \citet{simone2022} provide a drainage-specific example:
+standard centrality metrics can rank structurally central elements
+differently from hydraulically relevant elements, which motivated the
+incorporation of relevance and direction.
+
+Accordingly, the literature supports treating topology as reachability
+while retaining transmission or influence as a conceptually separate
+relation-level mechanism. Where heterogeneous influence cannot be
+empirically justified, a neutral coefficient is more defensible than an
+unsupported set of edge weights \citep{kempe2003,simone2022,dastgir2023}.
+
+\subsection{Susceptibility, Capacity, Vulnerability, and Receiver
+Response}\label{susceptibility-capacity-vulnerability-and-receiver-response}
+
+A second distinction concerns transmission versus susceptibility.
+Transmission describes how strongly an influence transfers along a
+relation, whereas susceptibility describes how strongly a relation or
+receiving context responds under the current condition. Similar
+distinctions appear in models using capacity, vulnerability, tolerance,
+resilience, exposure, or fragility \citep{buldyrev2010,he2019,
+kavallieratos2021,faraji2026}.
+
+Cascading-failure models demonstrate that the same incoming load can
+produce different outcomes depending on component capacity or tolerance
+\citep{buldyrev2010,he2019,shuang2017}. Cyber and infrastructure models likewise separate
+dependency or exposure strength from vulnerability or resilience
+\citep{kavallieratos2021,faraji2026,zhou2023}. Drainage studies that incorporate hydraulic
+relevance, runoff, capacity, storage/discharge relationships, siltation
+condition, or edge vulnerability similarly show that structural
+connectivity alone is not sufficient to characterize operating response
+\citep{simone2022,simone2023,reyes2020,dastgir2023,dastgir2024,meijer2023,zhang2025}.
+
+These patterns support keeping relation-specific susceptibility distinct
+from transmission rather than collapsing both concepts into one
+unexplained coefficient. In a drainage application, susceptibility may be
+linked to load relative to effective capacity, whereas heterogeneous
+transmission should remain neutral unless empirical evidence justifies its
+calibration \citep{dastgir2023,meijer2023,zhang2025}.
+
+\subsection{Recursive Propagation and Current-State
+Updating}\label{recursive-propagation-and-current-state-updating}
+
+Many propagation systems are recursive: later effects depend on the
+state produced by earlier propagation rather than repeatedly referencing
+only the original source. Epidemic models update infection state over
+successive interactions, cascading-failure models redistribute load
+after each failure, financial-contagion models update exposure or loss
+as conditions change, and hydraulic models update system state in
+response to preceding conditions \citep{kermack1927,buldyrev2010,
+he2019,faraji2026,petrone2018}.
+
+This pattern supports current-state recursion: for a chain
+$A\to B\to C$, the contribution from B to C should be based on the current
+modeled state at B when the intended semantics permit inherited and local
+influence to accumulate. Conceptually, the node propagates what it
+currently carries rather than only the disturbance that originally
+entered the network \citep{kermack1927,buldyrev2010,faraji2026}.
+
+Current-state recursion is central to comparative network context. If
+the model repeatedly used only the original local disturbance,
+intermediate accumulation would be lost and downstream ranking would not
+reflect the evolving state of the network \citep{kempe2003,buldyrev2010,
+petrone2018}.
+
+\subsection{Multi-Source Aggregation and Bounded
+State}\label{multi-source-aggregation-and-bounded-state}
+
+When several upstream relations converge on the same node, their
+contributions require aggregation. Existing model families use different
+operators according to state semantics: physical loads may be summed or
+redistributed, threshold models accumulate influence until a threshold
+is crossed, and probabilities may be combined through Bayesian or
+noisy-OR structures when the required assumptions are satisfied
+\citep{kempe2003,munoz2017,buldyrev2010}.
+
+For a bounded non-probabilistic comparative risk state, simple addition
+creates a practical difficulty because multiple contributions can exceed
+the declared {[}0,1{]} range. Clipping can restore the range but introduces
+an abrupt ceiling that loses information about how additional
+contributions accumulate. Multiplicative-complement aggregation is a
+candidate bounded, saturating operator, although its resemblance to
+noisy-OR algebra requires an explicit warning: it has a probabilistic
+interpretation only when the inputs and dependence assumptions justify
+one \citep{munoz2017}. The selected operator must therefore follow the
+declared state semantics rather than visual similarity to an established
+probability formula.
+
+\subsection{Dependence, Shared Paths, and
+Reconvergence}\label{dependence-shared-paths-and-reconvergence}
+
+Bounded aggregation does not solve every multi-source problem. When
+contributions share a common origin and travel through multiple paths
+that later reconverge, incoming contributions may not be independent
+descriptions of distinct risk sources. Similar dependence problems
+appear in financial networks through common exposures, in infrastructure
+networks through shared dependencies, and in graph systems with
+overlapping paths \citep{buldyrev2010,faraji2026,zhou2023}.
+
+The literature therefore supports treating local aggregation and
+dependence as separate mechanisms. Bounding incoming contributions does
+not by itself correct shared-origin or common-cause dependence;
+reconvergence should be evaluated as an explicit limitation rather than
+hidden inside the aggregation rule \citep{buldyrev2010,faraji2026}.
+
+This distinction is important for interpretability. A bounded output
+does not automatically mean that shared-origin information has been
+counted correctly. Dependence-aware correction remains a separate
+extension problem \citep{munoz2017,faraji2026}.
+
+\subsection{Lightweight Graph Models, Learned Surrogates, and
+High-Fidelity
+Simulation}\label{lightweight-graph-models-learned-surrogates-and-high-fidelity-simulation}
+
+The drainage literature contains a spectrum of model complexity. Local
+scores and graph indicators provide relatively inexpensive screening;
+graph-hydrodynamic hybrids combine structural reasoning with physical
+analysis; hydraulic simulators explicitly represent domain dynamics; and
+graph-neural-network surrogates learn simulator-derived hydraulic
+behavior for faster inference \citep{simone2022,dastgir2023,meijer2023,
+zhang2024}.
+
+\citet{dastgir2023} explicitly compare a graph-based critical-pipe
+method with hydrodynamic modeling and report substantially lower data
+and computational requirements for the graph approach, while also
+documenting accuracy loss as complexity and stress increase. Simone et
+al. \citep{simone2022} likewise position tailored complex-network metrics as
+complementary preliminary tools when full hydraulic simulation is more
+complex, data demanding, or computationally expensive.
+
+At the learned-surrogate end of the spectrum, \citet{zhang2024}
+develop a graph-neural-network surrogate for urban-drainage hydraulic
+prediction. The model is trained against physics-based flow-routing
+outputs and predicts hydraulic variables for real-time use.
+Physics-guided mechanisms are included to improve prediction
+consistency. Such a surrogate seeks to emulate hydraulic state transitions,
+which is a different objective from transparent graph screening or
+comparative index construction \citep{zhang2024}.
+
+The literature therefore does not imply that lightweight models are
+universally superior. High-fidelity models provide richer physical
+detail, while learned surrogates can approximate that detail after
+training. Lightweight graph models instead trade physical completeness
+for lower data requirements, simpler computation, and direct
+interpretability. The appropriate model depends on the decision
+question \citep{dastgir2023,simone2022,zhang2024}.
+
+\subsection{Existing Ranking and Prioritization
+Approaches}\label{existing-ranking-and-prioritization-approaches}
+
+Existing drainage and network studies rank components using different
+criteria. Local monitoring may rank according to observed blockage or
+defect severity. Centrality approaches rank according to structural
+importance. Weakest-link and vulnerability methods incorporate
+combinations of topology and domain-specific information. Failure
+studies rank components or combinations according to modeled
+consequence. Siltation studies identify high-risk nodes and propagation
+pathways. Hydraulic approaches may prioritize locations according to
+depth, surcharge, flood volume, resilience, or performance loss
+\citep{iqbal2021,vandaele2024,simone2022,dastgir2023,dastgir2024,
+meijer2023,zhang2025}.
+
+The evidence shows that ranking is not a single modeling operation with
+a universal meaning. A centrality rank, blockage-severity rank,
+weakest-link rank, hydraulic-impact rank, and propagated-risk rank
+answer different questions. The semantic basis of the score must
+therefore be explicit before rankings can be compared
+\citep{simone2022,dastgir2023,meijer2023,zhang2025}.
+
+
+% \begin{quote}\textit{Table migration note: this comparison table was preserved separately in tables\_pending.tex and will be rebuilt cleanly in LaTeX before final submission.}\end{quote}
+
+\input{tables/table_ranking_approaches}
+
+
+The literature comparison also separates score generation from the
+decision-support use of a score. A method may first compute local,
+structural, hydraulic, or propagated values and then order components for
+inspection or maintenance; the resulting ranking inherits the meaning
+and limitations of the underlying score \citep{simone2022,dastgir2023,
+meijer2023,zhang2025}.
+
+\subsubsection{Drainage Prioritization Evidence
+Matrix}\label{drainage-prioritization-evidence-matrix}
+
+The following study-level comparison makes the progression from local
+condition assessment to structural, hybrid, risk-path, and learned
+hydraulic approaches explicit.
+
+
+% \begin{quote}\textit{Table migration note: this comparison table was preserved separately in tables\_pending.tex and will be rebuilt cleanly in LaTeX before final submission.}\end{quote}
+
+\input{tables/table_evidence_matrix}
+
+
+The matrix shows that existing studies already provide local condition
+signals, graph-based criticality, capacity-aware screening, propagation
+pathways, and richer hydraulic state modeling. These strands remain
+distributed across methods with different purposes and state semantics,
+which creates an integrative question rather than an absence of ranking
+methods \citep{iqbal2021,simone2022,dastgir2023,meijer2023,zhang2024,
+zhang2025}.
+
+\subsection{Parameter Patterns in Existing
+Approaches}\label{parameter-patterns-in-existing-approaches}
+
+An important model-design question concerns how many parameters should
+be included in the generic core and its domain-specific instantiations.
+The literature suggests that the
+appropriate number cannot be fixed in advance; parameter choice follows
+the semantics and purpose of the model \citep{simone2022,dastgir2023,
+meijer2023,zhang2024,zhang2025}.
+
+Drainage approaches already illustrate this diversity. Standard
+centrality may use only graph structure, whereas tailored centrality can
+incorporate intrinsic node relevance and flow direction \citep{simone2022},
+\citep{simone2023}. \citet{dastgir2023} combine runoff-related path
+information with capacity-related information for critical-pipe
+analysis. \citet{meijer2023} focus on subsystem storage and
+discharge capacities together with graph-based flow paths. Zhang et al.
+\citep{zhang2025} combine pipeline risk factors, multiple centrality measures,
+edge vulnerability, and propagation-path information. Hydraulic and
+learned-surrogate approaches use substantially larger sets of rainfall,
+boundary, geometric, control, and hydraulic-state variables \citep{zhang2024}.
+
+These studies show that more parameters are not automatically better,
+just as fewer parameters are not automatically preferable. Each added
+variable should represent a distinct mechanism or provide empirically
+useful domain information. Adding several correlated or weakly justified
+parameters may reduce interpretability without improving the decision
+task \citep{simone2022,dastgir2023,meijer2023,zhang2024}.
+
+Across the reviewed methods, a defensible reusable core retains only
+semantically distinct roles while allowing each domain to construct those
+roles from several observed variables where justified. For example, a
+drainage susceptibility mapping may combine hydraulic or physical
+attributes without requiring a generic propagation equation to absorb
+every raw parameter \citep{dastgir2023,meijer2023,zhang2025}.
+
+Thus, the literature supports a generic core plus domain-supported
+parameterization rather than a universal fixed list of physical
+variables. The final number of drainage-specific parameters should be
+determined from evidence, data availability, and validation rather than
+from an arbitrary target count \citep{simone2022,dastgir2023,zhang2024}.
+
+
+% \begin{quote}\textit{Table migration note: this comparison table was preserved separately in tables\_pending.tex and will be rebuilt cleanly in LaTeX before final submission.}\end{quote}
+
+\input{tables/table_parameter_patterns}
+
+
+\subsection{Reusable Architectures and Domain-Specific
+Instantiation}\label{generic-core-and-domain-specific-instantiation}
+
+A model can be generic in formulation without being empirically
+generalizable to every domain. Network science repeatedly reuses
+architectural ideas---nodes, directed relations, current state,
+transmission, response, and aggregation---while redefining their meanings
+for influence, epidemics, cascading infrastructure, cybersecurity,
+finance, transportation, and drainage \citep{kempe2003,kermack1927,
+buldyrev2010,sheyner2002,faraji2026,petrone2018,simone2022}.
+
+This distinction is important because the word \emph{generalizable} can
+imply demonstrated performance on unseen domains. A reusable architecture
+supports cross-domain instantiation only when each application can
+defensibly map its data and semantics to the abstract roles and validate
+the resulting interpretation \citep{kavallieratos2021,faraji2026,
+petrone2018}.
+
+The core propagation logic can therefore remain fixed while a domain
+supplies its own parameter definitions and, where justified, an
+additional refinement layer. Drainage, cybersecurity, transportation,
+and supply-chain applications require different parameter definitions,
+evidence, and independent validation even when they share a graph-based
+computational pattern \citep{kavallieratos2021,zhou2023,petrone2018,
+dastgir2023}.
+
+This structure resembles a reusable computational backbone with
+application-specific adaptation, but it should not be interpreted as
+machine-learning transfer learning. A learned surrogate transfers fitted
+representations or parameters; an explicit architecture instead reuses a
+declared computational rule whose variables must be reinterpreted and
+validated in each domain \citep{zhang2024}.
+
+\subsection{Synthesis of Research
+Problems}\label{synthesis-of-research-problems}
+
+The reviewed evidence supports three major research problems.
+
+First, local condition does not by itself represent network-context
+priority. Local monitoring can quantify condition at a component, but
+comparative prioritization in an interconnected system requires
+consideration of propagated network effects
+\citep{iqbal2021,vandaele2024,simone2022,dastgir2023}.
+
+Second, structural importance does not by itself represent current
+operating response. Centrality and topology use the network as context,
+but drainage and broader infrastructure studies repeatedly augment
+structure with hydraulic relevance, capacity, storage/discharge
+relationships, vulnerability, or other operating information
+\citep{simone2022,dastgir2023,meijer2023,buldyrev2010,faraji2026}.
+
+Third, existing propagation states are designed for different analytical
+objectives. Activation, probability, infection, physical load, failure,
+financial loss, and hydraulic state each imply different update and
+aggregation rules. A bounded continuous non-probabilistic comparative
+risk state therefore requires an explicitly declared semantic and
+compatible propagation architecture \citep{kempe2003,kermack1927,
+sheyner2002,buldyrev2010,faraji2026,zhang2024}.
+
+Together, these problems create a need for a model that can integrate
+local disturbance, current propagated state, and relation-specific
+operating response while remaining interpretable enough to explain why
+one node receives a higher comparative risk state than another
+\citep{simone2022,dastgir2023,meijer2023,zhang2024}.
+
+\subsection{Architectural and Integrative Research
+Gap}\label{architectural-and-integrative-research-gap}
+
+The literature does not support claiming that graph propagation,
+recursive updating, capacity-based response, bounded state, edge
+weighting, or multi-source aggregation are individually novel. Each has
+precedent in established model families \citep{kempe2003,buldyrev2010,
+munoz2017,faraji2026,petrone2018}.
+
+The gap is instead architectural and integrative. Within the reviewed
+drainage, infrastructure, cybersecurity, finance, transportation,
+cascade, epidemic, influence-diffusion, and graph-surrogate evidence, no
+clearly established lightweight directed-graph formulation was
+identified that combines all of the following under one explicit
+comparative-risk semantics: a bounded continuous non-probabilistic node
+state; recursive propagation of current upstream risk; explicit
+separation of directed reachability, optional transmission, and
+relation-specific susceptibility; local disturbance at receiving nodes;
+bounded aggregation of converging contributions; and explicit
+recognition that shared-path or common-cause dependence is distinct from
+local aggregation. This gap statement is a synthesis bounded to the
+literature set examined in this chapter \citep{simone2022,dastgir2023,
+meijer2023,zhang2025,kempe2003,buldyrev2010,sheyner2002}.
+
+The reviewed evidence therefore establishes an architectural and
+integrative research gap rather than the absence of individual graph,
+propagation, or ranking mechanisms. A response to this gap would need to
+combine a clearly defined bounded state, recursive updating,
+relation-specific modifiers, receiving-node disturbance, convergence,
+and explicit dependence limits while preserving the distinction between
+generic computation and domain-specific evidence
+\citep{kempe2003,buldyrev2010,sheyner2002,dastgir2023,zhang2025}.
+
+Figure~\ref{fig:literature-gap} summarizes how the three reviewed
+evidence streams lead to this architectural and integrative gap.
+
+\input{figures/fig_literature_gap}
+
+\subsection{Chapter Synthesis}\label{chapter-synthesis}
+
+The literature establishes a clear progression from practical drainage
+prioritization to a broader network-risk modeling problem. Local
+assessment provides necessary component-level condition information,
+graph metrics provide structural context, and high-fidelity models
+provide domain-rich physical behavior. Broader propagation research
+contributes mechanisms for recursive updating, transmission,
+susceptibility, aggregation, and dependence. However, these mechanisms
+are distributed across models with different state semantics and
+purposes \citep{kempe2003,kermack1927,buldyrev2010,sheyner2002,
+kavallieratos2021,petrone2018}.
+
+The drainage literature also demonstrates that prioritization methods
+already range from local condition scoring to tailored centrality,
+weakest-link analysis, siltation-chain risk, hydrodynamic consequence
+analysis, and learned hydraulic surrogates. The research opportunity is
+therefore not to introduce ranking itself, but to formulate a distinct
+comparative-risk semantics and propagation process that can explain why
+one node ranks above another after both local and network context are
+considered \citep{iqbal2021,simone2022,dastgir2023,meijer2023,
+zhang2024}.
+
+Accordingly, the reviewed literature supports a methodological response
+that declares its state semantics, separates topology from relation-level
+response, propagates current state recursively, bounds converging
+contributions, and limits its claims to comparative prioritization. The
+specific formulation adopted by the study is presented in Chapter 3 so
+that this chapter remains a synthesis of prior work rather than a
+duplicate statement of the proposed model \citep{kempe2003,buldyrev2010,
+munoz2017,dastgir2023,zhang2025}.

@@ -1,0 +1,49 @@
+{\small
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\dimexpr\linewidth-6\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.27\dimexpr\linewidth-6\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.27\dimexpr\linewidth-6\tabcolsep\relax}
+                     >{\raggedright\arraybackslash}p{0.26\dimexpr\linewidth-6\tabcolsep\relax}@{}}
+\caption{Comparison of ranking and prioritization approaches}\label{tab:ranking-approaches}\\
+\toprule
+\textbf{Approach} & \textbf{Primary ranking basis} & \textbf{What the ranking answers} & \textbf{Limitation relative to the present target} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Approach} & \textbf{Primary ranking basis} & \textbf{What the ranking answers} & \textbf{Limitation relative to the present target} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+Local condition / detection~\citep{iqbal2021,vandaele2024,patil2023} &
+Observed blockage, defect, debris, or local score &
+Which asset appears more locally impaired? &
+Does not inherently incorporate recursively propagated network context \\
+\addlinespace
+
+Centrality / structural criticality~\citep{simone2022,simone2023,reyes2020} &
+Graph position, paths, relevance, or structural interaction &
+Which node or edge is more structurally important? &
+Does not by itself represent propagation of a current disturbance under current relation conditions \\
+\addlinespace
+
+Weakest-link / vulnerability methods~\citep{dastgir2023,meijer2023} &
+Structural information combined with capacity, storage, discharge, redundancy, or other domain variables &
+Which component most constrains or weakens system performance? &
+Produces specialized vulnerability or criticality semantics rather than a generic bounded recursive risk state \\
+\addlinespace
+
+Siltation-chain risk~\citep{zhang2025} &
+Pipeline risk, node importance, edge vulnerability, and propagation path &
+Which nodes and pathways are high priority for siltation management? &
+Domain-specific siltation semantics and parameterization \\
+\addlinespace
+
+Hydraulic consequence analysis~\citep{dastgir2024,zhang2024} &
+Simulated depth, surcharge, flood volume, performance loss, or resilience &
+Which failures or locations cause greater physical consequence? &
+High-fidelity but strongly domain-specific and more data/computation intensive \\
+
+\end{longtable}
+}

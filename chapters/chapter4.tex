@@ -1,0 +1,663 @@
+\section{Results and Discussion}\label{results-and-discussion}
+
+\subsection{Overview of Validation Results}
+
+The restored GBBRPM v1 validation pipeline was executed using the
+historical reconstructed validation inputs and the frozen model
+formulation described in Chapter 3. The controlled experiment suite
+produced 136 scenario runs, supplemented by comparator analysis,
+robustness trials, mathematical property tests, scalability measurements,
+reconvergence diagnostics, a SWMM external-reference comparison, and
+software and electrical cross-domain cases.
+
+The results are interpreted according to the evidence role of each case.
+They are not interpreted as calibrated failure probabilities, proof that
+GBBRPM reproduces full hydraulic behavior, prediction of software
+exploitation, or completed electrical event-response validation.
+
+\input{tables/paper/table_cross_domain_evidence}
+
+\subsection{Baseline Behavior Across N1--N5}
+
+The baseline experiments evaluate the five synthetic DAGs under their
+reference local disturbances and heterogeneous edge susceptibilities. N1
+isolates sequential propagation, N2 exposes branch-dependent differences,
+N3 demonstrates bounded multi-source convergence, N4 stresses
+reconvergence from a shared upstream origin, and N5 combines multiple
+sources, branching, convergence, heterogeneous susceptibility, and an
+intermediate local disturbance.
+
+\input{tables/paper/table_drainage_networks}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/figure4_1.jpg}
+\caption{Baseline outlet risk across the five controlled GBBRPM networks under the historical validation configuration.}
+\label{fig:baseline-outlet-risk}
+\end{figure}
+
+For the historical N5 baseline, the designated outlet risk is
+
+\[
+R_{N20}=0.7086404493.
+\eqtag{4-1}\]
+
+The highest-ranked internal nodes are ordered
+
+\[
+N13>N19>N16.
+\eqtag{4-2}\]
+
+This ranking shows that the model does not simply prioritize source nodes
+or the final outlet. Accumulated upstream state, susceptibility,
+convergence structure, and local disturbance can elevate intermediate
+nodes.
+
+\begin{table}[H]
+\centering
+\caption{Baseline summary across the controlled network set.}
+\label{tab:baseline-summary}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrl@{}}
+\toprule
+Network & Max. risk & Mean risk & Outlet & Outlet risk & Top-three nodes \\
+\midrule
+N1 & 0.800000 & 0.249493 & F   & 0.053760 & A $>$ B $>$ C \\
+N2 & 0.800000 & 0.465250 & H   & 0.408000 & A $>$ C $>$ G \\
+N3 & 0.700000 & 0.420205 & H   & 0.106814 & A $>$ C $>$ B \\
+N4 & 0.800000 & 0.579719 & G   & 0.351372 & A $>$ D $>$ B \\
+N5 & 0.816448 & 0.632660 & N20 & 0.708640 & N13 $>$ N19 $>$ N16 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+The networks do not exhibit a uniform propagation pattern. N1 shows
+strong attenuation along a chain, while N2 retains comparatively high
+downstream risk because several high-susceptibility branches feed later
+nodes. N3 demonstrates bounded convergence from two local sources, N4
+produces stronger downstream amplification under reconvergence, and N5
+produces a high-risk intermediate ranking rather than prioritizing the
+outlet alone. These patterns are consistent with the intended use of the
+networks as mechanism-isolation cases rather than interchangeable test
+graphs.
+
+\subsection{Controlled Scenario Analysis}
+
+The restored historical suite contains 136 runs distributed across five
+scenario families.
+
+\begin{table}[H]
+\centering
+\caption{Controlled scenario families and run counts.}
+\label{tab:scenario-families}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{@{}lrL@{}}
+\toprule
+Scenario family & Runs & Purpose \\
+\midrule
+Source severity & 20 & Increasing local disturbance \\
+$L/C$ stress & 25 & Increasing operating susceptibility \\
+Disturbance location & 36 & Sensitivity to disturbance placement \\
+Multi-source configuration & 10 & Simultaneous source disturbances \\
+Intermediate disturbance & 45 & Disturbance within propagation paths \\
+\midrule
+\textbf{Total} & \textbf{136} & Restored controlled protocol \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The archived scenario-sweep file was used to recover the historical
+scenario structure and parameter selections, but its stored numerical
+values belong to a different recovered dataset generation. Consequently,
+the quantitative results below were recomputed using the validated
+historical reconstructed node and edge inputs rather than copied from the
+mixed-generation archive.
+
+\subsubsection{Source-Severity Response}
+
+The source-severity sweep varies the selected source disturbance over
+$0.25$, $0.50$, $0.75$, and $1.00$ while preserving the remaining
+baseline local disturbances. All five networks show monotone outlet
+response.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/figure4_2.jpg}
+\caption{Outlet-risk response to increasing source disturbance severity across N1--N5.}
+\label{fig:source-severity}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Source-severity response at the lowest and highest tested levels.}
+\label{tab:severity-response}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{@{}lrrrL@{}}
+\toprule
+Network & Outlet at 0.25 & Outlet at 1.00 & Change & Top-three ordering, 0.25 $\rightarrow$ 1.00 \\
+\midrule
+N1 & 0.016800 & 0.067200 & $+0.050400$ & A $>$ B $>$ C $\rightarrow$ A $>$ B $>$ C \\
+N2 & 0.127500 & 0.510000 & $+0.382500$ & A $>$ C $>$ G $\rightarrow$ A $>$ C $>$ G \\
+N3 & 0.085549 & 0.120991 & $+0.035443$ & B $>$ C $>$ E $\rightarrow$ A $>$ C $>$ E \\
+N4 & 0.129511 & 0.410550 & $+0.281039$ & A $>$ D $>$ F $\rightarrow$ A $>$ B $>$ D \\
+N5 & 0.696268 & 0.713972 & $+0.017704$ & N13 $>$ N19 $>$ N10 $\rightarrow$ N1 $>$ N13 $>$ N5 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+N1 and N2 preserve their top-three ordering, whereas N3, N4, and N5
+exhibit ranking changes. N5 shows only a small outlet increase because
+the varied N1 disturbance is embedded in a network containing other
+active disturbances. Thus, stronger local disturbance is directionally
+monotone, while ranking response depends on the surrounding network
+state.
+
+\subsubsection{$L/C$ Stress Response}
+
+The stress sweep scales all edge loads by $0.50$, $0.75$, $1.00$,
+$1.25$, and $1.50$, after which susceptibility is recomputed as
+$S=\min(1,L/C)$. The outlet response is strongly nonlinear in the more
+convergent networks.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/figure4_3.jpg}
+\caption{Outlet-risk response to increasing $L/C$ stress under bounded susceptibility.}
+\label{fig:lc-stress}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Outlet-risk response across the $L/C$ stress range.}
+\label{tab:lc-stress}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{@{}lrrrL@{}}
+\toprule
+Network & Outlet at $\times0.50$ & Outlet at $\times1.00$ & Outlet at $\times1.50$ & Top-three ordering, $\times0.50\rightarrow\times1.50$ \\
+\midrule
+N1 & 0.001680 & 0.053760 & 0.324000 & A $>$ B $>$ C $\rightarrow$ A $>$ B $>$ C \\
+N2 & 0.051000 & 0.408000 & 0.800000 & A $>$ C $>$ B $\rightarrow$ A $>$ C $>$ G \\
+N3 & 0.007402 & 0.106814 & 0.460077 & A $>$ B $>$ C $\rightarrow$ C $>$ E $>$ G \\
+N4 & 0.026261 & 0.351372 & 0.956000 & A $>$ B $>$ C $\rightarrow$ D $>$ E $>$ F \\
+N5 & 0.025978 & 0.708640 & 0.999998 & N1 $>$ N3 $>$ N2 $\rightarrow$ N19 $>$ N20 $>$ N18 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The strongest changes occur in N4 and N5. These values demonstrate the
+compounding effect of increasing susceptibility along multiple recursive
+paths and are not hydraulic failure probabilities. Saturation follows
+from the clipped-linear rule: once an edge reaches $S=1$, further
+increases in $L/C$ cannot increase its susceptibility.
+
+\subsubsection{Disturbance-Location Sensitivity}
+
+The location sweep assigns the same local severity, $B=0.75$, to
+historically selected locations while clearing other local disturbances.
+This isolates the effect of disturbance placement.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/figure4_4.jpg}
+\caption{Sensitivity of outlet risk to disturbance location at fixed local severity.}
+\label{fig:blockage-location}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Range of outlet risk across tested disturbance locations, with tied extrema retained.}
+\label{tab:blockage-location}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrlrr@{}}
+\toprule
+Network & Lowest location & Lowest risk & Highest location & Highest risk & Range \\
+\midrule
+N1 & A  & 0.050400 & E  & 0.600000 & 0.549600 \\
+N2 & B/D/E/F & 0.000000 & H  & 0.750000 & 0.750000 \\
+N3 & E/G & 0.000000 & F  & 0.487500 & 0.487500 \\
+N4 & F  & 0.000000 & E  & 0.562500 & 0.562500 \\
+N5 & N4 & 0.058820 & N3 & 0.619410 & 0.560590 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+The large within-network ranges show that equal local severity does not
+imply equal downstream modeled risk. The result directly supports the role
+of topology and downstream connectivity in prioritization: local severity
+alone is insufficient to characterize network-level comparative risk.
+
+\subsubsection{Multi-Source Configurations}
+
+The N3 and N5 experiments activate different subsets of the historical
+source disturbances while preserving each source's baseline severity.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/figure4_5.jpg}
+\caption{Outlet-risk response under single- and multi-source configurations in N3 and N5.}
+\label{fig:multi-source}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Multi-source configuration results for N3 and N5.}
+\label{tab:multi-source}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrl@{}}
+\toprule
+Network & Active sources & Mean risk & Outlet risk & Top-three nodes \\
+\midrule
+N3 & A & 0.226641 & 0.056306 & A $>$ C $>$ E \\
+N3 & B & 0.250959 & 0.073734 & B $>$ C $>$ E \\
+N3 & A+B & 0.420205 & 0.106814 & A $>$ C $>$ B \\
+N5 & N1 & 0.310047 & 0.421144 & N1 $>$ N5 $>$ N8 \\
+N5 & N2 & 0.330667 & 0.529607 & N19 $>$ N16 $>$ N13 \\
+N5 & N3 & 0.363189 & 0.621147 & N10 $>$ N19 $>$ N3 \\
+N5 & N1+N2 & 0.475306 & 0.581552 & N1 $>$ N5 $>$ N16 \\
+N5 & N1+N3 & 0.539799 & 0.671334 & N1 $>$ N19 $>$ N13 \\
+N5 & N2+N3 & 0.503194 & 0.689122 & N13 $>$ N19 $>$ N10 \\
+N5 & N1+N2+N3 & 0.632660 & 0.708640 & N13 $>$ N19 $>$ N16 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Activating both N3 sources raises outlet risk above either single-source
+case. In N5, the single-source cases produce materially different outlet
+risks, and the full configuration reaches 0.7086. Pairwise combinations
+also alter the highest-ranked nodes. The bounded aggregator permits the
+contributions to coexist without exceeding 1, but does not establish
+probabilistic independence.
+
+\subsubsection{Intermediate Disturbance}
+
+The intermediate-disturbance protocol evaluates three selected nodes in
+each network at severities $0.25$, $0.50$, and $0.75$, producing 45
+runs. Baseline local disturbances are retained, so the inserted
+disturbance is evaluated together with inherited risk.
+
+\begin{table}[H]
+\centering
+\caption{Largest outlet-risk response in the intermediate-disturbance tests.}
+\label{tab:intermediate-disturbance}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrlr@{}}
+\toprule
+Network & Baseline outlet & Largest outlet & Scenario & Increase \\
+\midrule
+N1 & 0.053760 & 0.613440 & E=0.75 & $+0.559680$ \\
+N2 & 0.408000 & 0.852000 & H=0.75 & $+0.444000$ \\
+N3 & 0.106814 & 0.160766 & C=0.75 & $+0.053952$ \\
+N4 & 0.351372 & 0.481593 & D=0.75 & $+0.130221$ \\
+N5 & 0.708640 & 0.852160 & N19=0.75 & $+0.143520$ \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+The effect is highly location-dependent. N1 exhibits a large change when
+a severe disturbance is placed near the downstream end, while N3 shows a
+more modest increase. N5 reaches approximately 0.8522 when N19 is assigned
+$B=0.75$. These results illustrate how a local term can coexist with
+recursively inherited contributions at an already affected node.
+
+\subsection{Comparator Analysis}
+
+Comparator experiments test whether heterogeneous condition-aware
+propagation produces ranking behavior different from simpler alternatives.
+
+\begin{table}[H]
+\centering
+\caption{N5 comparator agreement relative to GBBRPM.}
+\label{tab:comparators}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrr@{}}
+\toprule
+Comparator & Spearman $\rho$ & Top-three Jaccard \\
+\midrule
+Local-only & 0.108627 & 0.0 \\
+Uniform $S=0.25$ & -0.042105 & 0.0 \\
+Uniform $S=0.50$ & 0.150376 & 0.0 \\
+Uniform $S=0.75$ & 0.696241 & 0.5 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Low agreement with the local-only baseline indicates that propagated
+network context substantially changes prioritization. Agreement also
+varies across uniform-susceptibility comparators, showing that ranking
+depends on the heterogeneous edge-condition pattern rather than only on
+the recursive architecture. The relatively higher agreement at uniform
+$S=0.75$ is specific to this N5 configuration and is not evidence that
+this constant is universally preferable.
+
+\subsection{Robustness and Ranking Stability}
+
+Robustness was evaluated at perturbation magnitudes of $\pm5\%$,
+$\pm10\%$, and $\pm20\%$, with 600 trials per level and fixed seed 41.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/paper/fig_drainage_robustness.pdf}
+\caption{Drainage ranking stability under $\pm5\%$, $\pm10\%$, and $\pm20\%$ susceptibility perturbations. Error bars show the reproduced Spearman distribution; the second panel reports top-20\% Jaccard overlap.}
+\label{fig:ranking-robustness}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Reproduced ranking-robustness summary across 600 trials.}
+\label{tab:robustness}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{@{}l*{4}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Perturbation & Mean Spearman & 5th percentile & 95th percentile & Mean top-three Jaccard \\
+\midrule
+$\pm5\%$  & 0.979190 & 0.962331 & 0.992481 & 0.744500 \\
+$\pm10\%$ & 0.938267 & 0.886289 & 0.974436 & 0.546667 \\
+$\pm20\%$ & 0.845552 & 0.697067 & 0.935338 & 0.388833 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The results show high stability under small perturbations and progressively
+lower stability as uncertainty increases. Mean Spearman correlation remains
+high even at $\pm20\%$, while priority-set overlap declines more strongly.
+Table~\ref{tab:robustness} reports top-three overlap, whereas
+Figure~\ref{fig:ranking-robustness} uses top-20\% overlap. The overall
+ordering may therefore remain broadly similar even when membership
+among the highest-priority nodes changes. Accordingly, GBBRPM is
+comparatively stable for broad prioritization under modest input uncertainty,
+while exact top-ranked membership becomes more sensitive at larger
+perturbation levels.
+
+\subsection{Mathematical Property Tests}
+
+Randomized property testing was executed across 600 trials. All tested
+cases passed the declared baseline properties.
+
+\begin{table}[H]
+\centering
+\caption{Randomized mathematical property-test results.}
+\label{tab:property-tests}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrr@{}}
+\toprule
+Property & Passes & Total \\
+\midrule
+Boundedness & 600 & 600 \\
+Monotonicity in local disturbance & 600 & 600 \\
+$B=1\Rightarrow R=1$ & 600 & 600 \\
+$S=0$ gates the edge contribution & 600 & 600 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+These randomized checks complement the analytical results in Chapter 3.
+They do not prove correctness for every possible implementation or
+extension, but provide computational evidence that the frozen v1
+implementation behaves consistently with its bounded semantics over the
+tested cases.
+
+\subsection{Reconvergence and Dependence Diagnostic}
+
+When one disturbance splits across paths that later reconverge, the local
+bounded aggregator can treat the incoming terms as distinct even though
+they share an origin. The executable diagnostic compares ordinary GBBRPM
+with an ancestry-aware path-pruned counterfactual. Independent source
+lineages retain multiplicative-complement aggregation; overlapping
+lineages are grouped and only the largest incoming contribution in each
+group is retained.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/figure4_7.jpg}
+\caption{Overlap-inflation diagnostic for converging and reconverging networks.}
+\label{fig:reconvergence}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Regenerated reconvergence and overlap-inflation diagnostic.}
+\label{tab:reconvergence}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{@{}l*{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Network & Maximum OI & Mean OI & Outlet OI & Outlet GBBRPM & Outlet path-pruned \\
+\midrule
+N3 & 0.000000 & 0.000000 & 0.000000 & 0.106814 & 0.106814 \\
+N4 & 0.189280 & 0.083148 & 0.099372 & 0.351372 & 0.252000 \\
+N5 & 0.439353 & 0.149633 & 0.322637 & 0.708640 & 0.386003 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+N3 has no overlap inflation because its convergence is driven by
+independent source branches. N4 shows moderate inflation, and N5 shows the
+largest effect. The path-pruned result is not ground truth or a replacement
+formulation; it is a diagnostic counterfactual revealing where shared
+ancestry may be counted through multiple paths. The values are generated by
+\texttt{reconvergence.py} and exported in
+\texttt{results/reconvergence\_summary.csv} and
+\texttt{results/reconvergence\_node\_diagnostic.csv}.
+
+\subsection{Computational Scalability}
+
+The evaluator was timed on sparse DAGs with approximately three edges per
+node. For each size, five warm-up evaluations preceded 30 timed
+repetitions. Because scheduling delays can distort the arithmetic mean,
+the median and interquartile range (IQR) are the primary statistics.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/figure4_8.pdf}
+\caption{Median runtime and interquartile range of the one-pass GBBRPM evaluator on sparse DAGs.}
+\label{fig:scalability}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Scalability measurements after five warm-up runs and 30 repetitions.}
+\label{tab:scalability}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rrrrr@{}}
+\toprule
+Nodes & Edges & Median (ms) & IQR (ms) & Mean (ms) \\
+\midrule
+20   & 60   & 1.628378  & 1.499549--1.767802   & 2.616805 \\
+50   & 150  & 1.900651  & 1.880617--2.032984   & 1.971181 \\
+100  & 300  & 2.548793  & 2.520786--2.649607   & 2.623430 \\
+250  & 750  & 4.663104  & 4.434086--4.838490   & 4.697808 \\
+500  & 1500 & 7.876152  & 7.722431--10.143945  & 10.103489 \\
+1000 & 3000 & 16.650025 & 15.479139--28.142643 & 24.144717 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Median runtime increases monotonically from approximately 1.63 ms at 20
+nodes to 16.65 ms at 1000 nodes. Differences between median and mean at
+several sizes reflect isolated timing outliers rather than changes in the
+deterministic result. The observed growth is consistent with the expected
+one-pass $O(|V|+|E|)$ implementation over sparse DAGs, but remains machine-
+and load-dependent. The complete timing distribution is retained in
+\texttt{results/scalability.csv}.
+
+\subsection{SWMM External-Reference Comparison}
+
+A separate SWMM workflow compared GBBRPM downstream-risk patterns with
+hydraulic consequences under 12 controlled conduit-blockage scenarios.
+For each case, conduit area loss $a$ is represented in GBBRPM as reduced
+effective capacity,
+
+\[
+C'_{ij}=(1-a)C_{ij},
+\eqtag{4-3}\]
+
+with reference load held fixed and susceptibility recomputed. Positive
+GBBRPM risk change and positive SWMM maximum-depth or flooding-volume
+change are calculated relative to their respective baselines. Spearman
+correlation is evaluated over the union of nodes with positive change in
+either workflow; top-20\% Jaccard compares their highest-priority
+positive-change sets. Outside-scope share measures positive hydraulic worsening
+outside the blocked edge's target-and-descendant region.
+
+\input{tables/paper/table_drainage_swmm}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{figures/paper/fig_drainage_swmm_alignment.pdf}
+\caption{Agreement between GBBRPM priority changes and SWMM hydraulic outcomes across the 12 blockage scenarios.}
+\label{fig:drainage-swmm-alignment}
+\end{figure}
+
+The negative rank correlations and low top-20\% overlaps show that nodes
+with the largest GBBRPM increases generally differ from those with the
+largest positive hydraulic worsening under this protocol. Approximately
+71.20\% of positive maximum-depth worsening and 40.53\% of positive
+flooding-volume worsening occurred outside the strictly downstream GBBRPM
+region. This behavior is consistent with backwater, surcharge, ponding,
+and flow redistribution, which are absent from the downstream-only DAG
+formulation.
+
+Earlier thesis material preserved historical rank-correlation and
+top-three values under a different reporting convention. Those values
+are not used as principal regenerated evidence. The reported top-20\%
+overlap and outside-scope shares are reproduced by the explicit current
+workflow. Scenario-level and summary outputs are stored in
+\path{data/swmm/extracted/swmm_comparison_by_scenario.csv} and
+\path{swmm_comparison_summary.csv}.
+
+The mismatch clarifies that GBBRPM v1 is not a surrogate for full
+hydraulic state prediction. It is better positioned as a lightweight,
+interpretable downstream comparative-risk propagation and prioritization
+model.
+
+\subsection{Software-Dependency Case}
+
+The real Express 4.18.2 dependency topology contains 71 packages and 128
+directed dependency edges. Seven package versions were linked to
+evidence-backed vulnerability advisories and assigned bounded local
+disturbance levels according to the declared severity mapping.
+
+\input{tables/paper/table_software_vulnerabilities}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/paper/fig_software_vulnerable_subgraph.pdf}
+\caption{Evidence-backed vulnerable packages and their directed dependency relations to the Express root.}
+\label{fig:software-vulnerable-subgraph}
+\end{figure}
+
+The transmission sweep shows that the Express root risk rises from
+$0.5000$ at $\tau=0$ to $0.9975$ at $\tau=1$. Express moves from rank
+three to rank one by $\tau=0.50$, while the complete ordering remains
+highly stable relative to the $\tau=1$ reference.
+
+\input{tables/paper/table_software_sensitivity}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{figures/paper/fig_software_tau_sensitivity.pdf}
+\caption{Modeled software risk across the transmission-coefficient sweep.}
+\label{fig:software-tau-sensitivity}
+\end{figure}
+
+This case demonstrates that the same bounded recursive core can operate
+on a real directed dependency topology with a domain-specific
+disturbance mapping. It supports structural applicability and parameter
+sensitivity, not a claim that the risk index predicts future
+exploitation or software incidents.
+
+\subsection{Electrical-Network Case}
+
+The electrical importer produced 187 bus records and 177 active directed
+connections distributed across 10 weak components. The baseline archive
+contained 269 channel files, of which 231 were populated and 38 were
+empty. Empty members were recorded as data-quality outcomes rather than
+treated as parser failures.
+
+\input{tables/paper/table_electrical_baseline}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/paper/fig_electrical_topology_overview.pdf}
+\caption{Imported electrical topology with voltage-instrumented and isolated bus records identified.}
+\label{fig:electrical-topology}
+\end{figure}
+
+Overall timestamp coverage was 98.31\%. The archive contained 54 usable
+voltage channels with mean values from 0.9762 to 1.0431 p.u. Availability
+and missing intervals varied across measurement kinds, and 47 channel
+files remained unmapped under the available meter dictionary.
+
+\input{tables/paper/table_electrical_data_quality}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.68\textwidth]{figures/paper/fig_electrical_baseline_coverage.pdf}
+\caption{Meter-level voltage timestamp coverage during the available normal-operation baseline.}
+\label{fig:electrical-baseline-coverage}
+\end{figure}
+
+Two meters shown as ``No data'' in
+Figure~\ref{fig:electrical-baseline-coverage} lack usable voltage
+coverage; this does not imply that every mapped current or power channel
+for those meters is absent. The requested event windows are listed
+separately because the available baseline covers November 14--15, 2024
+rather than the November 13 switching events.
+
+\input{tables/paper/table_electrical_event_windows}
+
+The electrical case therefore verifies topology construction, channel
+mapping, chunked baseline preprocessing, empty-file handling, and
+coverage reporting. It does not yet validate GBBRPM against event-centered
+electrical outcomes; that claim remains pending acquisition of authorized
+measurements for the requested windows.
+
+\subsection{Integrated Discussion}
+
+Taken together, the experiments support five principal conclusions.
+First, GBBRPM satisfies its declared bounded and monotone risk-index
+semantics under the tested conditions. Second, graph structure and
+heterogeneous susceptibility materially influence downstream ranking
+beyond local-only scoring. Third, prioritization is generally stable
+under small perturbations but exact top-ranked membership becomes less
+stable under larger uncertainty. Fourth, the SWMM comparison demonstrates
+that the model's value lies in lightweight interpretable propagation and
+prioritization rather than high-fidelity hydraulic reproduction. Fifth,
+the software and electrical cases show that the frozen architecture and
+data pipeline can be mapped to distinct real directed-network structures,
+although their evidence does not establish equal predictive validity.
+
+The results support GBBRPM as an integrative graph-risk architecture
+rather than a claim that any individual mechanism is novel. They also
+identify extension targets including calibrated transmission,
+dependence-aware aggregation, cyclic or bidirectional propagation, and
+application-specific parameter estimation.
+
+\subsection{Chapter Summary}
+
+The restored pipeline provides a coherent computational assessment of
+GBBRPM v1 across five controlled synthetic DAGs, 136 controlled scenario
+runs, diagnostic comparators, 600-trial robustness experiments,
+randomized property tests, reconvergence diagnostics, scalability tests,
+and a separate SWMM external-reference workflow. Cross-domain evidence
+adds a 71-package software dependency graph and a 187-bus electrical
+topology with 269 baseline channel files.
+
+The evidence supports bounded recursive propagation, sensitivity to
+network context, robustness under modest uncertainty, and computational
+tractability while making the limitations of shared-path dependence and
+downstream-only propagation explicit. They also support cross-domain
+instantiability within the tested evidence boundaries while keeping
+electrical event validation pending. These findings provide the basis
+for the conclusions and recommendations in the succeeding chapter.

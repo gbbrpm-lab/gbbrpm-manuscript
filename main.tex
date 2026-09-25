@@ -1,0 +1,115 @@
+\documentclass[12pt,a4paper,fleqn]{article}
+
+% CITC manuscript body: A4 with 3.8 cm binding margin and 2.5 cm elsewhere.
+\usepackage[left=3.8cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\singlespacing
+
+% Palatino is the closest metrically compatible TeX font available to
+% Book Antiqua in this build environment.
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+
+\usepackage{amsmath}
+\newcommand{\eqtag}[1]{\tag{\textit{Equation #1}}}
+\setlength{\mathindent}{0pt}
+\usepackage{booktabs,longtable,array,calc,tabularx}
+\usepackage{graphicx,float}
+\usepackage{chngcntr}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+\usepackage[round,authoryear]{natbib}
+\usepackage{hyperref} 
+\hypersetup{ 
+    hidelinks=true
+}
+\usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+\captionsetup{
+    font=normalsize,
+    labelfont=bf,
+    labelsep=period,
+    justification=raggedright,
+    singlelinecheck=false
+}
+\captionsetup[figure]{position=bottom,skip=6pt}
+\captionsetup[table]{position=top,skip=6pt}
+
+% Pandoc table compatibility
+\providecommand{\real}[1]{#1}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\definecolor{gbnavy}{RGB}{23,54,93}
+\definecolor{gbgray}{RGB}{71,85,105}
+\definecolor{gblight}{RGB}{238,243,248}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+
+\setlength{\emergencystretch}{3em}
+
+% Number tables and figures by chapter-level section (e.g., Figure 4.1).
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+
+% CITC chapter and heading hierarchy.
+\titleformat{\section}[display]
+  {\normalfont\bfseries\fontsize{12}{14}\selectfont\centering}
+  {\MakeUppercase{Chapter \Roman{section}}}{0.5\baselineskip}{\MakeUppercase}
+\titleformat{\subsection}
+  {\normalfont\bfseries\fontsize{12}{14}\selectfont}
+  {\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}
+  {\normalfont\itshape\fontsize{12}{14}\selectfont}
+  {\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{0pt}{4\baselineskip}
+\titlespacing*{\subsection}{0pt}{2\baselineskip}{\baselineskip}
+\titlespacing*{\subsubsection}{0pt}{\baselineskip}{0.5\baselineskip}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+
+% Every chapter begins on a new page; its page number is counted but hidden.
+\pretocmd{\section}{\clearpage\thispagestyle{empty}}{}{}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{2.5cm}
+{\bfseries\fontsize{14}{17}\selectfont
+DESIGN AND EVALUATION OF A GRAPH-BASED BOUNDED RISK PROPAGATION MODEL FOR COMPARATIVE PRIORITIZATION ACROSS DIRECTED-NETWORK DOMAINS\par}
+\vfill
+{\fontsize{12}{14}\selectfont
+Glenn Mark Anino\\Den Jester Antonio\\John Jaybird Casia\\John Cyril Espina\\Sophia Marie Flores\par}
+\vfill
+{\fontsize{12}{14}\selectfont
+Department of Computer Science\\
+College of Information Technology and Computing\\
+University of Science and Technology of Southern Philippines\\
+Cagayan de Oro City, Philippines\par}
+\vspace*{1.5cm}
+\end{titlepage}
+
+\pagenumbering{arabic}
+
+\input{chapters/chapter1}
+\input{chapters/chapter2}
+\input{chapters/chapter3}
+\input{chapters/chapter4}
+\input{chapters/chapter5}
+\input{chapters/chapter6}
+\input{references}
+
+\end{document}
