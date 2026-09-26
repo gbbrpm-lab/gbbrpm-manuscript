@@ -12,6 +12,7 @@ The project is intended to be edited in VS Code, tracked with Git, built locally
 - **Chapter IV — Results and Discussion:** Reports the controlled results, robustness and scalability analyses, reconvergence diagnostic, SWMM comparison, software case, and electrical baseline case.
 - **Chapter V — Summary and Conclusion:** Separates the conclusions supported by each evidence source and keeps unsupported field or event-validation claims explicit.
 - **Chapter VI — Recommendations:** Lists the empirical data, validation, dependence-handling, and model-extension work that remains.
+- **Appendix A — Worked Example:** Gives a fully traced calculation of the generic GBBRPM core architecture using controlled dimensionless inputs.
 
 ## Evidence boundaries
 
@@ -66,6 +67,7 @@ To verify reproducibility, clone the repository into a new directory and build i
 ├── main.tex
 ├── references.tex
 ├── chapters/                 # Chapters I–VI
+├── appendices/               # Detailed worked calculations
 ├── figures/                  # Manuscript figures
 │   └── paper/                # Cross-domain generated figures
 ├── tables/                   # Literature and manuscript tables

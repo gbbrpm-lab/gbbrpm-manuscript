@@ -1,0 +1,299 @@
+\clearpage
+\thispagestyle{empty}
+\refstepcounter{section}
+\label{app:worked-example}
+
+\begin{center}
+\textbf{APPENDIX A}
+
+\vspace{\baselineskip}
+
+\textbf{Worked Example of the Generic GBBRPM\\
+Core Architecture}
+\end{center}
+
+\vspace{3\baselineskip}
+
+\subsection{Purpose and Scope of the Example}
+
+This appendix provides a transparent, step-by-step calculation of the generic
+Graph-Based Bounded Risk Propagation Model (GBBRPM) core architecture. The
+example demonstrates source-node initialization, relation-level contribution,
+bounded convergence, local disturbance at a receiving node, current-state
+recursion, and final comparative ranking. All values are controlled,
+dimensionless illustrative inputs. They are not drainage measurements,
+software observations, electrical measurements, calibrated probabilities, or
+evidence of empirical predictive validity.
+
+The calculation uses the abstract directed acyclic graph shown in
+Figure~\ref{fig:generic-node-example}. Its directed relations are
+\(N_1\rightarrow N_2\), \(N_4\rightarrow N_2\), and
+\(N_2\rightarrow N_3\). Nodes \(N_1\) and \(N_4\) are sources, the two
+incoming paths converge at \(N_2\), and the accumulated state at \(N_2\) is
+then propagated to \(N_3\). A valid topological evaluation order is
+\(N_1,N_4,N_2,N_3\).
+
+\subsection{Controlled Inputs}
+
+Table~\ref{tab:appendix-node-inputs} lists the local disturbance assigned to
+each node. The nonzero \(B_2\) value is included deliberately to show that a
+receiving node can contain both locally introduced and inherited risk.
+
+\begin{table}[H]
+\caption{Controlled Node Inputs for the Worked Example}
+\label{tab:appendix-node-inputs}
+\centering
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll}
+\toprule
+Node & Predecessor set \(P(j)\) & Local disturbance \(B_j\) \\
+\midrule
+\(N_1\) & \(\emptyset\) & 0.60 \\
+\(N_4\) & \(\emptyset\) & 0.30 \\
+\(N_2\) & \(\{N_1,N_4\}\) & 0.10 \\
+\(N_3\) & \(\{N_2\}\) & 0.00 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Table~\ref{tab:appendix-edge-inputs} lists the relation-specific
+susceptibilities and transmission factors. Neutral transmission
+\(\tau_{ij}=1\) is used consistently with the frozen v1 baseline. Therefore,
+the worked example does not claim to evaluate heterogeneous transmission.
+
+\begin{table}[H]
+\caption{Controlled Relation Inputs for the Worked Example}
+\label{tab:appendix-edge-inputs}
+\centering
+\begin{tabularx}{\textwidth}{@{}c c c L@{}}
+\toprule
+Relation & Susceptibility \(S_{ij}\) & Transmission \(\tau_{ij}\) & Role \\
+\midrule
+\(N_1\rightarrow N_2\) & 0.50 & 1.00 & First input to convergence \\
+\(N_4\rightarrow N_2\) & 0.40 & 1.00 & Second input to convergence \\
+\(N_2\rightarrow N_3\) & 0.75 & 1.00 & Recursive downstream transfer \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+All supplied values lie in \([0,1]\), every relation has a valid endpoint,
+and the graph contains no directed cycle. The inputs therefore satisfy the
+declared bounded-input and DAG requirements before propagation begins.
+
+\subsection{Core Update Rules}
+
+For a directed relation \(i\rightarrow j\), the incoming contribution is
+calculated as
+
+\[
+Q_{ij}=S_{ij}\tau_{ij}R_i.
+\eqtag{A-1}
+\]
+
+where:
+
+\noindent\(Q_{ij}\) = contribution entering node \(j\) from predecessor \(i\);\\
+\noindent\(S_{ij}\) = bounded relation-specific susceptibility;\\
+\noindent\(\tau_{ij}\) = bounded transmission or influence factor; and\\
+\noindent\(R_i\) = current accumulated state of upstream node \(i\).
+
+The receiving-node state is calculated as
+
+\[
+R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij}).
+\eqtag{A-2}
+\]
+
+where:
+
+\noindent\(R_j\) = final bounded state of receiving node \(j\);\\
+\noindent\(B_j\) = local disturbance introduced directly at node \(j\);\\
+\noindent\(P(j)\) = set of immediate predecessors of node \(j\); and\\
+\noindent\(Q_{ij}\) = incoming contribution from predecessor \(i\).
+
+The multiplicative-complement expression is a bounded saturating aggregator.
+It is used algebraically and is not interpreted as a probabilistic union.
+
+\subsection{Step 1: Initialize the Source Nodes}
+
+Nodes \(N_1\) and \(N_4\) have no predecessors. For either source node, the
+product over the empty predecessor set equals one. Equation A-2 therefore
+reduces to \(R_j=B_j\):
+
+\[
+\begin{aligned}
+R_1
+  &=1-(1-B_1)\prod_{i\in\emptyset}(1-Q_{i1}) \\
+  &=1-(1-0.60)(1) \\
+  &=0.60,\\[0.5\baselineskip]
+R_4
+  &=1-(1-B_4)\prod_{i\in\emptyset}(1-Q_{i4}) \\
+  &=1-(1-0.30)(1) \\
+  &=0.30.
+\end{aligned}
+\eqtag{A-3}
+\]
+
+Thus, a source node can contain a local disturbance. It does not require a
+special propagation rule: the ordinary aggregation rule produces its local
+state automatically through the empty-product convention.
+
+\subsection{Step 2: Calculate Contributions Entering
+\texorpdfstring{\(N_2\)}{N2}}
+
+The current source states are now available for the two relations entering
+\(N_2\). Applying Equation A-1 gives
+
+\[
+\begin{aligned}
+Q_{12}
+  &=S_{12}\tau_{12}R_1 \\
+  &=(0.50)(1.00)(0.60) \\
+  &=0.30,\\[0.5\baselineskip]
+Q_{42}
+  &=S_{42}\tau_{42}R_4 \\
+  &=(0.40)(1.00)(0.30) \\
+  &=0.12.
+\end{aligned}
+\eqtag{A-4}
+\]
+
+The two contributions are calculated separately because they arrive through
+different directed relations with different susceptibilities. Their raw sum
+is not used as the receiving-node state; they are combined through the bounded
+aggregation rule in the next step.
+
+\subsection{Step 3: Aggregate Local and Inherited Risk at
+\texorpdfstring{\(N_2\)}{N2}}
+
+Node \(N_2\) has local disturbance \(B_2=0.10\) and two incoming
+contributions. Substitution into Equation A-2 gives
+
+\[
+\begin{aligned}
+R_2
+  &=1-(1-B_2)(1-Q_{12})(1-Q_{42}) \\
+  &=1-(1-0.10)(1-0.30)(1-0.12) \\
+  &=1-(0.90)(0.70)(0.88) \\
+  &=1-0.5544 \\
+  &=0.4456.
+\end{aligned}
+\eqtag{A-5}
+\]
+
+The value \(R_2=0.4456\) represents the combined effect of the local
+disturbance at \(N_2\) and the two inherited contributions. Although all
+three components contribute to the result, the multiplicative-complement
+form keeps the computed state within \([0,1]\).
+
+For comparison, removing the local disturbance while retaining both inherited
+contributions would give
+\(1-(1-0.30)(1-0.12)=0.3840\). The increase from 0.3840 to 0.4456 is therefore
+caused by including the receiving node's own local disturbance through the
+same bounded rule rather than adding it after propagation.
+
+\subsection{Step 4: Propagate the Current State to
+\texorpdfstring{\(N_3\)}{N3}}
+
+The contribution from \(N_2\) to \(N_3\) uses the newly accumulated state
+\(R_2=0.4456\), not only the original local disturbance \(B_2=0.10\):
+
+\[
+\begin{aligned}
+Q_{23}
+  &=S_{23}\tau_{23}R_2 \\
+  &=(0.75)(1.00)(0.4456) \\
+  &=0.3342.
+\end{aligned}
+\eqtag{A-6}
+\]
+
+Because \(N_3\) has no local disturbance and only \(N_2\) as its
+predecessor, its state is
+
+\[
+\begin{aligned}
+R_3
+  &=1-(1-B_3)(1-Q_{23}) \\
+  &=1-(1-0.00)(1-0.3342) \\
+  &=1-(1.00)(0.6658) \\
+  &=0.3342.
+\end{aligned}
+\eqtag{A-7}
+\]
+
+This step demonstrates current-state recursion. If the calculation incorrectly
+used only \(B_2\), the relation contribution would be
+\((0.75)(1.00)(0.10)=0.0750\), which would discard the risk inherited by
+\(N_2\). The implemented architecture instead propagates \(R_2\), preserving
+the accumulated upstream effect in the downstream evaluation.
+
+\subsection{Step 5: Produce the Comparative Ranking}
+
+After all nodes have been evaluated once in topological order, their final
+states are sorted in descending order. Table~\ref{tab:appendix-final-ranking}
+reports the resulting prioritization.
+
+\begin{table}[H]
+\caption{Final Node States and Comparative Ranking}
+\label{tab:appendix-final-ranking}
+\centering
+\begin{tabular*}{0.72\textwidth}{@{\extracolsep{\fill}}cll}
+\toprule
+Rank & Node & Final state \(R_i\) \\
+\midrule
+1 & \(N_1\) & 0.6000 \\
+2 & \(N_2\) & 0.4456 \\
+3 & \(N_3\) & 0.3342 \\
+4 & \(N_4\) & 0.3000 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+The ranking is a comparison among modeled node states under this controlled
+configuration. It does not mean that \(N_1\) has a 60\% probability of failure
+or that the numerical spacing between ranks has a domain-independent physical
+meaning. If two nodes obtain exactly equal final states, the implementation
+retains the tie and assigns them the same risk standing rather than applying an
+unsupported secondary tie-breaker.
+
+\subsection{Calculation Trace and Interpretation}
+
+Table~\ref{tab:appendix-trace} consolidates the complete evaluation trace. It
+also shows that every downstream calculation uses only predecessor states that
+have already been computed in the declared topological order.
+
+\begin{table}[H]
+\caption{Complete Topological Evaluation Trace}
+\label{tab:appendix-trace}
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}c c L L c@{}}
+\toprule
+Order & Node & Available predecessor states & Incoming contributions & Result \\
+\midrule
+1 & \(N_1\) & None & Empty product & \(R_1=0.6000\) \\
+2 & \(N_4\) & None & Empty product & \(R_4=0.3000\) \\
+3 & \(N_2\) & \(R_1=0.6000\), \(R_4=0.3000\) & \(Q_{12}=0.3000\), \(Q_{42}=0.1200\) & \(R_2=0.4456\) \\
+4 & \(N_3\) & \(R_2=0.4456\) & \(Q_{23}=0.3342\) & \(R_3=0.3342\) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The worked example establishes seven features of the generic architecture.
+First, the empty-product convention gives source nodes their local states
+without a separate initialization equation. Second, relation susceptibility
+modifies each upstream state before it enters the receiving node. Third,
+neutral transmission preserves the transmission interface without introducing
+unsupported relation differences. Fourth, multiple incoming contributions and
+a receiving-node disturbance are combined through one bounded rule. Fifth,
+the evaluator propagates the current accumulated state rather than only the
+original local input. Sixth, one topological pass is sufficient because the
+evaluated graph is acyclic. Seventh, prioritization is derived only after all
+node states have been calculated.
+
+These calculations explain the mechanics of the frozen core architecture.
+They do not establish that the illustrative parameter values are appropriate
+for a particular domain. Drainage, software-dependency, and electrical-network
+instantiations require separate evidence for the meanings and construction of
+their local disturbances, susceptibilities, transmission factors, and outcome
+comparators.
