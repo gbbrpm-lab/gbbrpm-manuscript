@@ -6,6 +6,7 @@
 - Kept Chapter 2 literature-only and added citations to every substantive literature claim.
 - Added a propagation-model-family comparison table and a literature-derived architectural-gap figure.
 - Added the generic node-and-edge example requested during consultation to Chapter 3.
+- Added Appendix A with a fully traced generic-core calculation covering source initialization, converging contributions, local disturbance, current-state recursion, bounded aggregation, ranking, and ties; Chapter 3 now cross-references the appendix.
 - Retained three evaluation domains: drainage, software dependency, and electrical networks.
 - Clarified evidence boundaries: drainage lacks operational field data; software has real structural/advisory evidence; electrical has real topology and baseline data but lacks event-aligned November 13 measurements.
 - Rechecked the problem–question–objective–method alignment table.
