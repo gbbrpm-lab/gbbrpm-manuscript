@@ -25,13 +25,15 @@ dimensionless illustrative inputs. They are not drainage measurements,
 software observations, electrical measurements, calibrated probabilities, or
 evidence of empirical predictive validity.
 
-The calculation uses the abstract directed acyclic graph shown in
-Figure~\ref{fig:generic-node-example}. Its directed relations are
+The calculation uses the controlled directed acyclic graph shown in
+Figure~\ref{fig:appendix-sample-network}. Its directed relations are
 \(N_1\rightarrow N_2\), \(N_4\rightarrow N_2\), and
 \(N_2\rightarrow N_3\). Nodes \(N_1\) and \(N_4\) are sources, the two
 incoming paths converge at \(N_2\), and the accumulated state at \(N_2\) is
 then propagated to \(N_3\). A valid topological evaluation order is
 \(N_1,N_4,N_2,N_3\).
+
+\input{figures/fig_appendix_sample_network}
 
 \subsection{Controlled Inputs}
 

@@ -1,0 +1,35 @@
+\begin{figure}[H]
+\centering
+\resizebox{0.70\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily,
+  entity/.style={circle, draw=gbnavy, fill=gblight, line width=1pt,
+    minimum size=17mm, align=center, font=\bfseries},
+  edge/.style={-{Latex[length=2.5mm]}, draw=gbnavy, line width=.9pt},
+  edgevalue/.style={font=\scriptsize, fill=white, inner sep=2pt,
+    text width=29mm, align=center},
+  input/.style={draw=gbgray, rounded corners, fill=white, align=center,
+    inner sep=4pt, text width=31mm, font=\scriptsize},
+  inputedge/.style={-{Latex[length=2mm]}, dashed, draw=gbgray, line width=.8pt}
+]
+\node[entity] (n1) at (0,0) {$N_1$};
+\node[entity] (n4) at (0,2.25) {$N_4$};
+\node[entity] (n2) at (4,1.1) {$N_2$};
+\node[entity] (n3) at (8,1.1) {$N_3$};
+
+\draw[edge] (n1) -- node[edgevalue, below=3pt] {$S_{12}=0.50$, $\tau_{12}=1.00$, $Q_{12}=0.3000$} (n2);
+\draw[edge] (n4) -- node[edgevalue, above=3pt] {$S_{42}=0.40$, $\tau_{42}=1.00$, $Q_{42}=0.1200$} (n2);
+\draw[edge] (n2) -- node[edgevalue, above=3pt] {$S_{23}=0.75$, $\tau_{23}=1.00$, $Q_{23}=0.3342$} (n3);
+
+\node[input] (i1) at (0,-1.85) {source node, order 1: $B_1=0.60$, $R_1=0.6000$};
+\node[input] (i4) at (0,4.15) {source node, order 2: $B_4=0.30$, $R_4=0.3000$};
+\node[input] (i2) at (4,-1.85) {bounded convergence, order 3: $B_2=0.10$, $R_2=0.4456$};
+\node[input] (i3) at (8,-1.85) {receiving node, order 4: $B_3=0.00$, $R_3=0.3342$};
+\draw[inputedge] (i1) -- (n1);
+\draw[inputedge] (i4) -- (n4);
+\draw[inputedge] (i2) -- (n2);
+\draw[inputedge] (i3) -- (n3);
+\end{tikzpicture}}
+\caption{Controlled four-node DAG used in the Appendix A calculation. Node callouts show evaluation order, local disturbance, and computed state; relation labels show susceptibility, neutral transmission, and incoming contribution.}
+\label{fig:appendix-sample-network}
+\end{figure}
