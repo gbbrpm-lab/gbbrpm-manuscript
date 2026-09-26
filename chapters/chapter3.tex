@@ -72,6 +72,10 @@ Data basis
 Claim supported
 \end{minipage} \\
 \midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Phase & Purpose & Data basis & Claim supported \\
+\midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
@@ -179,6 +183,13 @@ R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})
 
 After all node states have been computed, comparative prioritization is obtained by ordering nodes in descending order of their final \(R_i\) values. Ranking is a derived output of propagation, not a separate propagation mechanism. Tied values receive the same risk standing and are reported explicitly rather than separated through an unsupported tie-breaking rule.
 
+A complete numerical demonstration of source initialization, relation-level
+contribution, bounded multi-source aggregation, current-state recursion, and
+comparative ranking is provided in Appendix~\ref{app:worked-example}. The
+worked example uses controlled dimensionless values solely to explain the
+generic computation; it is not an operational measurement or an empirical
+validation case.
+
 \hypertarget{controlled-synthetic-network-set}{%
 \subsection{Controlled Synthetic Network Set}\label{controlled-synthetic-network-set}}
 
@@ -201,6 +212,10 @@ Structure
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
 Primary purpose
 \end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Network & Structure & Primary purpose \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
