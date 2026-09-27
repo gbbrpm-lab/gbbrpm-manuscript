@@ -1,0 +1,25 @@
+\begin{table}[H]
+\centering
+\caption{Selected Component 2 controlled-scenario results.}
+\label{tab:electrical-component2-results}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{@{}lrrrrL@{}}
+\toprule
+Scenario & Setting & Risk sum & Max. risk & Affected & Highest-risk node \\
+\midrule
+Reference & $B=0$ & 0.000 & 0.000 & 0 & None \\
+Root severity & $B_{N01}=0.25$ & 0.395 & 0.250 & 2 & C2\_N01 \\
+Root severity & $B_{N01}=0.75$ & 1.186 & 0.750 & 3 & C2\_N01 \\
+Root severity & $B_{N01}=1.00$ & 1.581 & 1.000 & 4 & C2\_N01 \\
+Load scale & $0.50\times$ & 0.908 & 0.750 & 2 & C2\_N01 \\
+Load scale & $1.50\times$ & 1.638 & 0.750 & 5 & C2\_N01 \\
+Transmission & $\tau=0$ & 0.750 & 0.750 & 1 & C2\_N01 \\
+Transmission & $\tau=1$ & 1.186 & 0.750 & 3 & C2\_N01 \\
+Location & $B_{N02}=0.75$ & 1.417 & 0.750 & 4 & C2\_N02 \\
+Location & $B_{N03}=0.75$ & 1.191 & 0.750 & 4 & C2\_N03 \\
+All internal & six nodes at $B=0.50$ & 3.754 & 0.599 & 10 & C2\_N03 \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}\parbox{0.96\linewidth}{\footnotesize ``Affected'' denotes observable nodes with risk greater than 0.05. Values are deterministic comparative indices, not probabilities or observed event outcomes.}
+\end{table}

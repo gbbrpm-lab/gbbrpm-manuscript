@@ -63,17 +63,62 @@ index is an exploit probability or a predictor of future incidents.
 
 \subsubsection{Electrical-Network Evidence}
 
-The electrical case verified import and baseline preprocessing for 187
-bus records, 177 active directed connections, and 269 channel files.
-The workflow handled 38 empty archive members without terminating,
-reported mapping and missingness explicitly, identified 54 usable
-voltage channels, and measured 98.31\% overall timestamp coverage.
+The full-network electrical stage verified import and baseline
+preprocessing for 187 bus records, 177 active directed connections, and
+269 channel files. The workflow handled 38 empty archive members without
+terminating, reported mapping and missingness explicitly, identified 54
+usable voltage channels, and measured 98.31\% overall timestamp coverage.
 
-The available magnitudes cover normal operation on November 14--15,
-2024, while the requested switching events occurred on November 13.
-Consequently, the case supports real-topology construction and baseline
-data-pipeline verification, but electrical event-response validation
-remains pending.
+The Component 2 stage extended this evidence through a controlled
+real-topology, measured-loading instantiation. Its observable model contained
+12 nodes and 11 edges parameterized from 24 aligned phasor snapshots.
+Across 43 deterministic scenarios, risks and edge contributions remained
+bounded. Root severity, measured-load scaling, and uniform transmission
+produced monotone increases in downstream risk. Equal disturbances at
+different nodes produced different risk sums, with C2\_N02 highest at
+1.417 because it bypassed the initial transformer attenuation while
+retaining broad downstream reach. The all-internal-source case affected
+10 of 12 nodes while remaining bounded at a maximum node risk of 0.599.
+
+These findings support controlled electrical mechanism and sensitivity
+claims, not event prediction. The measurements represent normal operation
+and are not aligned with the requested switching-event outcomes;
+electrical event-response validation therefore remains pending.
+
+\subsection{Answers to the Research Questions}
+
+The combined evidence answers the five research questions within the
+declared non-probabilistic and non-predictive scope:
+
+\begin{enumerate}[label=\textbf{RQ\arabic*.},leftmargin=*]
+  \item Local disturbance, current upstream risk, relation-specific
+  susceptibility, optional transmission, directed reachability, and
+  multi-source input are integrated through a topologically ordered
+  evaluator and the multiplicative-complement aggregation rule. The
+  resulting state remains traceable to its local and incoming terms.
+  \item The formulation preserved the declared $[0,1]$ bounds and
+  monotone response in the controlled scenarios and all 600 randomized
+  property trials. Comparative rankings also changed in the expected
+  direction when source severity, edge susceptibility, and disturbance
+  placement changed.
+  \item The model responded materially to severity, susceptibility,
+  topology, location, and multi-source configuration; retained high
+  overall ranking agreement under modest perturbation; exposed reduced
+  top-set stability at larger perturbations; and exhibited runtime growth
+  consistent with one-pass $O(|V|+|E|)$ evaluation on the tested sparse
+  DAGs.
+  \item The frozen update rule was instantiated without redefinition in
+  drainage, software-dependency, and electrical-network cases. The
+  domain meanings and evidence sources changed, but the roles of $B$,
+  $S$, $\tau$, $Q$, and $R$ remained fixed.
+  \item The domains provide unequal but complementary evidence: drainage
+  supplies controlled behavior and a hydraulic-reference boundary;
+  software supplies real-topology structural and transmission-sensitivity
+  evidence; and electrical data supply importer verification plus
+  controlled real-topology, measured-loading sensitivity evidence. None
+  of these results establishes universal predictive validity, and the
+  electrical case still lacks event-aligned independent outcomes.
+\end{enumerate}
 
 \subsection{Conclusions}
 
@@ -92,9 +137,11 @@ Within the tested scope, the study concludes that:
   This supports cross-domain instantiability, not universal validity.
   \item The SWMM disagreement establishes that GBBRPM should not be used
   as a substitute for hydraulic simulation.
-  \item The current electrical evidence verifies topology and baseline
-  preprocessing only; event-centered validation cannot be claimed until
-  temporally aligned measurements are obtained.
+  \item The electrical evidence verifies topology and baseline
+  preprocessing and demonstrates bounded, monotone controlled responses
+  on Component 2 under measured loading. Event-centered validation cannot
+  be claimed until temporally aligned inputs and independent outcomes are
+  obtained.
 \end{enumerate}
 
 \subsection{Limitations}
@@ -110,7 +157,14 @@ evidence.
 The drainage case uses controlled networks and simulated hydraulic
 reference outcomes rather than a calibrated operational field study.
 The software case demonstrates structural applicability and sensitivity
-rather than observed incident prediction. The electrical case contains
-substantial baseline coverage but no measurements aligned with the
-requested event windows. The three cases therefore cannot be pooled as
-if they offered identical empirical strength.
+rather than observed incident prediction. The Component 2 electrical
+suite injects controlled disturbances into a measured normal-operation
+baseline; it does not contain observed event labels or outcomes aligned
+with the requested windows. Component 2 was selected purposively using
+observability, traceability, branching structure, and DAG compatibility,
+not through random sampling; the 24-snapshot window supports descriptive
+parameter instantiation rather than temporal or population-level
+generalization. Its residual power is reported but not spatially
+allocated, and one unobserved component edge is excluded. The three cases
+therefore cannot be pooled as if they offered identical empirical
+strength.

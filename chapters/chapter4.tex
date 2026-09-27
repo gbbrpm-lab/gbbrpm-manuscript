@@ -8,7 +8,8 @@ formulation described in Chapter 3. The controlled experiment suite
 produced 136 scenario runs, supplemented by comparator analysis,
 robustness trials, mathematical property tests, scalability measurements,
 reconvergence diagnostics, a SWMM external-reference comparison, and
-software and electrical cross-domain cases.
+software and electrical cross-domain cases, including a separate 43-run
+Component 2 controlled electrical suite.
 
 The results are interpreted according to the evidence role of each case.
 They are not interpreted as calibrated failure probabilities, proof that
@@ -579,6 +580,8 @@ exploitation or software incidents.
 
 \subsection{Electrical-Network Case}
 
+\subsubsection{Full-Network Import and Baseline Quality}
+
 The electrical importer produced 187 bus records and 177 active directed
 connections distributed across 10 weak components. The baseline archive
 contained 269 channel files, of which 231 were populated and 38 were
@@ -617,11 +620,101 @@ rather than the November 13 switching events.
 
 \input{tables/paper/table_electrical_event_windows}
 
-The electrical case therefore verifies topology construction, channel
+This first stage therefore verifies topology construction, channel
 mapping, chunked baseline preprocessing, empty-file handling, and
-coverage reporting. It does not yet validate GBBRPM against event-centered
-electrical outcomes; that claim remains pending acquisition of authorized
-measurements for the requested windows.
+coverage reporting.
+
+\subsubsection{Component 2 Controlled Instantiation}
+
+The second stage instantiated GBBRPM on an authorized Component 2 extract
+from the Caltech SoCal 28-Bus dataset. Table~\ref{tab:electrical-component2-design}
+summarizes the traceable conversion from topology and phasors to the
+observable model. The complete 13-node, 12-edge component became a
+12-node, 11-edge arborescence after excluding the unobserved
+\texttt{line\_407}. The source and five terminal meters had 24 aligned
+phasor snapshots. Source mean real power was 985.957 kW, compared with
+976.828 kW across the five metered terminal loads; the 9.129 kW residual
+(0.926\% of source real power) was retained as an explicit reconciliation
+residual rather than assigned to an arbitrary node.
+
+\input{tables/paper/table_electrical_component2_design}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\textwidth]{figures/paper/fig_electrical_component2_topology.pdf}
+\caption{Observable Component 2 topology and baseline edge susceptibility derived from measured downstream apparent power and declared capacity.}
+\label{fig:electrical-component2-topology}
+\end{figure}
+
+Figure~\ref{fig:electrical-component2-topology} shows that measured
+loading produces heterogeneous electrical susceptibility even though the
+graph is small. The largest baseline susceptibility is 0.395 on
+\texttt{line\_408}, followed by 0.318 on transformer
+\texttt{tr\_121} and 0.308 on source transformer
+\texttt{tr\_117}; the lightly loaded \texttt{line\_416} branch has
+susceptibility 0.014. These values are descriptive loading-to-capacity
+ratios, not empirical failure probabilities.
+
+All 43 controlled runs preserved node risks and edge contributions in
+$[0,1]$. The zero-disturbance reference produced zero risk throughout.
+With a root disturbance of 0.75, the risk sum was 1.186, three nodes
+exceeded 0.05, and the maximum terminal-node risk was 0.029. Raising the
+root disturbance from 0.25 to 1.00 increased risk sum monotonically from
+0.395 to 1.581 and increased the number of affected nodes from two to
+four. Table~\ref{tab:electrical-component2-results} reports selected
+endpoints from all major scenario families.
+
+\input{tables/paper/table_electrical_component2_results}
+
+Uniformly scaling measured edge loads while holding the root disturbance
+at 0.75 produced a monotone increase in propagated risk. Risk sum rose
+from 0.908 at $0.50\times$ measured loading to 1.638 at $1.50\times$,
+while the affected-node count rose from two to five. The maximum risk
+remained 0.75 because the controlled source disturbance was fixed; the
+change occurred in downstream propagation rather than in the injected
+source value.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{figures/paper/fig_electrical_load_scale.pdf}
+\caption{Component 2 response to uniform counterfactual scaling of measured edge loading with root disturbance fixed at 0.75.}
+\label{fig:electrical-load-scale}
+\end{figure}
+
+Disturbance placement also changed total propagated risk. At equal local
+severity 0.75, C2\_N02 produced the largest risk sum (1.417), followed by
+C2\_N03 (1.191) and the root C2\_N01 (1.186). C2\_N02 avoids the initial
+attenuation through \texttt{tr\_117} while retaining access to nearly all
+downstream branches. Terminal-node disturbances produced no downstream
+propagation and therefore retained a risk sum of 0.750. This result shows
+why equal local disturbances need not imply equal network-level
+priorities.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.86\textwidth]{figures/paper/fig_electrical_location_effect.pdf}
+\caption{Risk sum under an isolated disturbance of 0.75 at each observable Component 2 node.}
+\label{fig:electrical-location-effect}
+\end{figure}
+
+The uniform transmission sweep provided a second controlled attenuation
+test. With $\tau=0$, only the root retained its local risk and the risk
+sum was 0.750. Increasing $\tau$ to 1 raised risk sum monotonically to
+1.186 and maximum terminal risk to 0.029. In the multi-source family,
+the nested C2\_N02--C2\_N03 pair produced a maximum node risk of 0.599
+and risk sum of 1.582, demonstrating bounded combination of incoming and
+local disturbance. Activating all six internal non-root sources at 0.50
+raised risk sum to 3.754 and affected 10 of 12 nodes. Parallel-source
+cases represent concurrent branch coverage; because Component 2 is an
+arborescence, these runs are not evidence about reconvergent-path
+dependence.
+
+The Component 2 results extend the electrical case beyond importer and
+baseline verification to controlled mechanism and sensitivity evidence on real
+topology and measured normal-operation loading. They still do not validate
+GBBRPM against observed electrical-event outcomes. Such a claim requires
+temporally aligned disturbance labels and independent outcome measurements
+for the requested switching windows.
 
 \subsection{Integrated Discussion}
 
@@ -636,7 +729,11 @@ that the model's value lies in lightweight interpretable propagation and
 prioritization rather than high-fidelity hydraulic reproduction. Fifth,
 the software and electrical cases show that the frozen architecture and
 data pipeline can be mapped to distinct real directed-network structures,
-although their evidence does not establish equal predictive validity.
+although their evidence does not establish equal predictive validity. The
+Component 2 suite specifically shows that measured electrical loading can
+parameterize heterogeneous susceptibility and produce expected bounded,
+monotone scenario responses without converting those responses into event
+predictions.
 
 The results support GBBRPM as an integrative graph-risk architecture
 rather than a claim that any individual mechanism is novel. They also
@@ -651,8 +748,9 @@ GBBRPM v1 across five controlled synthetic DAGs, 136 controlled scenario
 runs, diagnostic comparators, 600-trial robustness experiments,
 randomized property tests, reconvergence diagnostics, scalability tests,
 and a separate SWMM external-reference workflow. Cross-domain evidence
-adds a 71-package software dependency graph and a 187-bus electrical
-topology with 269 baseline channel files.
+adds a 71-package software dependency graph, a 187-bus electrical
+baseline with 269 channel files, and a 12-node observable Component 2
+model evaluated in 43 controlled runs.
 
 The evidence supports bounded recursive propagation, sensitivity to
 network context, robustness under modest uncertainty, and computational
