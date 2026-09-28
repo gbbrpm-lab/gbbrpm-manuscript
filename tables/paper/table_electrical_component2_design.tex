@@ -1,0 +1,22 @@
+\begin{table}[H]
+\centering
+\caption{Caltech Component 2 data preparation and model instantiation.}
+\label{tab:electrical-component2-design}
+\small
+\begin{tabularx}{\textwidth}{@{}lL@{}}
+\toprule
+Item & Component 2 value or policy \\
+\midrule
+Complete / observable graph & 13 nodes and 12 edges / 12 nodes and 11 edges \\
+Observation exclusion & \texttt{line\_407}; no supported downstream meter path \\
+Measurement window & 24 synchronized phasor snapshots from November 14, 2024 07:00 \\
+Source / terminal meters & \texttt{egauge\_21} / \texttt{egauge\_3, 7, 9, 11, 13} \\
+Mean real power & 985.957 kW source; 976.828 kW metered terminal loads \\
+Unallocated residual & 9.129 kW and 135.398 kvar, reported separately \\
+Susceptibility & $S_{ij}=\min(1,L_{ij}/C_{ij})$ using mean downstream apparent power \\
+Capacity & Declared line current and voltage; minimum transformer nameplate kVA \\
+Reference state & $B_i=0$ and $\tau_{ij}=1$ unless varied by the scenario \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}\parbox{0.96\linewidth}{\footnotesize Phasor-derived power is the model input. The raw \texttt{Mains\_Power} register is retained only as a scale cross-check because its declared unit is inconsistent with its numerical values.}
+\end{table}
