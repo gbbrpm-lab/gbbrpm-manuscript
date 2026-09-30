@@ -12,9 +12,10 @@ This pack follows the thesis from motivation to recommendations. Each file can b
 6. [Drainage and SWMM Case](06_DRAINAGE_AND_SWMM_CASE.md)
 7. [Software-Dependency Case](07_SOFTWARE_DEPENDENCY_CASE.md)
 8. [Electrical-Network Case](08_ELECTRICAL_NETWORK_CASE.md)
-9. [Conclusions, Limitations, and Recommendations](09_CONCLUSIONS_LIMITATIONS_RECOMMENDATIONS.md)
-10. [Rapid-Fire Examiner Questions](10_RAPID_FIRE_EXAMINER_QA.md)
-11. [Suggested Defense Presentation Flow](11_PRESENTATION_FLOW.md)
+9. [Research Prototype](08A_RESEARCH_PROTOTYPE.md)
+10. [Conclusions, Limitations, and Recommendations](09_CONCLUSIONS_LIMITATIONS_RECOMMENDATIONS.md)
+11. [Rapid-Fire Examiner Questions](10_RAPID_FIRE_EXAMINER_QA.md)
+12. [Suggested Defense Presentation Flow](11_PRESENTATION_FLOW.md)
 
 The detailed Component 2 briefing remains available at [ADVISER_BRIEFING_COMPONENT2.md](../ADVISER_BRIEFING_COMPONENT2.md).
 
@@ -32,10 +33,10 @@ GBBRPM is a deterministic, bounded, non-probabilistic recursive architecture tha
 | Software case | Can the frozen roles map to a different real topology? | Structural instantiability and controlled transmission sensitivity |
 | Electrical full-network import | Can real topology and baseline channels be processed? | Topology and baseline data-pipeline verification |
 | Component 2 | Can measured loading parameterize a controlled electrical instantiation? | Real-topology, measured-loading mechanism and sensitivity evidence |
+| Research prototype | Can the frozen evaluator support a validated interactive workflow? | Implementation feasibility, graph safeguards, and traceable outputs |
 
 ## Three statements to repeat consistently
 
 1. The output is a comparative risk index, not a calibrated probability.
 2. Cross-domain instantiability does not mean universal predictive validity.
 3. Controlled sensitivity evidence does not equal independent event validation.
-

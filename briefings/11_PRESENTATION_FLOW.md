@@ -1,6 +1,6 @@
 # Briefing 11: Suggested Defense Presentation Flow
 
-This sequence is designed for a roughly 12--15 minute technical presentation. Adjust timing to the panel's instructions.
+This sequence is designed for a roughly 13--16 minute technical presentation. Adjust timing to the panel's instructions.
 
 ## Slide 1: Title and one-sentence contribution — 30 seconds
 
@@ -87,7 +87,11 @@ Split the explanation:
 
 Explain why Component 2 was selected and why this remains controlled sensitivity rather than event validation.
 
-## Slide 13: Cross-domain evidence comparison — 1 minute
+## Slide 13: Research prototype — 1 minute
+
+Show the prototype architecture or a live interface view. Explain validated synthetic/imported inputs, editable model parameters, graph safeguards, and traceable rankings. State that operational mode remains inactive and that the prototype is not production-ready.
+
+## Slide 14: Cross-domain evidence comparison — 1 minute
 
 Use a table:
 
@@ -97,7 +101,7 @@ Use a table:
 
 State that these are unequal evidence roles.
 
-## Slide 14: Conclusions — 1 minute
+## Slide 15: Conclusions — 1 minute
 
 Give only three conclusions:
 
@@ -105,7 +109,7 @@ Give only three conclusions:
 2. network context materially changes prioritization; and
 3. the frozen rule is instantiable across the tested domains, without proving universal prediction.
 
-## Slide 15: Limitations and next work — 45 seconds
+## Slide 16: Limitations and next work — 45 seconds
 
 Prioritize:
 
@@ -125,4 +129,3 @@ Prioritize:
 - Say “controlled sensitivity,” not “event validation,” for Component 2.
 - Do not combine unlike evidence into one accuracy score.
 - When challenged, return to the exact question each experiment was designed to answer.
-

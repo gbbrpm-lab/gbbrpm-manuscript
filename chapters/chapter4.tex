@@ -576,9 +576,7 @@ This case demonstrates that the same bounded recursive core can operate
 on a real directed dependency topology with a domain-specific
 disturbance mapping. It supports structural applicability and parameter
 sensitivity, not a claim that the risk index predicts future
-exploitation or software incidents. Appendix~\ref{app:software-worked-example}
-reproduces the reported Express result at \(\tau=0.50\) from its local and
-incoming contributions.
+exploitation or software incidents.
 
 \subsection{Electrical-Network Case}
 
@@ -716,13 +714,54 @@ baseline verification to controlled mechanism and sensitivity evidence on real
 topology and measured normal-operation loading. They still do not validate
 GBBRPM against observed electrical-event outcomes. Such a claim requires
 temporally aligned disturbance labels and independent outcome measurements
-for the requested switching windows. Appendix~\ref{app:electrical-worked-example}
-traces the measured-loading susceptibility construction and the complete
-12-node root-disturbance calculation underlying the reported risk sum.
+for the requested switching windows.
+
+\subsection{Research Prototype Implementation and Functional Verification}
+
+The GBBRPM research prototype operationalized the frozen evaluator
+through a common validated input workflow and an interactive graph and
+ranking interface. Synthetic mode exposed the five controlled networks;
+imported mode accepted schema-conforming user networks; and operational
+mode remained visibly inactive because no provenance-complete agency
+dataset had been configured. This separation prevented synthetic or
+user-provided fixtures from being mislabeled as operational evidence.
+
+Table~\ref{tab:prototype-verification} reports the functional verification
+outcomes. The frozen N5 fixture reproduced the preserved outlet risk
+$R_{N20}=0.7086404493$ and ranked N13 first. A three-node imported graph
+with $B_A=0.8$, $S_{AB}=0.5$, and $S_{BC}=0.7$ produced
+$R_C=0.28$, matching direct evaluation. Unknown endpoints and cyclic
+inputs were rejected before propagation, and the frontend completed a
+production build. The build emitted a bundle-size optimization warning,
+but no compilation error.
+
+\begin{table}[H]
+\centering
+\caption{Research prototype functional verification.}
+\label{tab:prototype-verification}
+\small
+\begin{tabularx}{\textwidth}{@{}L L L@{}}
+\toprule
+Verification target & Acceptance criterion & Observed result \\
+\midrule
+Controlled inventory & N1--N5 load in fixed order; N5 contains 20 nodes & Passed \\
+Frozen-result reproduction & N5 outlet \(R_{N20}=0.7086404493\) and top node N13 & Passed \\
+Imported explicit-\(S\) graph & Valid \(A\rightarrow B\rightarrow C\) graph returns \(R_C=0.28\) & Passed \\
+Invalid-graph safeguards & Unknown endpoints and directed cycles are rejected & Passed \\
+Frontend production build & TypeScript and Vite compilation complete without errors & Passed with bundle-size warning \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The prototype therefore supports implementation feasibility,
+input-validation traceability, and faithful reuse of the versioned model
+engine. It does not demonstrate production readiness, user acceptance,
+operational data integration, or improved predictive validity. Those are
+separate evaluation questions.
 
 \subsection{Integrated Discussion}
 
-Taken together, the experiments support five principal conclusions.
+Taken together, the experiments and implementation evidence support six principal conclusions.
 First, GBBRPM satisfies its declared bounded and monotone risk-index
 semantics under the tested conditions. Second, graph structure and
 heterogeneous susceptibility materially influence downstream ranking
@@ -737,7 +776,10 @@ although their evidence does not establish equal predictive validity. The
 Component 2 suite specifically shows that measured electrical loading can
 parameterize heterogeneous susceptibility and produce expected bounded,
 monotone scenario responses without converting those responses into event
-predictions.
+predictions. Sixth, the research prototype shows that the validated
+workflow can be exposed through a common input contract, explicit graph
+validation, interactive parameter editing, and traceable rankings without
+duplicating the model equation in the interface.
 
 The results support GBBRPM as an integrative graph-risk architecture
 rather than a claim that any individual mechanism is novel. They also
@@ -755,6 +797,12 @@ and a separate SWMM external-reference workflow. Cross-domain evidence
 adds a 71-package software dependency graph, a 187-bus electrical
 baseline with 269 channel files, and a 12-node observable Component 2
 model evaluated in 43 controlled runs.
+
+The research prototype adds a functionally verified implementation layer:
+the frozen N1--N5 inventory, N5 reference result, valid imported-graph
+evaluation, invalid-graph safeguards, and frontend production build were
+checked successfully. This evidence supports implementation feasibility
+and traceability, not production deployment or usability.
 
 The evidence supports bounded recursive propagation, sensitivity to
 network context, robustness under modest uncertainty, and computational

@@ -13,11 +13,13 @@
 - Clarified evidence boundaries: drainage lacks operational field data; software has real structural/advisory evidence; electrical has real topology, baseline data, and controlled Component 2 sensitivity evidence but lacks event-aligned November 13 outcomes.
 - Added the authorized Caltech Component 2 methodology: 13-node complete topology, 12-node observable model, phasor-derived loading, explicit capacity and residual policies, and a 43-run controlled protocol.
 - Added Component 2 tables and figures covering topology/susceptibility, root severity, measured-load scaling, transmission, disturbance location, and multi-source behavior while retaining the non-predictive interpretation boundary.
-- Aligned Objectives 1--5 with the reported methodology and evidence, and added explicit answers to Research Questions 1--5 in Chapter V.
+- Aligned Objectives 1--6 with the reported methodology and evidence, and added explicit answers to Research Questions 1--6 in Chapter V.
 - Kept the 136-run architecture protocol separate from the 43-run Component 2 suite so their counts and evidence roles are not pooled.
 - Clarified that non-neutral uniform transmission sweeps test sensitivity rather than calibrated transmission, and removed stale provider-authorization wording from the event-window table.
 - Added an explicit feasibility-based Component 2 selection rationale and a defense briefing covering selection criteria, exclusions, parameter policies, the 43-run design, supported claims, and likely examiner questions.
-- Added an 11-file modular defense briefing pack covering the study from problem formulation through presentation flow, including exact results, limitations, and rapid-fire examiner questions.
+- Added a 12-file modular defense briefing pack covering the study from problem formulation through prototype implementation, conclusions, presentation flow, exact results, limitations, and rapid-fire examiner questions.
+- Integrated the interactive research prototype as a formal objective and evidence block, including its architecture, common input contract, interface functions, validation boundaries, functional-verification table, conclusions, limitations, and defense briefing.
+- Verified the frozen N5 result, an imported explicit-susceptibility graph, invalid endpoint and cycle rejection, and the frontend production build; the build warning is disclosed and no production-readiness claim is made.
 - Corrected the SWMM table label from ``Mean depth'' to ``Maximum depth'' so it matches the compared SWMM `MaxDepth` outcome.
 - Rechecked the problem–question–objective–method alignment table.
 - Applied CITC body formatting: A4, required margins, single spacing, 1.25 cm first-line indent, chapter headings, upper-right pagination, hidden chapter-opening page numbers, left-aligned captions, and left-aligned labeled equations.

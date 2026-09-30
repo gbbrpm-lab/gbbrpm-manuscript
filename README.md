@@ -1,6 +1,6 @@
 # GBBRPM Cross-Domain Thesis Manuscript
 
-This directory contains the reproducible LaTeX manuscript for the **Graph-Based Bounded Risk Propagation Model (GBBRPM)** thesis. The manuscript evaluates one frozen propagation architecture across three directed-network domains: drainage, software dependency, and electrical networks.
+This directory contains the reproducible LaTeX manuscript for the **Graph-Based Bounded Risk Propagation Model (GBBRPM)** thesis. The manuscript evaluates one frozen propagation architecture across three directed-network domains—drainage, software dependency, and electrical networks—and documents its implementation in an interactive research prototype.
 
 The project is intended to be edited in VS Code, tracked with Git, built locally, and optionally imported into Overleaf.
 
@@ -8,12 +8,12 @@ The project is intended to be edited in VS Code, tracked with Git, built locally
 
 - **Chapter I — Introduction:** Establishes the comparative network-risk problem, research questions, objectives, scope, and conceptual framework.
 - **Chapter II — Review of Related Literature:** Provides a literature-only synthesis of local assessment, graph prioritization, propagation-model families, state semantics, aggregation, dependence, parameterization, and the architectural research gap.
-- **Chapter III — Methodology:** Defines the controlled architecture-validation protocol and the drainage, software-dependency, and electrical-network evaluation methods, including the Caltech Component 2 adapter and 43-run protocol.
-- **Chapter IV — Results and Discussion:** Reports the controlled results, robustness and scalability analyses, reconvergence diagnostic, SWMM comparison, software case, full-network electrical baseline, and Component 2 sensitivity results.
+- **Chapter III — Methodology:** Defines the controlled architecture-validation protocol, the three domain-evaluation methods, and the research-prototype architecture and functional-verification protocol.
+- **Chapter IV — Results and Discussion:** Reports the controlled results, robustness and scalability analyses, reconvergence diagnostic, three domain cases, and prototype functional-verification results.
 - **Chapter V — Summary and Conclusion:** Separates the conclusions supported by each evidence source and keeps unsupported field or event-validation claims explicit.
 - **Chapter VI — Recommendations:** Lists the empirical data, validation, dependence-handling, and model-extension work that remains.
-- **Appendix A — Generic Worked Example:** Gives a fully traced calculation of the generic GBBRPM core architecture using controlled dimensionless inputs.
-- **Appendix B — Software Worked Calculation:** Reproduces the Express result at $\tau=0.50$, including intermediate-node recursion and multi-source aggregation.
+- **Appendix A — Worked Example:** Gives a fully traced calculation of the generic GBBRPM core architecture using controlled dimensionless inputs.
+- **Appendix B — Software Worked Calculation:** Reproduces the Express 4.18.2 result at $\tau=0.50$, including intermediate-node recursion and multi-source aggregation.
 - **Appendix C — Electrical Worked Calculation:** Derives Component 2 susceptibility from measured apparent loading and traces the complete 12-node root-disturbance scenario.
 
 ## Evidence boundaries
@@ -25,6 +25,8 @@ The three domain cases do not provide equivalent forms of validation:
 - **Electrical network:** real topology and normal-operation baseline measurements, plus a controlled 43-run Component 2 mechanism and sensitivity study using measured loading; event-centered validation remains pending because the available aligned data do not provide independent outcomes for the requested November 13 switching windows.
 
 GBBRPM produces a bounded, non-probabilistic comparative risk index. It is not presented as a calibrated failure probability, hydraulic simulator, universal predictor, or completed electrical event model.
+
+The accompanying prototype supports implementation feasibility and traceable interaction with the frozen evaluator. It is not presented as a production, multi-user, operational monitoring, or autonomous decision system.
 
 ## Requirements
 
