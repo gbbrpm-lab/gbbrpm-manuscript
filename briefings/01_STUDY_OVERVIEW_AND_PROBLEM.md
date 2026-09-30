@@ -38,7 +38,8 @@ The second question includes the first but is not equivalent to it.
 2. Does it preserve boundedness, monotonicity, and expected ranking behavior?
 3. How sensitive, robust, and scalable is it under controlled changes?
 4. Can the frozen rule be instantiated coherently in drainage, software, and electrical networks?
-5. What evidence and limitations does each domain provide?
+5. Can the validated workflow be implemented in an interactive, traceable research prototype?
+6. What evidence and limitations does each domain and the prototype provide?
 
 ## Objectives in plain language
 
@@ -46,7 +47,8 @@ The second question includes the first but is not equivalent to it.
 2. Formulate the bounded recursive architecture.
 3. Test its mathematical and computational behavior.
 4. Instantiate it in three domains without changing the core rule.
-5. Compare the strength and limits of the evidence across domains.
+5. Develop and functionally verify an interactive research prototype.
+6. Compare the strength and limits of the evidence across domains and the prototype.
 
 ## Primary contribution
 
@@ -83,4 +85,3 @@ No. Risk is a normalized comparative index in `[0,1]`. A value of `0.70` does no
 ### “What is the strongest overall claim?”
 
 The strongest claim is that GBBRPM is a coherent, bounded, traceable, and computationally tractable comparative-risk architecture on tested DAGs, with demonstrated instantiability—but unequal validation strength—across three domains.
-

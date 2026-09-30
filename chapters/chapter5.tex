@@ -85,9 +85,24 @@ claims, not event prediction. The measurements represent normal operation
 and are not aligned with the requested switching-event outcomes;
 electrical event-response validation therefore remains pending.
 
+\subsubsection{Research Prototype Evidence}
+
+The interactive prototype connected the frozen evaluator to validated
+synthetic and imported data through a common schema. It exposed explicit
+editing of $B$, $L$, $C$, and $\tau$, directed-network visualization,
+risk coloring, edge-contribution tracing, and comparative rankings. The
+prototype reproduced the frozen N5 outlet result, evaluated a controlled
+imported graph correctly, rejected invalid endpoint and cyclic inputs,
+and completed a production frontend build. Operational mode remained
+inactive pending a provenance-complete agency dataset.
+
+These findings support implementation feasibility and traceable model
+interaction. They do not constitute usability evaluation, production
+readiness, or operational decision validation.
+
 \subsection{Answers to the Research Questions}
 
-The combined evidence answers the five research questions within the
+The combined evidence answers the six research questions within the
 declared non-probabilistic and non-predictive scope:
 
 \begin{enumerate}[label=\textbf{RQ\arabic*.},leftmargin=*]
@@ -111,7 +126,13 @@ declared non-probabilistic and non-predictive scope:
   drainage, software-dependency, and electrical-network cases. The
   domain meanings and evidence sources changed, but the roles of $B$,
   $S$, $\tau$, $Q$, and $R$ remained fixed.
-  \item The domains provide unequal but complementary evidence: drainage
+  \item The validated architecture was implemented as an interactive
+  research prototype using a common input contract, graph validation,
+  controlled parameter editing, the pinned model engine, and traceable
+  network and ranking outputs. Functional checks reproduced preserved
+  results and rejected invalid graphs, supporting implementation
+  feasibility without implying production readiness.
+  \item The domains and prototype provide unequal but complementary evidence: drainage
   supplies controlled behavior and a hydraulic-reference boundary;
   software supplies real-topology structural and transmission-sensitivity
   evidence; and electrical data supply importer verification plus
@@ -142,6 +163,10 @@ Within the tested scope, the study concludes that:
   on Component 2 under measured loading. Event-centered validation cannot
   be claimed until temporally aligned inputs and independent outcomes are
   obtained.
+  \item The prototype demonstrates that the frozen model can be exposed
+  through a validated, interactive, and traceable workflow. It remains a
+  research artifact rather than a production or autonomous decision
+  system.
 \end{enumerate}
 
 \subsection{Limitations}
@@ -168,3 +193,9 @@ generalization. Its residual power is reported but not spatially
 allocated, and one unobserved component edge is excluded. The three cases
 therefore cannot be pooled as if they offered identical empirical
 strength.
+
+The prototype was verified for core functions and production compilation,
+but not through formal user testing, accessibility evaluation, concurrent
+multi-user operation, authentication, persistent storage, or deployment
+hardening. Its operational-data mode remains inactive until a documented
+adapter and provenance-complete dataset are available.

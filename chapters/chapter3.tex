@@ -4,7 +4,8 @@
 \subsection{Research Design}\label{research-design}}
 
 The study adopts a \textbf{quantitative model-design,
-computational-validation, and cross-domain evaluation research design}.
+computational-validation, cross-domain evaluation, and research-prototype
+development design}.
 Its purpose is to formulate, implement, and evaluate the Graph-Based
 Bounded Risk Propagation Model (GBBRPM) as a lightweight directed-graph
 comparative-risk propagation and prioritization model. The first
@@ -44,7 +45,8 @@ Objective 1: Synthesize limitations and recurring mechanisms relevant to compara
 Objective 2: Formulate a bounded continuous non-probabilistic recursive architecture & Sections 3.2--3.4 define the graph assumptions, model components, equations, evaluation order, and ranking procedure. & Frozen GBBRPM equations, declared semantics, and deterministic evaluator \\
 Objective 3: Evaluate mathematical behavior, ranking, sensitivity, robustness, reconvergence, and scalability & Sections 3.7--3.13 define diagnostic comparators, property tests, scenario sweeps, perturbation trials, dependence diagnostics, and runtime experiments. & Boundedness and monotonicity checks, node-risk rankings, sensitivity and robustness metrics, reconvergence findings, and runtime measurements \\
 Objective 4: Instantiate the generic core in three domains & Sections 3.5--3.7 define the shared parameter roles, while Section 3.14 documents the drainage, software, and two-stage electrical protocols, including the separate 43-run Component 2 suite. & Reproducible controlled inputs, documented cross-domain mappings, and real-topology case outputs \\
-Objective 5: Compare evidence roles and identify scope boundaries & Sections 3.11, 3.14, and 3.15 separate dependence limitations, domain evidence roles, external-reference evaluation, and excluded behaviors. & Cross-domain evidence comparison, explicit interpretation limits, and evidence-based extension requirements \\
+Objective 5: Develop and functionally verify an interactive research prototype & Section 3.15 defines the prototype architecture, common input contract, interaction workflow, and functional verification protocol. & Validated input workflow, versioned evaluator integration, interactive graph and ranking interface, and reproducible verification cases \\
+Objective 6: Compare evidence roles and identify scope boundaries & Sections 3.11, 3.14, and 3.16 separate dependence limitations, domain evidence roles, prototype evidence, external-reference evaluation, and excluded behaviors. & Cross-domain evidence comparison, prototype implementation boundary, explicit interpretation limits, and evidence-based extension requirements \\
 \end{longtable}
 
 \hypertarget{two-phase-validation-and-application-design}{%
@@ -189,10 +191,7 @@ contribution, bounded multi-source aggregation, current-state recursion, and
 comparative ranking is provided in Appendix~\ref{app:worked-example}. The
 worked example uses controlled dimensionless values solely to explain the
 generic computation; it is not an operational measurement or an empirical
-validation case. Domain-specific calculation traces for the
-software-dependency and Component 2 electrical cases are provided in
-Appendices~\ref{app:software-worked-example} and
-\ref{app:electrical-worked-example}, respectively.
+validation case.
 
 \hypertarget{controlled-synthetic-network-set}{%
 \subsection{Controlled Synthetic Network Set}\label{controlled-synthetic-network-set}}
@@ -534,6 +533,49 @@ adapter-generated model tables. The associated manifests record input
 hashes, output files, scenario policies, and the interpretation boundary
 used in reporting.
 
+\hypertarget{research-prototype-development-and-verification}{%
+\subsection{Research Prototype Development and Functional Verification}\label{research-prototype-development-and-verification}}
+
+The validated GBBRPM workflow was implemented as an interactive research
+prototype with three separated layers. The frontend uses React and Vite
+with Cytoscape-based directed-network visualization. A FastAPI service
+performs dataset retrieval, common-schema validation, and evaluation
+requests. The service invokes the tagged \texttt{gbbrpm} v0.1.0 engine so
+that the interface does not contain a separate or rewritten propagation
+formula. Figure~\ref{fig:prototype-architecture} summarizes this
+implementation boundary.
+
+\input{figures/fig_prototype_architecture}
+
+The prototype accepts three declared data modes. \textbf{Synthetic mode}
+loads the frozen N1--N5 fixtures used in the controlled study.
+\textbf{Imported mode} accepts a JSON network conforming to the common
+node-and-edge schema. \textbf{Operational mode} is retained as an
+inactive adapter slot and explicitly reports that no agency dataset is
+configured. This prevents demonstration fixtures from being represented
+as operational observations.
+
+Every active dataset is converted to a common contract before evaluation.
+Node records require a unique identifier and bounded local disturbance
+$B\in[0,1]$. Edge records require valid endpoints, optional bounded
+transmission $\tau$, and either explicit susceptibility $S$ or the
+primitive pair $L$ and $C$. Validation rejects duplicate identifiers,
+duplicate directed edges, unknown endpoints, incomplete $L/C$ pairs,
+out-of-bound parameters, and cyclic graphs. Valid inputs are forwarded to
+the same versioned evaluator used by the computational workflow.
+
+The interface permits selection of a controlled network or imported
+dataset, node-level editing of $B$, edge-level editing of $L$, $C$, and
+$\tau$, explicit model execution, risk-colored graph inspection, and
+comparative ranking. Results retain the source note, node risk, rank,
+local disturbance, outlet status, and edge-contribution terms. Functional
+verification was defined around five targets: controlled-dataset
+inventory, reproduction of a frozen N5 result, evaluation of a valid
+explicit-$S$ import, rejection of invalid endpoint and cyclic inputs,
+and successful production compilation of the frontend. These tests
+evaluate implementation consistency and validation behavior; they do not
+constitute usability, security, deployment, or domain-outcome validation.
+
 \hypertarget{methodological-scope}{%
 \subsection{Methodological Scope}\label{methodological-scope}}
 
@@ -542,6 +584,12 @@ comparative-prioritization output, robustness, dependence limitations,
 and computational properties under controlled directed-graph conditions.
 The cross-domain layer evaluates instantiability within the three selected
 cases while preserving their distinct evidence roles.
+
+The prototype layer evaluates whether the frozen computational workflow
+can be exposed through a common validated input contract and a traceable
+interactive output. It does not add empirical support for any domain
+mapping and does not convert the comparative index into an operational
+decision rule.
 
 The methodology does not establish calibrated failure probabilities,
 universal physical parameter mappings, universal cross-domain

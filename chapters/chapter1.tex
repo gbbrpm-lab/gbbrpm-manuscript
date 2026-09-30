@@ -167,7 +167,10 @@ disturbance location, and multi-source configuration?
 \item Can the same bounded propagation architecture be instantiated
 coherently in drainage, software-dependency, and electrical-network
 cases without redefining its core update rule?
-\item What evidence does each domain provide for model behavior,
+\item Can the validated architecture be implemented as an interactive
+research prototype that preserves input validation, parameter
+traceability, and comparative-ranking output?
+\item What evidence does each domain and the prototype provide for model behavior,
 structural applicability, preprocessing feasibility, and the boundary
 between comparative graph risk and domain-specific outcome prediction?
 \end{enumerate}
@@ -179,7 +182,8 @@ between comparative graph risk and domain-specific outcome prediction?
 The general objective of the study is to design and computationally
 evaluate a \textbf{Graph-Based Bounded Risk Propagation Model (GBBRPM)}
 for interpretable comparative node-risk prioritization in directed
-networks and to examine its cross-domain applicability through drainage,
+networks, implement the validated architecture in an interactive research
+prototype, and examine its cross-domain applicability through drainage,
 software-dependency, and electrical-network cases.
 
 \subsubsection{Specific Objectives}\label{specific-objectives}
@@ -204,8 +208,12 @@ effects, and computational scalability;
 software-dependency, and electrical-network cases using traceable
 topology, documented domain-specific parameter mappings, and explicitly
 labeled controlled sensitivity settings, including measured-loading
-electrical experiments; and
-\item compare the resulting evidence across domains while distinguishing
+electrical experiments;
+\item develop and functionally verify an interactive research prototype
+that validates model inputs, supports controlled parameter editing,
+invokes the versioned GBBRPM evaluator, and presents traceable network and
+ranking outputs; and
+\item compare the resulting evidence across domains and the prototype while distinguishing
 behavioral validation, structural applicability, baseline-data
 verification, and independent outcome validation, and identify the
 model's scope boundaries and requirements for further refinement.
@@ -254,6 +262,14 @@ especially relevant to comparative prioritization because the purpose is
 not only to produce an ordering, but also to explain why one component
 receives a higher modeled risk state than another.
 
+The accompanying research prototype translates the mathematical and
+computational workflow into an inspectable interface. It supports
+validated synthetic and user-imported DAG inputs, controlled editing of
+local disturbance and relation parameters, live model execution, network
+visualization, and ranked outputs. Its contribution is implementation
+feasibility and traceable demonstration; it is not presented as an
+operational monitoring or automated decision system.
+
 \subsection{Scope and Limitations}\label{scope-and-limitations}
 
 The study focuses on the design, computational validation, and
@@ -279,6 +295,16 @@ from measured loading. Event-centered electrical outcome validation
 remains pending because the available measurements represent normal
 operation and are not aligned with independent outcomes for the
 documented switching events.
+
+The study also implements a research prototype composed of an interactive
+web interface, a validation and evaluation service, and the versioned
+GBBRPM engine. Functional verification covers the controlled N1--N5
+inventory, reproduction of a frozen N5 result, evaluation of a valid
+user-imported graph, rejection of invalid graph structures, and a
+production frontend build. The operational-data interface remains
+inactive until a provenance-complete agency dataset and adapter are
+available. The prototype is not evaluated for production security,
+multi-user operation, long-term storage, or end-user usability.
 
 The study does not interpret the bounded risk state as a calibrated
 probability of failure, blockage, or any other event. The base model
