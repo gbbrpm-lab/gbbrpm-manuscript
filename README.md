@@ -12,7 +12,9 @@ The project is intended to be edited in VS Code, tracked with Git, built locally
 - **Chapter IV — Results and Discussion:** Reports the controlled results, robustness and scalability analyses, reconvergence diagnostic, SWMM comparison, software case, full-network electrical baseline, and Component 2 sensitivity results.
 - **Chapter V — Summary and Conclusion:** Separates the conclusions supported by each evidence source and keeps unsupported field or event-validation claims explicit.
 - **Chapter VI — Recommendations:** Lists the empirical data, validation, dependence-handling, and model-extension work that remains.
-- **Appendix A — Worked Example:** Gives a fully traced calculation of the generic GBBRPM core architecture using controlled dimensionless inputs.
+- **Appendix A — Generic Worked Example:** Gives a fully traced calculation of the generic GBBRPM core architecture using controlled dimensionless inputs.
+- **Appendix B — Software Worked Calculation:** Reproduces the Express result at $\tau=0.50$, including intermediate-node recursion and multi-source aggregation.
+- **Appendix C — Electrical Worked Calculation:** Derives Component 2 susceptibility from measured apparent loading and traces the complete 12-node root-disturbance scenario.
 
 ## Evidence boundaries
 
