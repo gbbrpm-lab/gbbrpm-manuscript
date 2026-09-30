@@ -7,6 +7,8 @@
 - Added a propagation-model-family comparison table and a literature-derived architectural-gap figure.
 - Added the generic node-and-edge example requested during consultation to Chapter 3.
 - Added Appendix A with a fully traced generic-core calculation covering source initialization, converging contributions, local disturbance, current-state recursion, bounded aggregation, ranking, and ties; Chapter 3 now cross-references the appendix.
+- Added Appendix B with a reproducible Express 4.18.2 calculation at $\tau=0.50$, including nested dependency propagation and the bounded aggregation that yields $R_{\mathrm{Express}}=0.9118$.
+- Added Appendix C with phasor-derived Component 2 susceptibility calculations and the complete 12-node root-severity trace that yields a risk sum of 1.186.
 - Retained three evaluation domains: drainage, software dependency, and electrical networks.
 - Clarified evidence boundaries: drainage lacks operational field data; software has real structural/advisory evidence; electrical has real topology, baseline data, and controlled Component 2 sensitivity evidence but lacks event-aligned November 13 outcomes.
 - Added the authorized Caltech Component 2 methodology: 13-node complete topology, 12-node observable model, phasor-derived loading, explicit capacity and residual policies, and a 43-run controlled protocol.

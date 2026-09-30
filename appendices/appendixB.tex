@@ -1,0 +1,198 @@
+\clearpage
+\thispagestyle{empty}
+\refstepcounter{section}
+\label{app:software-worked-example}
+
+\begin{center}
+\textbf{APPENDIX B}
+
+\vspace{\baselineskip}
+
+\textbf{Worked Calculation for the Software-Dependency Case}
+\end{center}
+
+\vspace{3\baselineskip}
+
+\subsection{Purpose and Selected Scenario}
+
+This appendix traces one reported software-domain result through the frozen
+GBBRPM equations. The case uses the real Express 4.18.2 dependency topology,
+the frozen OSV advisory snapshot, unit susceptibility on every retained
+dependency relation, and the controlled uniform transmission setting
+\(\tau=0.50\). This setting is selected because it demonstrates both
+intermediate-node recursion and multi-source convergence at Express. It is a
+sensitivity setting, not an empirically calibrated software transmission
+coefficient.
+
+The original deps.dev relation points from a dependent package to the
+dependency it uses. For propagation, the relation is reversed so that a local
+disturbance in a dependency can travel toward packages that depend on it. The
+calculation below therefore uses dependency-to-dependent direction. Package
+names are shortened for readability, but every value corresponds to the exact
+package version reported in Chapter IV.
+
+\subsection{Local Disturbance and Relation Inputs}
+
+The seven evidence-backed package versions have the local disturbances shown
+in Table~\ref{tab:app-software-inputs}. Each relation uses \(S_{ij}=1\) and
+the selected uniform sensitivity value \(\tau_{ij}=0.50\).
+
+\begin{table}[H]
+\caption{Software Inputs Used in the Worked Calculation}
+\label{tab:app-software-inputs}
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}L c c L@{}}
+\toprule
+Package version & Severity & \(B_i\) & Relevant outgoing relation(s) \\
+\midrule
+\texttt{qs@6.11.0} & Moderate & 0.50 & \texttt{body-parser}, Express \\
+\texttt{send@0.18.0} & Low & 0.25 & \texttt{serve-static}, Express \\
+\texttt{body-parser@1.20.1} & High & 0.75 & Express \\
+\texttt{path-to-regexp@0.1.7} & High & 0.75 & Express \\
+\texttt{cookie@0.5.0} & Low & 0.25 & Express \\
+\texttt{serve-static@1.15.0} & Low & 0.25 & Express \\
+\texttt{express@4.18.2} & Moderate & 0.50 & Root dependent package \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Packages without advisory-backed local disturbance have \(B_i=0\). Because
+their upstream states are also zero in this frozen case, their contributions
+to the nodes calculated below are zero and their \((1-Q_{ij})\) terms equal
+one. They can therefore be omitted from the displayed products without
+changing the result.
+
+\subsection{Step 1: Initialize the Disturbed Dependency Nodes}
+
+The selected upstream disturbed packages have no positive incoming
+contribution in this scenario. Their accumulated states therefore equal their
+local disturbances:
+
+\[
+R_{\texttt{qs}}=0.50,
+\qquad
+R_{\texttt{send}}=0.25,
+\qquad
+R_{\texttt{path-to-regexp}}=0.75,
+\qquad
+R_{\texttt{cookie}}=0.25.
+\eqtag{B-1}
+\]
+
+These are comparative normalized disturbances derived from the declared
+advisory-severity mapping; they are not exploitation probabilities.
+
+\subsection{Step 2: Evaluate the Intermediate Dependent Packages}
+
+The contribution from \texttt{qs} to \texttt{body-parser} is
+
+\[
+\begin{aligned}
+Q_{\texttt{qs},\texttt{body-parser}}
+ &=S\tau R_{\texttt{qs}} \\
+ &=(1.00)(0.50)(0.50) \\
+ &=0.25.
+\end{aligned}
+\eqtag{B-2}
+\]
+
+Combining this incoming contribution with the local disturbance
+\(B_{\texttt{body-parser}}=0.75\) gives
+
+\[
+\begin{aligned}
+R_{\texttt{body-parser}}
+ &=1-(1-0.75)(1-0.25) \\
+ &=1-(0.25)(0.75) \\
+ &=0.8125.
+\end{aligned}
+\eqtag{B-3}
+\]
+
+Similarly, the contribution from \texttt{send} to \texttt{serve-static} is
+
+\[
+Q_{\texttt{send},\texttt{serve-static}}
+ =(1.00)(0.50)(0.25)=0.125.
+\eqtag{B-4}
+\]
+
+The receiving package also has local disturbance
+\(B_{\texttt{serve-static}}=0.25\), so
+
+\[
+\begin{aligned}
+R_{\texttt{serve-static}}
+ &=1-(1-0.25)(1-0.125) \\
+ &=1-(0.75)(0.875) \\
+ &=0.34375.
+\end{aligned}
+\eqtag{B-5}
+\]
+
+Equations B-3 and B-5 demonstrate current-state recursion: the states later
+transmitted to Express contain both local and inherited effects.
+
+\subsection{Step 3: Calculate the Contributions Entering Express}
+
+At \(\tau=0.50\) and \(S=1\), the six nonzero contributions entering
+Express are shown in Table~\ref{tab:app-software-contributions}.
+
+\begin{table}[H]
+\caption{Nonzero Contributions Entering Express at \(\tau=0.50\)}
+\label{tab:app-software-contributions}
+\centering
+\small
+\begin{tabular*}{0.86\textwidth}{@{\extracolsep{\fill}}lrr}
+\toprule
+Dependency source \(i\) & Current \(R_i\) & \(Q_{i,\mathrm{Express}}=R_i(1)(0.50)\) \\
+\midrule
+\texttt{body-parser} & 0.812500 & 0.406250 \\
+\texttt{cookie} & 0.250000 & 0.125000 \\
+\texttt{path-to-regexp} & 0.750000 & 0.375000 \\
+\texttt{qs} & 0.500000 & 0.250000 \\
+\texttt{send} & 0.250000 & 0.125000 \\
+\texttt{serve-static} & 0.343750 & 0.171875 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+For example, the first contribution uses the accumulated intermediate state:
+
+\[
+Q_{\texttt{body-parser},\mathrm{Express}}
+ =(1.00)(0.50)(0.8125)=0.40625.
+\eqtag{B-6}
+\]
+
+Using only the original \(B_{\texttt{body-parser}}=0.75\) would instead give
+0.375 and would incorrectly discard the contribution already inherited from
+\texttt{qs}.
+
+\subsection{Step 4: Aggregate Local and Inherited State at Express}
+
+Express has its own advisory-derived local disturbance \(B=0.50\). Applying
+the multiplicative-complement rule to the six nonzero incoming contributions
+gives
+
+\[
+\begin{aligned}
+R_{\mathrm{Express}}
+={}&1-(1-0.50)
+\times(1-0.40625)(1-0.125)(1-0.375)\\
+&\quad\times(1-0.25)(1-0.125)(1-0.171875)\\
+={}&1-(0.50)(0.59375)(0.875)(0.625)\\
+&\quad\times(0.75)(0.875)(0.828125)\\
+={}&1-(0.50)(0.1764643192)\\
+={}&0.9117678404\approx0.9118.
+\end{aligned}
+\eqtag{B-7}
+\]
+
+This independently reproduces the Chapter IV result for Express at
+\(\tau=0.50\). At this setting Express becomes the highest-ranked node, while
+all states remain within \([0,1]\). The example establishes traceability of
+the software instantiation and the effect of the controlled transmission
+sweep; it does not validate prediction of exploitation or operational
+incidents.

@@ -1,0 +1,228 @@
+\clearpage
+\thispagestyle{empty}
+\refstepcounter{section}
+\label{app:electrical-worked-example}
+
+\begin{center}
+\textbf{APPENDIX C}
+
+\vspace{\baselineskip}
+
+\textbf{Worked Calculation for the Component 2\\
+Electrical-Network Case}
+\end{center}
+
+\vspace{3\baselineskip}
+
+\subsection{Purpose and Selected Scenario}
+
+This appendix traces the reported Component 2 root-disturbance scenario with
+\(B_{\mathrm{C2\_N01}}=0.75\), measured-loading scale \(1.00\), and neutral
+transmission \(\tau=1\). It first demonstrates how phasor-derived apparent
+power and declared capacity produce electrical susceptibility, then follows
+the resulting risk through the 12-node observable arborescence. The inputs are
+derived model-ready summaries; restricted raw phasor records and credentials
+are not reproduced.
+
+All nodes other than \texttt{C2\_N01} have \(B_i=0\) in this controlled
+scenario. Because each non-root node in the observable Component 2 graph has
+one predecessor, its update reduces to \(R_j=Q_{ij}=S_{ij}\tau_{ij}R_i\).
+This simplification is specific to the selected single-source arborescence
+case; it does not replace the general bounded aggregation rule.
+
+\subsection{Step 1: Derive Baseline Electrical Susceptibility}
+
+For the source transformer \texttt{tr\_117}, the 24 synchronized phasor
+snapshots produced mean downstream real power \(P=985.9568\) kW and reactive
+power \(Q=599.3408\) kvar. Its mean apparent-power loading is
+
+\[
+\begin{aligned}
+L_{12}
+ &=\sqrt{P^2+Q^2}\\
+ &=\sqrt{(985.9568)^2+(599.3408)^2}\\
+ &=1153.8297\ \text{kVA}.
+\end{aligned}
+\eqtag{C-1}
+\]
+
+Using the declared transformer capacity \(C_{12}=3750\) kVA, the source-edge
+susceptibility is
+
+\[
+\begin{aligned}
+S_{12}
+ &=\min\left(1,\frac{L_{12}}{C_{12}}\right)\\
+ &=\min\left(1,\frac{1153.8297}{3750}\right)\\
+ &=0.3076879.
+\end{aligned}
+\eqtag{C-2}
+\]
+
+For comparison, \texttt{line\_408} has \(L=705.9977\) kVA and
+\(C=1787.94\) kVA, giving
+
+\[
+S_{23}=\min\left(1,\frac{705.9977}{1787.94}\right)
+=0.3948666.
+\eqtag{C-3}
+\]
+
+The same rule is applied once to every observable edge. Table
+\ref{tab:app-electrical-edge-inputs} lists the model-ready values needed for
+the complete trace.
+
+\begin{table}[H]
+\caption{Component 2 Edge Inputs Used in the Worked Calculation}
+\label{tab:app-electrical-edge-inputs}
+\centering
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}L L r r r@{}}
+\toprule
+Relation & Element & \(L\) (kVA) & \(C\) (kVA) & \(S=L/C\) \\
+\midrule
+C2\_N01 $\rightarrow$ C2\_N02 & \texttt{tr\_117} & 1153.8297 & 3750.00 & 0.3076879 \\
+C2\_N02 $\rightarrow$ C2\_N03 & \texttt{line\_408} & 705.9977 & 1787.94 & 0.3948666 \\
+C2\_N02 $\rightarrow$ C2\_N11 & \texttt{line\_409} & 375.4093 & 1787.94 & 0.2099675 \\
+C2\_N03 $\rightarrow$ C2\_N04 & \texttt{line\_415} & 235.8730 & 1787.94 & 0.1319244 \\
+C2\_N03 $\rightarrow$ C2\_N06 & \texttt{tr\_121} & 317.7301 & 1000.00 & 0.3177301 \\
+C2\_N03 $\rightarrow$ C2\_N07 & \texttt{line\_417} & 153.8553 & 1787.94 & 0.0860517 \\
+C2\_N03 $\rightarrow$ C2\_N09 & \texttt{line\_416} & 24.9112 & 1787.94 & 0.0139329 \\
+C2\_N04 $\rightarrow$ C2\_N05 & \texttt{tr\_119} & 235.8730 & 1500.00 & 0.1572487 \\
+C2\_N07 $\rightarrow$ C2\_N08 & \texttt{tr\_123} & 153.8553 & 750.00 & 0.2051404 \\
+C2\_N09 $\rightarrow$ C2\_N10 & \texttt{tr\_125} & 24.9112 & 1000.00 & 0.0249112 \\
+C2\_N11 $\rightarrow$ C2\_N12 & \texttt{tr\_127} & 375.4093 & 1500.00 & 0.2502728 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+All listed ratios are below one, so clipping does not alter them in the
+baseline scenario. The values are operating loading-to-capacity ratios, not
+failure probabilities.
+
+\subsection{Step 2: Initialize the Root and Evaluate the First Transfer}
+
+The root has no predecessor, so the empty-product convention gives
+
+\[
+R_{\mathrm{C2\_N01}}=B_{\mathrm{C2\_N01}}=0.75.
+\eqtag{C-4}
+\]
+
+The contribution through \texttt{tr\_117} is
+
+\[
+\begin{aligned}
+Q_{12}
+ &=S_{12}\tau_{12}R_1\\
+ &=(0.3076879)(1.00)(0.75)\\
+ &=0.2307659.
+\end{aligned}
+\eqtag{C-5}
+\]
+
+Because \(B_{\mathrm{C2\_N02}}=0\) and the node has only this predecessor,
+
+\[
+R_{\mathrm{C2\_N02}}
+=1-(1-0)(1-0.2307659)=0.2307659.
+\eqtag{C-6}
+\]
+
+\subsection{Step 3: Propagate Through the Main Branch}
+
+Using the newly accumulated state at \texttt{C2\_N02}, the contribution to
+\texttt{C2\_N03} is
+
+\[
+\begin{aligned}
+Q_{23}
+ &=(0.3948666)(1.00)(0.2307659)\\
+ &=0.0911218,\\
+R_{\mathrm{C2\_N03}}
+ &=0.0911218.
+\end{aligned}
+\eqtag{C-7}
+\]
+
+The four outgoing branches from \texttt{C2\_N03} are then evaluated
+independently. For example, the transformer branch to \texttt{C2\_N06}
+gives
+
+\[
+\begin{aligned}
+Q_{36}
+ &=(0.3177301)(1.00)(0.0911218)\\
+ &=0.0289521,\\
+R_{\mathrm{C2\_N06}}
+ &=0.0289521.
+\end{aligned}
+\eqtag{C-8}
+\]
+
+The parallel branch from \texttt{C2\_N02} to \texttt{C2\_N11} gives
+
+\[
+\begin{aligned}
+R_{\mathrm{C2\_N11}}
+ &=(0.2099675)(1.00)(0.2307659)\\
+ &=0.0484533,\\
+R_{\mathrm{C2\_N12}}
+ &=(0.2502728)(1.00)(0.0484533)\\
+ &=0.0121266.
+\end{aligned}
+\eqtag{C-9}
+\]
+
+These calculations show why risk decreases differently across branches: every
+edge applies its own measured-loading susceptibility to the current upstream
+state.
+
+\subsection{Step 4: Complete the Topological Trace}
+
+Table~\ref{tab:app-electrical-trace} reports the complete one-pass trace. Minor
+differences in the displayed products can result from rounding; the evaluator
+uses the unrounded input values listed in the model tables.
+
+\begin{table}[H]
+\caption{Component 2 Root-Severity Trace at \(B_{N01}=0.75\)}
+\label{tab:app-electrical-trace}
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}c L L r@{}}
+\toprule
+Depth & Node & Calculation using unrounded predecessor state & Final \(R_i\) \\
+\midrule
+0 & C2\_N01 & Local disturbance & 0.7500000 \\
+1 & C2\_N02 & \(0.75(0.3076879)\) & 0.2307659 \\
+2 & C2\_N03 & \(R_{N02}(0.3948666)\) & 0.0911218 \\
+2 & C2\_N11 & \(R_{N02}(0.2099675)\) & 0.0484533 \\
+3 & C2\_N04 & \(R_{N03}(0.1319244)\) & 0.0120212 \\
+3 & C2\_N06 & \(R_{N03}(0.3177301)\) & 0.0289521 \\
+3 & C2\_N07 & \(R_{N03}(0.0860517)\) & 0.0078412 \\
+3 & C2\_N09 & \(R_{N03}(0.0139329)\) & 0.0012696 \\
+3 & C2\_N12 & \(R_{N11}(0.2502728)\) & 0.0121266 \\
+4 & C2\_N05 & \(R_{N04}(0.1572487)\) & 0.0018903 \\
+4 & C2\_N08 & \(R_{N07}(0.2051404)\) & 0.0016085 \\
+4 & C2\_N10 & \(R_{N09}(0.0249112)\) & 0.0000316 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Summing the unrounded states gives
+
+\[
+\sum_{i=1}^{12}R_i=1.1860821582\approx1.186,
+\eqtag{C-10}
+\]
+
+which reproduces the risk sum reported in Chapter IV. The three nodes above
+the declared 0.05 affected-node threshold are \texttt{C2\_N01},
+\texttt{C2\_N02}, and \texttt{C2\_N03}; the maximum terminal-node state is
+\(R_{\mathrm{C2\_N06}}=0.0289521\approx0.029\).
+
+The calculation establishes that measured normal-operation loading can be
+converted into heterogeneous bounded susceptibilities and evaluated by the
+unchanged GBBRPM core. The injected \(B=0.75\) is controlled rather than an
+observed electrical fault, so the result is mechanism and sensitivity
+evidence rather than event-outcome validation.
