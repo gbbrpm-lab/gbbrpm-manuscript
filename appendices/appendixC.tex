@@ -34,18 +34,24 @@ case; it does not replace the general bounded aggregation rule.
 
 For the source transformer \texttt{tr\_117}, the 24 synchronized phasor
 snapshots produced mean downstream real power \(P=985.9568\) kW and reactive
-power \(Q=599.3408\) kvar. Its mean apparent-power loading is
+power \(Q=599.3408\) kvar. The loading is the mean of the apparent
+powers computed at each snapshot, rather than the apparent power computed
+from these two means. Writing the snapshot powers as \(P_t\) and \(Q_t\),
 
 \[
 \begin{aligned}
 L_{12}
- &=\sqrt{P^2+Q^2}\\
- &=\sqrt{(985.9568)^2+(599.3408)^2}\\
+ &=\frac{1}{24}\sum_{t=1}^{24}\sqrt{P_t^2+Q_t^2}\\
  &=1153.8297\ \text{kVA}.
 \end{aligned}
 \eqtag{C-1}
 \]
 
+For comparison, \(\sqrt{\bar P^2+\bar Q^2}\approx1153.8285\) kVA.
+The small difference arises from the order of averaging and the nonlinear
+square-root operation; the snapshot-mean loading used below is unchanged.
+
+\noindent\begin{minipage}{\textwidth}
 Using the declared transformer capacity \(C_{12}=3750\) kVA, the source-edge
 susceptibility is
 
@@ -58,6 +64,7 @@ S_{12}
 \end{aligned}
 \eqtag{C-2}
 \]
+\end{minipage}
 
 For comparison, \texttt{line\_408} has \(L=705.9977\) kVA and
 \(C=1787.94\) kVA, giving

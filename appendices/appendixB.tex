@@ -196,3 +196,11 @@ all states remain within \([0,1]\). The example establishes traceability of
 the software instantiation and the effect of the controlled transmission
 sweep; it does not validate prediction of exploitation or operational
 incidents.
+
+This calculation also exposes the dependence limitation. The
+\texttt{qs} state contributes both directly to Express and indirectly
+through \texttt{body-parser}; similarly, \texttt{send} contributes
+directly and through \texttt{serve-static}. The product in
+Equation~(B-7) treats the corresponding inputs separately despite their
+shared origins. It reproduces the implemented v1 result, but does not
+correct or quantify overlap inflation.

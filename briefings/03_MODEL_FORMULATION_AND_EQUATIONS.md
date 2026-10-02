@@ -84,6 +84,8 @@ If `S_23 = 0.75`, `tau_23 = 1`, and `B3 = 0`:
 
 This demonstrates current-state recursion: `N3` receives the accumulated `R2`, not only an original source score.
 
+For the manuscript's complete generic trace—including source behavior, convergence, local disturbance, downstream recursion, ranking, and ties—use **Appendix A** during consultation or examiner questioning.
+
 ## Susceptibility mapping used in drainage and Component 2
 
 `S_ij = min(1, L_ij / C_ij)`
@@ -122,4 +124,3 @@ Simple addition can exceed one and requires clipping after aggregation. The mult
 ### “Is R time-dependent?”
 
 Not in v1. “Current state” means the state already computed earlier in topological order for the evaluated scenario, not a time-series state.
-
