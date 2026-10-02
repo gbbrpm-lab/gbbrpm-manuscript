@@ -119,6 +119,14 @@ R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})
 
 GBBRPM separates five conceptual roles. \textbf{Topology or reachability} determines where influence can travel. \textbf{Transmission or influence} represents how strongly influence transfers along an existing relation. \textbf{Susceptibility} represents the relation-specific or receiving-context response under the evaluated condition. \textbf{Local disturbance} represents risk introduced directly at a node. \textbf{Dependence} refers to shared-origin, shared-path, or common-cause effects and is not assumed to be resolved by the local aggregation rule.
 
+For a fixed topology and local disturbances, propagation depends on
+the effective edge weight \(w_{ij}=S_{ij}\tau_{ij}\). Different bounded
+factor pairs with the same product produce the same contributions and
+node states. Thus, susceptibility and transmission have distinct
+conceptual roles, but cannot be identified separately from risk outputs
+alone. Separate empirical interpretation requires independently
+defensible measurements or constructions for the two inputs.
+
 The multiplicative-complement operator is used as a \textbf{bounded saturating aggregation function}. Its algebraic form is related to noisy-OR formulations, but it is not assigned probabilistic semantics in GBBRPM. Its suitability is evaluated through required mathematical behavior: boundedness, monotonicity, zero-contribution behavior, saturation, and simultaneous representation of inherited and local contributions.
 
 Figure~\ref{fig:generic-node-example} provides the generic node example
@@ -381,7 +389,7 @@ The analysis recorded node-level risk values together with summary indicators su
 
 Input robustness was evaluated by perturbing bounded model parameters around a reference condition. Three perturbation magnitudes were used: \textbf{$\pm$5\%, $\pm$10\%, and $\pm$20\%}. For the historical validation protocol, each perturbation level was evaluated across \textbf{600 trials} using a fixed random seed of \textbf{41} to support reproducibility.
 
-Primary ranking metrics include \textbf{Spearman rank correlation} between the reference and perturbed rankings and \textbf{top-3 Jaccard similarity} for the highest-ranked nodes. The analysis may also record top-3 appearance frequency for individual nodes to identify whether high-priority nodes remain consistently represented under perturbation.
+Primary ranking metrics include \textbf{Spearman rank correlation} between the reference and perturbed rankings and \textbf{top-3 Jaccard similarity} for the highest-ranked nodes. The reproduced N5 summary also reports top-20\% Jaccard similarity, with a nominal priority-set size of four for the 20-node network. These are distinct set-size conventions and are reported separately in Chapter IV. The analysis may also record top-3 appearance frequency for individual nodes to identify whether high-priority nodes remain consistently represented under perturbation.
 
 This analysis distinguishes a model that produces stable prioritization under modest uncertainty from one whose rankings change substantially under small input variation. Ranking instability, when observed, is reported as a model characteristic rather than automatically treated as failure.
 

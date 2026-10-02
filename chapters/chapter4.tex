@@ -195,6 +195,11 @@ paths and are not hydraulic failure probabilities. Saturation follows
 from the clipped-linear rule: once an edge reaches $S=1$, further
 increases in $L/C$ cannot increase its susceptibility.
 
+This is edge-susceptibility saturation, not necessarily node-risk
+saturation. With $S_{ij}=1$, an incoming contribution remains
+$Q_{ij}=\tau_{ij}R_i$; the receiving state still depends on transmission,
+upstream states, local disturbance, and all other incoming contributions.
+
 \subsubsection{Disturbance-Location Sensitivity}
 
 The location sweep assigns the same local severity, $B=0.75$, to
@@ -356,13 +361,13 @@ $\pm10\%$, and $\pm20\%$, with 600 trials per level and fixed seed 41.
 \label{tab:robustness}
 \small
 \renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\textwidth}{@{}l*{4}{>{\centering\arraybackslash}X}@{}}
+\begin{tabularx}{\textwidth}{@{}l*{5}{>{\centering\arraybackslash}X}@{}}
 \toprule
-Perturbation & Mean Spearman & 5th percentile & 95th percentile & Mean top-three Jaccard \\
+Perturbation & Mean Spearman & 5th percentile & 95th percentile & Mean top-three Jaccard & Mean top-20\% Jaccard \\
 \midrule
-$\pm5\%$  & 0.979190 & 0.962331 & 0.992481 & 0.744500 \\
-$\pm10\%$ & 0.938267 & 0.886289 & 0.974436 & 0.546667 \\
-$\pm20\%$ & 0.845552 & 0.697067 & 0.935338 & 0.388833 \\
+$\pm5\%$  & 0.979190 & 0.962331 & 0.992481 & 0.744500 & 0.776000 \\
+$\pm10\%$ & 0.938267 & 0.886289 & 0.974436 & 0.546667 & 0.604873 \\
+$\pm20\%$ & 0.845552 & 0.697067 & 0.935338 & 0.388833 & 0.440823 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -370,8 +375,9 @@ $\pm20\%$ & 0.845552 & 0.697067 & 0.935338 & 0.388833 \\
 The results show high stability under small perturbations and progressively
 lower stability as uncertainty increases. Mean Spearman correlation remains
 high even at $\pm20\%$, while priority-set overlap declines more strongly.
-Table~\ref{tab:robustness} reports top-three overlap, whereas
-Figure~\ref{fig:ranking-robustness} uses top-20\% overlap. The overall
+Table~\ref{tab:robustness} reports both top-three and top-20\% overlap;
+the latter corresponds to Figure~\ref{fig:ranking-robustness} and uses a
+nominal set size of four in N5. The overall
 ordering may therefore remain broadly similar even when membership
 among the highest-priority nodes changes. Accordingly, GBBRPM is
 comparatively stable for broad prioritization under modest input uncertainty,
@@ -529,6 +535,10 @@ region. This behavior is consistent with backwater, surcharge, ponding,
 and flow redistribution, which are absent from the downstream-only DAG
 formulation.
 
+The comparison does not isolate which hydraulic mechanisms caused each
+disagreement, so the rank mismatch alone is not evidence of a specific
+physical mechanism.
+
 Earlier thesis material preserved historical rank-correlation and
 top-three values under a different reporting convention. Those values
 are not used as principal regenerated evidence. The reported top-20\%
@@ -538,9 +548,11 @@ workflow. Scenario-level and summary outputs are stored in
 \path{swmm_comparison_summary.csv}.
 
 The mismatch clarifies that GBBRPM v1 is not a surrogate for full
-hydraulic state prediction. It is better positioned as a lightweight,
-interpretable downstream comparative-risk propagation and prioritization
-model.
+hydraulic state prediction. Its intended role is lightweight,
+interpretable downstream comparative-risk propagation and prioritization.
+The observed disagreement does not itself validate that role for drainage
+inspection or maintenance decisions; such utility requires separate
+outcome-based evaluation.
 
 \subsection{Software-Dependency Case}
 
@@ -562,6 +574,15 @@ The transmission sweep shows that the Express root risk rises from
 $0.5000$ at $\tau=0$ to $0.9975$ at $\tau=1$. Express moves from rank
 three to rank one by $\tau=0.50$, while the complete ordering remains
 highly stable relative to the $\tau=1$ reference.
+
+The topology also contains reconverging paths: \texttt{qs} reaches Express
+directly and through \texttt{body-parser}, while \texttt{send} reaches it
+directly and through \texttt{serve-static}. These routes carry shared-origin
+influence into separate incoming contributions. The v1 aggregator does
+not correct this dependence, so the high root state may include overlap
+inflation. This case does not quantify its contribution to the reported
+root value. Stable rankings across the transmission sweep do not establish
+that the resulting risk magnitudes are free from this effect.
 
 \input{tables/paper/table_software_sensitivity}
 

@@ -49,6 +49,11 @@ GBBRPM represents lightweight downstream comparative propagation,
 whereas SWMM represents hydraulic mechanisms such as backwater,
 surcharge, ponding, and flow redistribution.
 
+The mismatch does not identify the causal hydraulic mechanism in each
+scenario or establish the usefulness of GBBRPM for drainage maintenance
+prioritization. That intended use remains subject to separate validation
+against relevant outcomes.
+
 \subsubsection{Software-Dependency Evidence}
 
 The Express 4.18.2 case instantiated the frozen core on a real topology
@@ -60,6 +65,11 @@ Ranking agreement with the $\tau=1$ reference remained high.
 This result supports real-topology structural applicability and expected
 sensitivity to transmission. It does not establish that the modeled
 index is an exploit probability or a predictor of future incidents.
+
+Reconverging dependencies also carry shared-origin influence into
+multiple Express inputs. The local aggregator may therefore inflate the
+root state through overlap; the software case does not quantify this
+effect, and ranking stability does not establish unbiased magnitudes.
 
 \subsubsection{Electrical-Network Evidence}
 

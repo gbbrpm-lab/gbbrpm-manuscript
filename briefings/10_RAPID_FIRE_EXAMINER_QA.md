@@ -92,6 +92,10 @@ Spearman measures overall rank agreement; Jaccard measures overlap among the hig
 
 Most of the ordering may remain similar even when a few nodes cross the cutoff defining the top-priority set.
 
+### Where can the complete step-by-step calculations be inspected?
+
+Appendix A traces the generic architecture, Appendix B reproduces the Express software result at `tau = 0.50`, and Appendix C derives Component 2 susceptibility and reproduces the electrical risk sum of `1.186`. An operational drainage calculation remains pending real, provenance-complete inputs.
+
 ## Interpretation questions
 
 ### Why does downstream risk still increase after some S values reach one?

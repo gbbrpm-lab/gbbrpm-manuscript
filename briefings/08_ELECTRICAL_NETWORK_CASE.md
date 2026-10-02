@@ -93,6 +93,8 @@ Residuals were reported separately because spatial allocation would require an u
 - nested pair `C2_N02 + C2_N03` produced maximum node risk `0.599` and risk sum `1.582`; and
 - all six internal sources affected 10 of 12 nodes with risk sum `3.754`.
 
+**Worked-calculation reference:** Appendix C derives baseline electrical susceptibility from measured apparent loading and declared capacity, then traces the full 12-node root-disturbance scenario that reproduces risk sum `1.186`.
+
 ## Structural interpretation
 
 `C2_N02` can produce greater network-wide risk than the root at equal disturbance because it bypasses attenuation through the initial transformer while retaining access to nearly every downstream branch.
@@ -110,4 +112,3 @@ Component 2 is an arborescence, so multi-source experiments test local-plus-inco
 It does not establish failure probability, switching-event prediction, temporal forecasting, complete power-flow reconstruction, or system-wide generalizability.
 
 For the detailed rationale and examiner answers, read [ADVISER_BRIEFING_COMPONENT2.md](../ADVISER_BRIEFING_COMPONENT2.md).
-

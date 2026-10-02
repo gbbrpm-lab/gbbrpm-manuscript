@@ -118,6 +118,17 @@ Prioritize:
 - lack of independent operational outcomes; and
 - need for domain calibration and repeated external studies.
 
+## Backup slides and calculation evidence
+
+Keep these outside the timed main presentation unless the panel asks:
+
+- **Appendix A:** generic bounded-recursion example, including source behavior, convergence, ranking, and ties;
+- **Appendix B:** Express software calculation yielding `R = 0.9118` at `tau = 0.50`;
+- **Appendix C:** Component 2 susceptibility derivation and 12-node trace yielding risk sum `1.186`; and
+- **Component 2 adviser briefing:** selection rationale, exclusions, parameter policies, and the separate 43-run design.
+
+Do not present an operational drainage calculation until defensible real inputs are available.
+
 ## Final sentence
 
 > GBBRPM is best understood as a lightweight, traceable comparative-prioritization architecture whose mechanisms are computationally supported, while predictive validity remains a separate domain-specific requirement.
