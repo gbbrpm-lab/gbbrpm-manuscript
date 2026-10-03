@@ -1,5 +1,19 @@
 # Briefing 10: Rapid-Fire Examiner Questions
 
+## Prototype questions
+
+### Why build a prototype if the thesis contribution is the model?
+
+The prototype tests implementation feasibility and makes the model's inputs, validation rules, parameter changes, graph state, and rankings inspectable. It supports the model contribution without replacing its computational evaluation.
+
+### Is the prototype production-ready?
+
+No. Its core functions and production frontend build were verified, but it has not undergone formal usability, accessibility, security, concurrency, or deployment evaluation.
+
+### Why is operational mode inactive?
+
+Because no provenance-complete agency dataset has been mapped and independently verified. The inactive state prevents controlled fixtures from being presented as operational evidence.
+
 ## Model identity
 
 ### What is GBBRPM?
@@ -77,6 +91,10 @@ Spearman measures overall rank agreement; Jaccard measures overlap among the hig
 ### Why can Spearman stay high while Jaccard falls?
 
 Most of the ordering may remain similar even when a few nodes cross the cutoff defining the top-priority set.
+
+### Where can the complete step-by-step calculations be inspected?
+
+Appendix A traces the generic architecture, Appendix B reproduces the Express software result at `tau = 0.50`, and Appendix C derives Component 2 susceptibility and reproduces the electrical risk sum of `1.186`. An operational drainage calculation remains pending real, provenance-complete inputs.
 
 ## Interpretation questions
 
@@ -159,4 +177,3 @@ Graphs, recursion, susceptibility, multiplication, bounded aggregation, and rank
 ### What is the thesis's safest contribution statement?
 
 GBBRPM provides a traceable bounded comparative-risk architecture whose intended computational behavior is supported on controlled DAGs and whose core roles can be instantiated coherently in three tested domains within explicitly different evidence limits.
-

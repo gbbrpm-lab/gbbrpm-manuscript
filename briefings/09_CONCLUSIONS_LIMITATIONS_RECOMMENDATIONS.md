@@ -18,7 +18,11 @@ The model responded materially to severity, susceptibility, topology, location, 
 
 The frozen update rule was instantiated without redefinition in drainage, software dependency, and electrical networks. Parameter meanings changed, but the roles of `B`, `S`, `tau`, `Q`, and `R` remained fixed.
 
-### RQ5: Evidence boundaries
+### RQ5: Research prototype
+
+The validated workflow was implemented through a common node-and-edge contract, graph validation, controlled parameter editing, the pinned model engine, network visualization, and comparative rankings. Functional checks reproduced preserved outputs and rejected invalid graphs.
+
+### RQ6: Evidence boundaries
 
 - drainage: controlled behavior and hydraulic-reference boundary;
 - software: real-topology structural and transmission-sensitivity evidence;
@@ -34,6 +38,7 @@ The cases do not provide equal predictive evidence.
 4. The frozen rule is coherently instantiable in the tested domains.
 5. SWMM disagreement demonstrates that GBBRPM should not replace hydraulic simulation.
 6. Component 2 strengthens electrical mechanism evidence but does not complete event validation.
+7. The prototype demonstrates implementation feasibility and traceability, not production readiness or operational validation.
 
 ## Limitations
 
@@ -66,6 +71,13 @@ The cases do not provide equal predictive evidence.
 - no event-aligned labels or independent outcomes; and
 - no statistical generalization to the full grid.
 
+### Prototype limitations
+
+- no formal user or accessibility study;
+- no authentication, persistent storage, or deployment hardening;
+- no concurrent multi-user evaluation; and
+- operational mode remains inactive until a documented dataset adapter is available.
+
 ## Recommendations linked to limitations
 
 1. Obtain event-aligned electrical measurements and independent outcomes.
@@ -75,6 +87,7 @@ The cases do not provide equal predictive evidence.
 5. Calibrate susceptibility and transmission separately by domain.
 6. Design explicit cyclic, bidirectional, or temporal extensions.
 7. Repeat cross-domain protocols on additional datasets and components.
+8. Conduct prototype usability testing and production hardening before operational use.
 
 ## Safe final conclusion
 

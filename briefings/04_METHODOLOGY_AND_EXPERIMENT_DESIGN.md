@@ -2,7 +2,7 @@
 
 ## Research design
 
-The thesis uses a quantitative model-design, computational-validation, and cross-domain evaluation design.
+The thesis uses a quantitative model-design, computational-validation, cross-domain evaluation, and research-prototype development design.
 
 ## Two evidence layers
 
@@ -31,6 +31,21 @@ Evidence:
 - full-network electrical preprocessing plus Component 2.
 
 These layers are not pooled as if they were equivalent predictive validation.
+
+### Prototype implementation layer
+
+Question: Can the validated workflow be exposed through a common input contract and an interactive, traceable interface without rewriting the model equation?
+
+Evidence:
+
+- React/Vite interface with Cytoscape network visualization;
+- FastAPI validation and evaluation service;
+- pinned `gbbrpm` v0.1.0 engine;
+- synthetic and validated imported-data modes;
+- inactive operational-data placeholder; and
+- service-level functional checks plus a production frontend build.
+
+This layer supports implementation feasibility, not production readiness or predictive validity.
 
 ## Controlled network set
 
@@ -128,4 +143,3 @@ They restore a historically used configuration and reproduce preserved behavior.
 ### “Why use a DAG?”
 
 It guarantees a deterministic one-pass order and prevents unresolved cyclic feedback. Cycles require an explicit iterative or temporal extension, which v1 does not silently assume.
-

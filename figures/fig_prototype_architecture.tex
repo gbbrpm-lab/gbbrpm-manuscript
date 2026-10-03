@@ -1,0 +1,22 @@
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=0.65cm,
+  box/.style={draw=gbnavy, rounded corners=2pt, fill=gblight,
+    text width=0.78\textwidth, minimum height=0.85cm, align=center,
+    font=\small},
+  arrow/.style={-{Stealth[length=2mm]}, thick, draw=gbnavy}
+]
+\node[box] (sources) {Data modes: frozen N1--N5 fixtures \quad user-imported JSON \quad inactive operational adapter};
+\node[box, below=of sources] (ui) {React/Vite interface: dataset selection, graph inspection, parameter editing, and explicit model execution};
+\node[box, below=of ui] (api) {FastAPI validation service: schema, bounds, endpoint, duplicate-edge, and DAG checks};
+\node[box, below=of api] (engine) {Pinned \texttt{gbbrpm} v0.1.0 evaluator: susceptibility derivation, topological propagation, and contribution tracing};
+\node[box, below=of engine] (outputs) {Traceable outputs: risk-colored directed graph, ranked nodes, outlet summary, and edge contributions};
+\draw[arrow] (sources) -- (ui);
+\draw[arrow] (ui) -- (api);
+\draw[arrow] (api) -- (engine);
+\draw[arrow] (engine) -- (outputs);
+\end{tikzpicture}
+\caption{Research prototype architecture and separation between data modes, interface, validation service, versioned evaluator, and comparative outputs.}
+\label{fig:prototype-architecture}
+\end{figure}

@@ -41,6 +41,8 @@ Uniform `tau` values: `0`, `0.25`, `0.50`, `0.75`, and `1.00`.
 
 Express reaches rank one by `tau = 0.50`. Ranking agreement with the `tau = 1` reference remains extremely high, and top-20% Jaccard remains `1.0` throughout.
 
+**Worked-calculation reference:** Appendix B independently traces the nonzero dependency contributions, intermediate-node recursion, and bounded aggregation that reproduce `R_Express = 0.9118` at `tau = 0.50`.
+
 ## Interpretation
 
 As transmission increases, more dependency risk reaches packages that depend on the affected packages. Express accumulates several incoming dependency contributions and approaches saturation.
@@ -80,4 +82,3 @@ Several nonzero contributions combine with its local disturbance through the sat
 ### “Why is ranking already similar at tau = 0?”
 
 The same seven local disturbances already determine much of the ordering. Increasing transmission changes accumulated magnitudes and elevates Express while leaving much of the broader ordering stable.
-
