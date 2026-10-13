@@ -13,9 +13,10 @@ references and Appendices A–E. **main.pdf** is the compiled proposal.
 The preliminary pages, updated prototype passages, and provisional timeline
 chart have been merged into the latest research draft. See
 **docs/MEMBER_INTEGRATION_REVIEW.md** for corrections and evidence boundaries.
-The current proposal omits the approval sheet and acknowledgement and uses an
-abstract placeholder, as requested. Earlier layouts are retained only in the
-uncompiled archive. Prototype revision reports were supplied
+The current proposal includes a pending approval-sheet layout and an
+acknowledgement placeholder, with the abstract still pending final results.
+The approval page does not assert acceptance or supply invented signatures.
+Prototype revision reports were supplied
 by the team, not independently executed during this manuscript pass; the reported
 positive-infinity validation defect and manual browser inspection remain open.
 The 24-week core calendar is provisional, with conditional dissemination shown
@@ -45,11 +46,11 @@ separately beyond the core period.
 
 The preliminary pages use compact contents/list spacing based on the supplied
 proposal examples. The full chapter heading hierarchy remains visible; no body
-sections were deleted to shorten the contents. The later preliminary adjustment
-removes the approval sheet and acknowledgement from the compiled proposal,
-replaces the abstract with a placeholder, and adds a small gap between contents
-entries. Appendix labels in the contents are shortened; full titles remain in
-the appendices. See **docs/PRELIMINARY_ADJUSTMENT_NOTES.md**.
+sections were deleted to shorten the contents. The earlier preliminary
+adjustment replaced the abstract with a placeholder and added a small gap
+between contents entries. The approval sheet and acknowledgement have since
+been restored; see **docs/PRELIM_RESTORATION_NOTES.md**. Appendix labels in
+the contents are shortened; full titles remain in the appendices.
 Chapter III retains a concise prototype description and verification summary;
 implementation-level replay details appear in Appendix E. The timeline uses the
 manuscript's navy/gray style and explicitly marks the W8 data review and protocol
@@ -118,12 +119,13 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
 The generated document is `main.pdf`. `main.tex` is the root file.
 
-### Missing `pdflscape.sty` after merging
+### Preliminary PDF form and `pdflscape.sty`
 
-The current proposal does not include an approval sheet or load `pdfpages` or
-`pdflscape`. If an official approval-sheet PDF is included in a future submission,
-restore the appropriate source and explicitly load its PDF-insertion dependencies.
-An unused PDF in the preliminary folder does not activate that route.
+The current proposal includes a draft approval page and loads `pdfpages` so
+an official first-page PDF at `preliminary/FM-USTP-ACAD-11.pdf` can replace
+the draft layout. It does not load `pdflscape` or require landscape pages.
+Use only the updated approved institutional form once it is supplied; do
+not treat the draft layout as signed approval.
 
 After replacing an older merged source, clean its local build cache and rebuild:
 
@@ -236,7 +238,8 @@ Core equations, preliminary results, and the timeline are preserved.
 ## Benchmark bound and expanded protocol
 
 `chapters/benchmark_bound.tex` proves the conditional nodewise bracket
-recursive maximum <= cascade marginal <= GBBRPM <= recursive clipped sum.
+recursive maximum <= restricted-tree reference <= cascade marginal <= GBBRPM
+<= recursive clipped sum.
 It is grounded in established positive association and aggregation arguments,
 not claimed as a first result. `chapters/cascade_prior_art.tex` distinguishes
 Abbe--Kulkarni--Lee bounds, MIA, LDAG, and the ancestry-overlap diagnostic.
@@ -246,10 +249,43 @@ synthetic benchmark assigns probabilistic meanings to the supplied numbers.
 The expanded protocol uses low weights, 20 evaluation graphs plus five development
 graphs per family/size, a restricted-tree comparator, and 48 preselected precision
 audits. Express raw topology files are absent from this manuscript package;
-their recovery or reacquisition is an explicit prerequisite, not an executed result.
+their recovery or reacquisition is an explicit prerequisite for the conditional
+Express case, not an executed result. If the snapshot and provenance checks
+are incomplete at the week-8 freeze, that case leaves the frozen inventory
+without delaying the controlled graph benchmark.
 See `docs/BOUND_AND_PROTOCOL_REVISION.md` for changes and current experiment counts.
 The full benchmark is still planned; only algebraic and small-graph proof checks
 were performed during authoring.
+
+## Tree bracket and prototype focus refinement
+
+The restricted tree preserves a maximum-weight path from every positive-path
+ancestor without thresholding. This gives the tighter conditional certificate
+`0 <= R - pi <= R - T <= R - M` when the target-specific tree is computed;
+constructing those trees incurs extra cost. Planned ranking analysis now
+reports strict reversals, Monte Carlo interval-resolved reversals and the
+number of unresolved pairs. Clipped addition remains a measured comparator:
+a looser score bound does not determine ranking quality. Section 3.4.2 and
+Appendix E have been shortened to keep replay and animation supporting the
+scientific benchmark. See `docs/TREE_BRACKET_REFINEMENT_NOTES.md`. These are
+proposal refinements; no new benchmark outcomes or prototype tests are claimed.
+
+## Computational and literature follow-up
+
+The prospective protocol now specifies a development-only compute pilot and
+records 75.6 billion potential edge-trial checks for the 3600 generated-DAG
+references under direct edge-by-edge execution, plus 10.08 billion for the
+48 extra precision solves. It adds a separate 144-scenario heterogeneous
+weight subset paired with existing uniform-0.20 graphs. This subset adds
+3.024 billion potential checks and has 24 development and 120 evaluation
+scenarios. No measured runtime or new study outcome is claimed. The 2020
+JMLR extension by Abbe, Kulkarni, and Lee is now cited and compared at the
+nodewise-equation and DAG lower-bound levels. Its published DAG lower
+recursion is also specified as a planned matched comparator after an
+auxiliary-source transformation; uniqueness of the bracket is not claimed.
+Appendix E prioritizes finite-number validation and a
+demonstration check ahead of replay polish. See
+`docs/REVIEW_PROTOCOL_FOLLOWUP.md` for exact conditions and work status.
 
 ## Chapter 1 opening and alignment revision
 
