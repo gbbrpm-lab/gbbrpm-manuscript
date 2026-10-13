@@ -26,6 +26,8 @@
 - Converted citations and references to author–date APA-style presentation and completed previously missing Dastgir (2024) and He et al. (2019) metadata.
 - Split Chapter V (Summary and Conclusion) and Chapter VI (Recommendations) as required by the CITC heading list.
 - Removed superseded hidden Chapter 3 and Chapter 5 drafts from the source.
+- Updated Chapter 3's prototype design and functional-verification text for the trace-presentation update (PR gbbrpm-prototype#6): evaluation responses now return the topological order and an ordered trace assembled from engine-computed values; the interface exposes the quantities needed to check displayed states against reported output; an optional, off-by-default trace replay presents the evaluation on a schedule derived from the trace, reports the Equation (3-2) and (3-4) quantities as they converge on the returned values, withholds the ranking until completion, and remains invariant to presentation options; verification now specifies trace determinism and agreement with the engine, schedule causality and concurrency, the two invariance conditions, presentation-geometry containment, and manual browser checks.
+- Aligned the Chapter 4 prototype results subsection, Chapter 5 synthesis and limitations, and defense briefing 08A with that design: added the trace-contract and trace-presentation results, three verification rows, explicit $S$ editing, the pending manual browser inspection, and examiner answers on trace duplication and physical-propagation interpretation.
 
 ## Deliberate limitations
 
