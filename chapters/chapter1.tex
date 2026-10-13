@@ -77,7 +77,12 @@ integration into a lightweight directed-graph architecture whose primary
 output is a bounded continuous non-probabilistic comparative risk state.
 
 The present study therefore proposes the \textbf{Graph-Based Bounded Risk
-Propagation Model (GBBRPM)}. The term bounded describes a core property
+Propagation Model (GBBRPM)}. GBBRPM is the name assigned in this study to
+one proposed model; it is not the name of an established model family.
+The broader research area is graph-based risk propagation and comparative
+network prioritization. The proposed contribution concerns the explicit
+integration and evaluation of existing propagation mechanisms for a bounded,
+non-probabilistic node-state task on directed acyclic graphs (DAGs). The term bounded describes a core property
 of the model rather than a drainage-specific disturbance: the model
 represents node risk as a normalized state constrained to the interval
 {[}0,1{]}. The architecture is generic in formulation, while its
@@ -87,13 +92,16 @@ severity and susceptibility may be derived from load relative to
 effective capacity. A different domain may use the same core only if it
 can defensibly define its own nodes, directed relations, disturbance,
 susceptibility, transmission, and comparative risk semantics. The study
-therefore claims generic formulation rather than universal empirical
-generalizability.
+will therefore examine generic formulation through separate domain
+instantiations rather than presume universal empirical generalizability.
+The mathematical formulation will be implemented in a \textbf{GBBRPM
+evaluation engine}; this engine is the executable implementation, not a
+second model.
 
 \subsection{Statement of the Problem}\label{statement-of-the-problem}
 
 The study addresses the problem of \textit{comparative risk prioritization in
-interconnected directed networks}, initially motivated by urban drainage.
+directed acyclic graphs}, initially motivated by urban drainage.
 Existing detection and monitoring approaches can identify the condition
 of an individual drainage component, including visual blockage or
 obstruction, but these outputs are principally local to the monitored
@@ -145,201 +153,187 @@ interpretable architecture specifically intended to produce a bounded
 comparative risk state from local disturbance and propagated network
 context.
 
-The central problem of the study is therefore how to formulate a
-directed-graph model that combines local disturbance with recursively
-propagated network context so that nodes can be compared according to
-their current modeled risk state, while keeping topology,
-susceptibility, optional transmission, aggregation, and dependence
-conceptually distinct. Consistent with this central problem, the study
-addresses the following research questions:
+The central problem is how to formulate and evaluate a bounded,
+non-probabilistic model that combines local disturbance with recursively
+propagated network context on DAGs. The study will examine both the
+information added beyond local or structural scores and the computational
+and input costs of obtaining it. A change in ranking will be treated as
+evidence of a changed modeling basis, not automatically as improved
+physical prediction or operational usefulness.
+
+The intended lightweight design will be assessed through the evaluation
+engine's complexity, runtime, memory, required inputs, and preprocessing
+requirements. Its limited state representation will be distinguished from
+higher-fidelity simulation, whose physical outputs answer different
+questions. The study will address the following research questions:
 
 \begin{enumerate}[label=\arabic*.,leftmargin=*]
-\item How can local disturbance, current upstream risk,
-relation-specific susceptibility, optional transmission, directed
-reachability, and bounded multi-source aggregation be integrated into
-an interpretable directed-graph architecture?
-\item Does the resulting formulation preserve boundedness,
-monotonicity, and expected comparative-ranking behavior under
-controlled network conditions?
-\item How sensitive, robust, and computationally scalable is the model
-under changes in disturbance severity, susceptibility, topology,
-disturbance location, and multi-source configuration?
-\item Can the same bounded propagation architecture be instantiated
-coherently in drainage, software-dependency, and electrical-network
-cases without redefining its core update rule?
-\item Can the validated architecture be implemented as an interactive
-research prototype that preserves input validation, parameter
-traceability, and comparative-ranking output?
-\item What evidence does each domain and the prototype provide for model behavior,
-structural applicability, preprocessing feasibility, and the boundary
-between comparative graph risk and domain-specific outcome prediction?
+\item How can local disturbance, current upstream state, relation-specific
+modifiers, and bounded aggregation be formulated into GBBRPM for
+comparative node-risk prioritization on DAGs?
+\item How can the proposed formulation be implemented reproducibly in a
+GBBRPM evaluation engine and presented in a prototype that preserves
+input validation and computational traceability?
+\item How do propagation and heterogeneous relation conditions alter risk
+magnitudes and rankings relative to local-only scoring, uniform
+propagation, and a structural ranking descriptor?
+\item What mathematical properties, sensitivity, ranking robustness, and
+reconvergence limitations characterize the proposed model?
+\item What computational and input requirements characterize GBBRPM's
+intended lightweight design?
+\item Can the same core be instantiated coherently in drainage,
+software-dependency, and electrical-network cases, and what applicability
+limits follow from each case's data and evaluation?
 \end{enumerate}
 
 \subsection{Objectives of the Study}\label{objectives-of-the-study}
 
 \subsubsection{General Objective}\label{general-objective}
 
-The general objective of the study is to design and computationally
-evaluate a \textbf{Graph-Based Bounded Risk Propagation Model (GBBRPM)}
-for interpretable comparative node-risk prioritization in directed
-networks, implement the validated architecture in an interactive research
-prototype, and examine its cross-domain applicability through drainage,
-software-dependency, and electrical-network cases.
+The general objective is to formulate, implement, and evaluate GBBRPM as
+a proposed lightweight model for bounded comparative node-risk
+prioritization on directed acyclic graphs, and to examine its computational
+requirements, behavioral properties, and coherent instantiation across
+drainage, software-dependency, and electrical-network domains.
 
 \subsubsection{Specific Objectives}\label{specific-objectives}
 
 Specifically, the study aims to:
-
 \begin{enumerate}[label=\arabic*.,leftmargin=*]
-\item synthesize the limitations and recurring mechanisms of local
-condition assessment, graph-based prioritization, and existing
-propagation models that are relevant to comparative network-risk
-prioritization;
-\item formulate a bounded continuous non-probabilistic recursive
-architecture that explicitly distinguishes local disturbance,
-relation-specific susceptibility, optional transmission, directed
-reachability, current-state updating, bounded multi-source aggregation,
-and dependence;
-\item computationally validate the generic GBBRPM architecture using
-controlled and reconstructed networks in terms of boundedness,
-monotonicity, ranking behavior, sensitivity, robustness, reconvergence
-effects, and computational scalability;
-\item instantiate the frozen architecture in drainage,
-software-dependency, and electrical-network cases using traceable
-topology, documented domain-specific parameter mappings, and explicitly
-labeled controlled sensitivity settings, including measured-loading
-electrical experiments;
-\item develop and functionally verify an interactive research prototype
-that validates model inputs, supports controlled parameter editing,
-invokes the versioned GBBRPM evaluator, and presents traceable network and
-ranking outputs; and
-\item compare the resulting evidence across domains and the prototype while distinguishing
-behavioral validation, structural applicability, baseline-data
-verification, and independent outcome validation, and identify the
-model's scope boundaries and requirements for further refinement.
+\item formulate GBBRPM by specifying its DAG representation, bounded state
+semantics, local disturbance, relation-specific modifiers, recursive update
+rule, aggregation mechanism, assumptions, and expected mathematical
+properties;
+\item implement a reproducible deterministic evaluation engine and an
+interactive research prototype that will validate inputs, execute the same
+versioned core, and expose traceable node states, edge contributions, and
+rankings;
+\item evaluate the effect of propagated state and heterogeneous relation
+conditions on risk magnitudes and rankings relative to local-only scoring,
+uniform-susceptibility propagation, and a predeclared structural ranking
+descriptor;
+\item establish analytical properties and assess computational behavior
+under controlled scenarios, including boundedness, monotonicity, boundary
+cases, sensitivity, perturbation robustness, and shared-origin reconvergence;
+\item characterize the evaluation engine's computational and input
+requirements through complexity analysis, runtime and memory measurements,
+and a documented comparison of required information and modeled mechanisms;
+and
+\item assess whether the same core formulation can be instantiated
+coherently in the three selected domains through documented DAG
+construction, parameter mappings, within-domain experiments, and explicit
+evidence and applicability limits.
 \end{enumerate}
+
+Literature synthesis will inform the design requirements and interpretation
+of these objectives. The study's principal research outputs will be the
+model specification, evaluation engine, evaluation evidence, and research
+prototype.
 
 \subsection{Significance of the Study}\label{significance-of-the-study}
 
-The study is significant because it addresses a decision-support space
-between purely local or structural prioritization and high-fidelity
-domain simulation. Drainage literature demonstrates both the usefulness
-of lightweight graph-based screening and the added physical detail
-provided by hydrodynamic and learned hydraulic models \citep{simone2022},
-\citep{dastgir2023}, \citep{meijer2023}, \citep{zhang2024}. GBBRPM does not attempt to replace those
-higher-fidelity approaches. Instead, it is intended to produce a bounded
-comparative risk state that allows components to be ranked relative to
-one another under a common network and parameterization.
+\subsubsection{Theoretical Significance}
 
-For urban drainage research, the study provides a way to connect local
-disturbance information with network context for preliminary
-prioritization of locations that may merit inspection, maintenance, or
-higher-fidelity hydraulic analysis. This positioning is consistent with
-drainage studies that use graph methods for critical-pipe or
-weakest-link screening while retaining hydrodynamic models for richer
-physical assessment \citep{dastgir2023}, \citep{meijer2023}. The model is therefore intended
-as a complementary prioritization layer rather than a hydraulic
-prediction model.
+The study will contribute an explicitly specified architecture for combining
+local disturbance with recursively propagated network context on DAGs.
+Theoretical significance will lie in the declared non-probabilistic state
+semantics, relation-level contribution rule, bounded aggregation mechanism,
+and analytical account of the model's properties and restrictions.
+The study will distinguish properties established by the formulation from
+claims that require computational or domain evidence, including the
+difference between bounded aggregation and correction for shared-origin
+dependence.
 
-This is an intended research use. The study's hydraulic comparison does
-not validate inspection or maintenance benefits; those require separate
-evaluation against relevant operational outcomes.
+Existing propagation and risk literature supplies relevant mechanisms
+\citep{kempe2003,buldyrev2010,sheyner2002,munoz2017,petrone2018}. The proposed
+contribution will be assessed as their particular integration for the
+specified comparative-state task, rather than treating every component as
+new. A common interface for domain-specific inputs will allow architectural
+reuse to be examined without assuming common physical semantics or
+universal applicability. Susceptibility and transmission will retain
+distinct conceptual roles, while their separate empirical identification
+will not be inferred from outputs that depend on their product.
 
-For graph-based risk and propagation research, the study provides an
-explicit architecture in which topology, susceptibility, transmission,
-local disturbance, aggregation, and dependence are treated as
-conceptually distinct mechanisms rather than being collapsed into one
-undifferentiated coefficient. This separation follows recurring
-distinctions observed across influence, cascade, cyber-risk, financial,
-and infrastructure propagation models \citep{kempe2003}, \citep{buldyrev2010,he2019,shuang2017,sheyner2002,munoz2017,kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}. For
-the drainage application and any future domain-specific application, the
-model provides a reusable core propagation structure while requiring
-each instantiation to justify its own parameter definitions and any
-additional refinement layer.
+\subsubsection{Practical Significance}
 
-The study is also significant methodologically because interpretability
-is retained throughout the propagation process. A high modeled risk
-state at a node can be traced to the current upstream state,
-relation-specific susceptibility, optional transmission, local
-disturbance, and the bounded aggregation mechanism. This traceability is
-especially relevant to comparative prioritization because the purpose is
-not only to produce an ordering, but also to explain why one component
-receives a higher modeled risk state than another.
+The proposed engine and prototype will provide an inspectable environment
+for exploring how local disturbances and relation conditions influence
+comparative node states. Scenario assumptions, incoming contributions, and
+rankings will be available for examination before further domain-specific
+analysis is considered. The intended practical role is transparent
+scenario exploration and research screening.
 
-The accompanying research prototype translates the mathematical and
-computational workflow into an inspectable interface. It supports
-validated synthetic and user-imported DAG inputs, controlled editing of
-local disturbance and relation parameters, live model execution, network
-visualization, and ranked outputs. Its contribution is implementation
-feasibility and traceable demonstration; it is not presented as an
-operational monitoring or automated decision system.
+Drainage literature supports the use of graph-based screening alongside
+richer physical assessment \citep{dastgir2023}, \citep{meijer2023}. Potential
+applications of this study will include drainage screening,
+software-dependency analysis, and electrical-network scenario assessment,
+subject to defensible parameter construction and validation within each
+domain. Lower computational cost or a plausible ordering will not be
+treated as sufficient evidence of maintenance benefit, exploitation
+prediction, or fault prediction. Such benefits will require independent
+outcome evidence. The prototype will demonstrate the research workflow;
+operational decision-making will remain outside the verified contribution
+unless separately evaluated.
 
 \subsection{Scope and Limitations}\label{scope-and-limitations}
 
-The study focuses on the design, computational validation, and
-cross-domain evaluation of GBBRPM as a lightweight directed-graph
-architecture for comparative bounded-risk propagation. The generic core represents a node
-risk state, a local disturbance, relation-specific susceptibility,
-optional transmission or influence, and an edge contribution. The risk
-state and the model's bounded parameters are represented on normalized
-{[}0,1{]} scales.
+\subsubsection{Scope of the Study}
 
-The evaluation has two complementary layers. The first evaluates the
-generic formulation on directed acyclic graphs using one-pass topological
-processing, controlled synthetic networks, diagnostic baselines,
-perturbation trials, mathematical property tests, and scalability tests.
-The second examines cross-domain instantiation through drainage,
-software-dependency, and electrical-network cases. Drainage supplies
-behavioral tests and a SWMM external-reference comparison; software
-supplies real-topology structural applicability and transmission
-sensitivity evidence; and electrical data supply real-topology and
-baseline-preprocessing verification together with controlled mechanism
-and sensitivity tests on an observable Component 2 model parameterized
-from measured loading. Event-centered electrical outcome validation
-remains pending because the available measurements represent normal
-operation and are not aligned with independent outcomes for the
-documented switching events.
+The study will cover the formulation and implementation of GBBRPM for
+static comparative node-risk assessment on DAGs. It will specify bounded
+local disturbance, susceptibility, optional transmission, edge
+contributions, node-state aggregation, topological evaluation, and
+tie-aware ranking. Controlled networks will support investigation of
+mathematical behavior, mechanism effects, robustness, shared-origin
+reconvergence, and computational cost.
 
-The study also implements a research prototype composed of an interactive
-web interface, a validation and evaluation service, and the versioned
-GBBRPM engine. Functional verification covers the controlled N1--N5
-inventory, reproduction of a frozen N5 result, evaluation of a valid
-user-imported graph, rejection of invalid graph structures, and a
-production frontend build. The operational-data interface remains
-inactive until a provenance-complete agency dataset and adapter are
-available. The prototype is not evaluated for production security,
-multi-user operation, long-term storage, or end-user usability.
+Three domain instantiations will be examined separately using documented
+topology and parameter mappings: drainage, software dependency, and
+electrical networks. The same core equations will be retained. The common
+object of investigation will be coherent instantiation of the architectural
+roles, rather than equality of physical outcomes or comparability of
+numerical scores across domains. Operational drainage or event-aligned
+electrical evaluation will proceed only if suitable data become available.
 
-The study does not interpret the bounded risk state as a calibrated
-probability of failure, blockage, or any other event. The base model
-also does not represent cycles, bidirectional feedback, explicit
-temporal dynamics, hydraulic backwater, surcharge, ponding, flow
-redistribution, or common-cause dependence correction. These exclusions
-are important because drainage and broader propagation literature show
-that feedback, shared dependencies, and richer physical state
-interactions may require iterative, probabilistic, or high-fidelity
-formulations beyond a one-pass lightweight graph model \citep{buldyrev2010},
-\citep{shuang2017}, \citep{wu2026}, \citep{petrone2018}, \citep{dastgir2024}, \citep{zhang2024}. Where heterogeneous
-transmission cannot yet be empirically justified, the baseline
-transmission term is kept neutral. Likewise, drainage-specific
-susceptibility mappings such as load relative to effective capacity are
-treated as instantiation choices rather than universal components of the
-generic model.
+The research prototype will support validated synthetic and user-imported
+DAG inputs, controlled parameter editing, execution of the versioned
+evaluation engine, and traceable graph and ranking outputs. Functional
+verification will assess numerical consistency, input handling, and
+presentation of the computation.
 
-The study claims generic formulation and demonstrated cross-domain
-instantiability within the three evaluated cases, not universal empirical
-generalizability. The cases test different claims and do not provide
-equivalent outcome-validation strength. A domain may instantiate the core
-only if it can provide defensible definitions for nodes, directed
-relations, local disturbance, susceptibility, optional transmission, and
-comparative risk. Domain-specific prediction, calibration, and operational
-usefulness must be justified and validated separately from the generic
-core.
+\subsubsection{Limitations of the Study}
+
+The core will be restricted to DAGs and one-pass evaluation. It will not
+represent cycles, bidirectional feedback, physical-time evolution, or full
+hydraulic or electrical dynamics. A topological order is a computational
+dependency order, not a physical propagation timeline. The index will not
+be a calibrated probability, and the local aggregator will not correct
+shared-origin dependence. Susceptibility and transmission cannot be
+identified separately from output states alone.
+
+Interpretation will depend on the provenance, coverage, and defensibility
+of domain inputs. Synthetic networks and simulated hydraulic outputs will
+not be treated as field observations. Advisory-based software mappings
+will not establish exploitation probabilities. Controlled disturbances
+applied to measured electrical loading will not establish event-response
+prediction. The currently available electrical baseline is not aligned
+with independent outcomes for the documented switching windows.
+Inadequate field records or event-aligned outcomes may restrict evaluation
+to structural instantiation and controlled behavior.
+
+Higher-fidelity formulations may be required for feedback, shared
+dependencies, and physical state interactions
+\citep{buldyrev2010,shuang2017,petrone2018,wu2026,dastgir2024,zhang2024}.
+The study will report these omissions as tradeoffs rather than presume
+that reduced computational cost preserves predictive fidelity. Prototype
+checks will establish consistency in the tested configuration, not
+production security, multi-user readiness, usability, or operational
+utility.
 
 \subsection{Conceptual Framework}\label{conceptual-framework}
 
 The conceptual framework of the study begins with local disturbance and
-directed network context. The current risk state at an upstream node is
+directed acyclic network context. The current risk state at an upstream node is
 transformed into a relation-specific contribution according to
 susceptibility and, where justified, optional transmission. Multiple
 incoming contributions are then combined with any local disturbance at
@@ -382,7 +376,7 @@ than the propagation mechanism itself.
 
 \subsection{Definition of Terms}\label{definition-of-terms}
  
-{\renewcommand{\arraystretch}{1.15}
+{\small\renewcommand{\arraystretch}{1.08}
 \begin{longtable}{@{}p{\dimexpr0.28\linewidth-\tabcolsep\relax}p{\dimexpr0.72\linewidth-\tabcolsep\relax}@{}}
 \toprule
 Term & Definition \\
@@ -396,9 +390,25 @@ Ranking components according to their modeled risk states relative to one anothe
 \addlinespace
  
 GBBRPM. &
-Graph-Based Bounded Risk Propagation Model, the generically formulated directed-graph architecture proposed in this study. \\
+Graph-Based Bounded Risk Propagation Model, the name assigned in this study to its proposed bounded, non-probabilistic comparative-risk model on DAGs; not an established model-family name. \\
 \addlinespace
  
+GBBRPM evaluation engine. &
+Software that will validate inputs and apply the versioned GBBRPM equations in topological order; the implementation of the model. \\
+\addlinespace
+
+Directed acyclic graph (DAG). &
+A directed graph containing no directed cycle. This is the supported graph class for the proposed one-pass engine. \\
+\addlinespace
+
+Lightweight model. &
+A fixed-form, single-pass DAG model without physical-time integration or training in its core. Runtime, memory, preprocessing, and input requirements will characterize this design; reduced cost does not establish physical fidelity. \\
+\addlinespace
+
+Preliminary evidence. &
+Completed exploratory calculations or tests used to assess feasibility and limitations before protocol freezing, distinguished from independent confirmatory or outcome validation. \\
+\addlinespace
+
 Normalized risk state. &
 A dimensionless continuous value in $[0,1]$ representing the current modeled level of network-context risk at a node. It is not a calibrated probability of an event. \\
 \addlinespace
@@ -428,11 +438,11 @@ The multiplicative-complement mechanism used to combine local disturbance and mu
 \addlinespace
  
 Domain-specific instantiation. &
-The process of defining the generic model's nodes, edges, disturbance, susceptibility, transmission, and any optional refinement parameters according to a particular application domain. \\
+Defining the shared node, edge, disturbance, susceptibility, and transmission roles with defensible meanings and inputs for a particular domain. \\
 \addlinespace
  
 Generic formulation. &
-A model architecture whose core propagation logic is not hard-coded to one application domain. Generic formulation does not imply that the model has been empirically evaluated across all domains. \\
+A core formulation not hard-coded to one domain. Reusability of its architecture does not establish universal empirical applicability. \\
  
 \end{longtable}
 }

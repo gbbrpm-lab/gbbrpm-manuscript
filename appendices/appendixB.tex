@@ -8,14 +8,14 @@
 
 \vspace{\baselineskip}
 
-\textbf{Worked Calculation for the Software-Dependency Case}
+\textbf{Preliminary Worked Calculation for the Software-Dependency Case}
 \end{center}
 
 \vspace{3\baselineskip}
 
 \subsection{Purpose and Selected Scenario}
 
-This appendix traces one reported software-domain result through the frozen
+This appendix traces one preliminary software-domain result through the frozen
 GBBRPM equations. The case uses the real Express 4.18.2 dependency topology,
 the frozen OSV advisory snapshot, unit susceptibility on every retained
 dependency relation, and the controlled uniform transmission setting
@@ -29,7 +29,7 @@ dependency it uses. For propagation, the relation is reversed so that a local
 disturbance in a dependency can travel toward packages that depend on it. The
 calculation below therefore uses dependency-to-dependent direction. Package
 names are shortened for readability, but every value corresponds to the exact
-package version reported in Chapter IV.
+package version retained in the preliminary software case.
 
 \subsection{Local Disturbance and Relation Inputs}
 
@@ -190,7 +190,7 @@ R_{\mathrm{Express}}
 \eqtag{B-7}
 \]
 
-This independently reproduces the Chapter IV result for Express at
+This independently reproduces the preliminary result for Express at
 \(\tau=0.50\). At this setting Express becomes the highest-ranked node, while
 all states remain within \([0,1]\). The example establishes traceability of
 the software instantiation and the effect of the controlled transmission

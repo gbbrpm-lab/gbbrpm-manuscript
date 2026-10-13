@@ -1,32 +1,61 @@
-# GBBRPM Cross-Domain Thesis Manuscript
+# GBBRPM Three-Chapter Research Proposal
 
-This directory contains the reproducible LaTeX manuscript for the **Graph-Based Bounded Risk Propagation Model (GBBRPM)** thesis. The manuscript evaluates one frozen propagation architecture across three directed-network domains—drainage, software dependency, and electrical networks—and documents its implementation in an interactive research prototype.
+This project incorporates the October 12, 2026 consultation and the additional
+request to distinguish the **GBBRPM evaluation engine** from the mathematical
+model. The title retains cross-domain emphasis and explicitly limits the proposed
+core to **directed acyclic graphs**.
 
-The project is intended to be edited in VS Code, tracked with Git, built locally, and optionally imported into Overleaf.
+Build **main.tex**. Its main chapter sequence is Chapters I–III, followed by
+references and Appendices A–D. **main.pdf** is the compiled proposal.
 
-## Current manuscript structure
+## Current structure
 
-- **Chapter I — Introduction:** Establishes the comparative network-risk problem, research questions, objectives, scope, and conceptual framework.
-- **Chapter II — Review of Related Literature:** Provides a literature-only synthesis of local assessment, graph prioritization, propagation-model families, state semantics, aggregation, dependence, parameterization, and the architectural research gap.
-- **Chapter III — Methodology:** Defines the controlled architecture-validation protocol, the three domain-evaluation methods, and the research-prototype architecture and functional-verification protocol.
-- **Chapter IV — Results and Discussion:** Reports the controlled results, robustness and scalability analyses, reconvergence diagnostic, three domain cases, and prototype functional-verification results.
-- **Chapter V — Summary and Conclusion:** Separates the conclusions supported by each evidence source and keeps unsupported field or event-validation claims explicit.
-- **Chapter VI — Recommendations:** Lists the empirical data, validation, dependence-handling, and model-extension work that remains.
-- **Appendix A — Worked Example:** Gives a fully traced calculation of the generic GBBRPM core architecture using controlled dimensionless inputs.
-- **Appendix B — Software Worked Calculation:** Reproduces the Express 4.18.2 result at $\tau=0.50$, including intermediate-node recursion and multi-source aggregation.
-- **Appendix C — Electrical Worked Calculation:** Derives Component 2 susceptibility from measured apparent loading and traces the complete 12-node root-disturbance scenario.
+- Chapter I: model identity, problem and questions, aligned objectives,
+  theoretical/practical significance, separate scope and limitations, framework,
+  and operational definitions.
+- Chapter II: source-based literature regrouped into a connected argument about
+  local/structural assessment, state semantics, propagation mechanisms, ranking,
+  computational/input tradeoffs, reusable formulations, and the research gap.
+- Chapter III: design requirements and detailed formulation; evaluation-engine
+  and prototype specification; domain data and mappings; controlled comparisons;
+  property, sensitivity, robustness, dependence, and cost protocols; separate
+  domain evaluation; verification, analysis, reproducibility, and timeline.
+- Appendix A: generic worked example.
+- Appendix B: preliminary software worked calculation.
+- Appendix C: preliminary electrical worked calculation.
+- Appendix D: selected preliminary evidence, including unfavorable hydraulic
+  agreement and known dependence limitations.
+
+## Completed work versus planned work
+
+The core mathematical equations and retained preliminary numerical results are
+unchanged. The revised proposal adds planned structural comparison, separated
+runtime and memory measurement, explicit cutoff-tie reporting, and reviewed
+input-validation conventions. These additions are proposed methods, not newly
+executed tests. See **docs/PROPOSAL_REVISION_NOTES.md** for decisions and
+remaining confirmations.
+
+The schedule is provisional. W1 is anchored to October 12, 2026; official
+proposal/final defense, submission, data-access, and dissemination dates remain
+to be confirmed. Independent outcome evaluation remains conditional on suitable
+agency or event-aligned records.
+
+## Historical research record
+
+**archive/full-study/main_preconsultation.pdf** and the original six chapter
+sources preserve the previous full-study manuscript. Archived chapter sources
+are reference copies, not the main compilation target. Prior study briefings and
+old revision notes are historical context, not the current proposal plan.
+Existing experiment scripts and generated tables preserve earlier reproducibility
+assets; running them does not execute the newly proposed protocols automatically.
 
 ## Evidence boundaries
 
-The three domain cases do not provide equivalent forms of validation:
-
-- **Drainage:** controlled synthetic networks and SWMM-based hydraulic comparison; operational field data remain pending.
-- **Software dependency:** real Express dependency topology and vulnerability-advisory evidence; supports structural and sensitivity findings, not observed incident prediction.
-- **Electrical network:** real topology and normal-operation baseline measurements, plus a controlled 43-run Component 2 mechanism and sensitivity study using measured loading; event-centered validation remains pending because the available aligned data do not provide independent outcomes for the requested November 13 switching windows.
-
-GBBRPM produces a bounded, non-probabilistic comparative risk index. It is not presented as a calibrated failure probability, hydraulic simulator, universal predictor, or completed electrical event model.
-
-The accompanying prototype supports implementation feasibility and traceable interaction with the frozen evaluator. It is not presented as a production, multi-user, operational monitoring, or autonomous decision system.
+GBBRPM is a bounded, non-probabilistic comparative index. Cross-domain
+instantiation does not make domain scores equivalent, establish a calibrated
+failure probability, or validate hydraulic, exploitation, or electrical-event
+prediction. The real software topology and measured electrical loading remain
+real inputs; the associated experiments are preliminary and partly controlled.
 
 ## Requirements
 
@@ -36,7 +65,7 @@ The accompanying prototype supports implementation feasibility and traceable int
 - [Strawberry Perl](https://strawberryperl.com/) for `latexmk`
 - [VS Code](https://code.visualstudio.com/)
 - [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop)
-- Python 3 with `matplotlib` and `pandas` only when regenerating the included Chapter IV plots
+- Python 3 with `matplotlib` and `pandas` only when regenerating historical plots
 
 After installation, restart VS Code and verify the toolchain in PowerShell:
 
@@ -70,10 +99,10 @@ To verify reproducibility, clone the repository into a new directory and build i
 .
 ├── main.tex
 ├── ADVISER_BRIEFING_COMPONENT2.md  # Component 2 defense rationale and Q&A
-├── briefings/                       # Modular start-to-finish defense briefing pack
+├── archive/                  # Prior full-study PDF, chapter sources, and briefings
 ├── references.tex
-├── chapters/                 # Chapters I–VI
-├── appendices/               # Detailed worked calculations
+├── chapters/                 # Proposal Chapters I–III
+├── appendices/               # Worked calculations and preliminary evidence
 ├── figures/                  # Manuscript figures
 │   └── paper/                # Cross-domain generated figures
 ├── tables/                   # Literature and manuscript tables
@@ -85,7 +114,7 @@ To verify reproducibility, clone the repository into a new directory and build i
 └── REVISION_NOTES.md         # Revision scope and remaining limitations
 ```
 
-## Regenerate the included Chapter IV figures
+## Regenerate historical figures
 
 Install the plotting dependencies:
 
@@ -93,7 +122,7 @@ Install the plotting dependencies:
 python -m pip install matplotlib pandas
 ```
 
-Regenerate Figures 4.2–4.5 from `data/core_scenarios.csv`:
+Regenerate the former Figures 4.2–4.5 from `data/core_scenarios.csv`:
 
 ```powershell
 python scripts/generate_chapter4_figures.py
