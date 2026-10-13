@@ -156,7 +156,7 @@ active disturbances. Thus, stronger local disturbance is directionally
 monotone, while ranking response depends on the surrounding network
 state.
 
-\subsubsection{$L/C$ Stress Response}
+\subsubsection{\texorpdfstring{$L/C$}{L/C} Stress Response}
 
 The stress sweep scales all edge loads by $0.50$, $0.75$, $1.00$,
 $1.25$, and $1.50$, after which susceptibility is recomputed as
@@ -747,6 +747,12 @@ mode remained visibly inactive because no provenance-complete agency
 dataset had been configured. This separation prevented synthetic or
 user-provided fixtures from being mislabeled as operational evidence.
 
+Evaluation responses also returned the topological order computed by the
+evaluation service and an ordered trace assembled from values already
+computed by the engine. This supported optional step-by-step trace
+inspection and replay without recomputing the propagation rule in the
+interface or issuing additional evaluation requests.
+
 Table~\ref{tab:prototype-verification} reports the functional verification
 outcomes. The frozen N5 fixture reproduced the preserved outlet risk
 $R_{N20}=0.7086404493$ and ranked N13 first. A three-node imported graph
@@ -754,7 +760,10 @@ with $B_A=0.8$, $S_{AB}=0.5$, and $S_{BC}=0.7$ produced
 $R_C=0.28$, matching direct evaluation. Unknown endpoints and cyclic
 inputs were rejected before propagation, and the frontend completed a
 production build. The build emitted a bundle-size optimization warning,
-but no compilation error.
+but no compilation error. Repeated evaluation of each fixture returned
+an identical response, and every trace step reproduced the reported risk
+and local disturbance of its node while covering each node and edge
+exactly once.
 
 \begin{table}[H]
 \centering
@@ -769,6 +778,9 @@ Controlled inventory & N1--N5 load in fixed order; N5 contains 20 nodes & Passed
 Frozen-result reproduction & N5 outlet \(R_{N20}=0.7086404493\) and top node N13 & Passed \\
 Imported explicit-\(S\) graph & Valid \(A\rightarrow B\rightarrow C\) graph returns \(R_C=0.28\) & Passed \\
 Invalid-graph safeguards & Unknown endpoints and directed cycles are rejected & Passed \\
+Evaluation trace & Every node and edge appears exactly once; step values equal reported results for N1--N5 & Passed \\
+Replay schedule & Settlement causality and input non-mutation & Passed \\
+Presentation readouts & Displayed contribution and node-risk values equal engine values once the corresponding contributions have arrived (controlled trace) & Passed \\
 Frontend production build & TypeScript and Vite compilation complete without errors & Passed with bundle-size warning \\
 \bottomrule
 \end{tabularx}
@@ -776,9 +788,13 @@ Frontend production build & TypeScript and Vite compilation complete without err
 
 The prototype therefore supports implementation feasibility,
 input-validation traceability, and faithful reuse of the versioned model
-engine. It does not demonstrate production readiness, user acceptance,
-operational data integration, or improved predictive validity. Those are
-separate evaluation questions.
+engine, including agreement between displayed and reported quantities
+once settled.
+Graph motion, selection correspondence, and responsive layout were not
+covered by the automated checks and remain subject to manual browser
+inspection. The prototype does not demonstrate production readiness,
+user acceptance, operational data integration, or improved predictive
+validity. Those are separate evaluation questions.
 
 \subsection{Integrated Discussion}
 
@@ -800,7 +816,8 @@ monotone scenario responses without converting those responses into event
 predictions. Sixth, the research prototype shows that the validated
 workflow can be exposed through a common input contract, explicit graph
 validation, interactive parameter editing, and traceable rankings without
-duplicating the model equation in the interface.
+duplicating the model equation in the interface or recomputing it for
+presentation.
 
 The results support GBBRPM as an integrative graph-risk architecture
 rather than a claim that any individual mechanism is novel. They also
@@ -821,9 +838,11 @@ model evaluated in 43 controlled runs.
 
 The research prototype adds a functionally verified implementation layer:
 the frozen N1--N5 inventory, N5 reference result, valid imported-graph
-evaluation, invalid-graph safeguards, and frontend production build were
-checked successfully. This evidence supports implementation feasibility
-and traceability, not production deployment or usability.
+evaluation, invalid-graph safeguards, evaluation-trace agreement with the
+engine, and frontend production build were checked successfully. This
+evidence supports implementation feasibility and traceability, not
+production deployment or usability; presentation-level behavior visible
+only in a browser remains subject to manual inspection.
 
 The evidence supports bounded recursive propagation, sensitivity to
 network context, robustness under modest uncertainty, and computational
