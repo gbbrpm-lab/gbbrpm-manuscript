@@ -54,8 +54,6 @@
 \renewcommand*\l@section[2]{%
   \begingroup
     \let\numberline\@gobble
-    \let\hyper@linkstart\@gobbletwo
-    \let\hyper@linkend\@empty
     \@dottedtocline{1}{0cm}{0cm}{\MakeUppercase{#1}}{#2}%
   \endgroup}
 % Each lower level is indented 1.25 cm from the previous one.
@@ -96,6 +94,6 @@
 \newcommand*\apptocmode{\renewcommand*\l@subsection{\@dottedtocline{3}{2.5cm}{1.5cm}}}
 
 % ---------- Entries for REFERENCES in the table of contents ----------
-\apptocmd{\thebibliography}{\addcontentsline{toc}{section}{References}}{}{}
+\apptocmd{\thebibliography}{\phantomsection\addcontentsline{toc}{section}{References}}{}{}
 
 \makeatother
