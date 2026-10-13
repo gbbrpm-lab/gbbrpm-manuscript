@@ -1,0 +1,298 @@
+\subsubsection{Separately Defined Stochastic Reference}
+\label{stochastic-reference}
+
+The principal controlled evaluation will examine receiving-state accuracy
+under a specified stochastic process, alongside the index-behavior analysis.
+This reference will adopt Independent Cascade's conditional edge-transmission
+mechanism and live-edge interpretation \citep{kempe2003}. The study will add
+independently sampled initial activations at all nodes. For this benchmark only,
+the supplied numbers $B_j$ and $w_{ij}=S_{ij}\tau_{ij}$ will parameterize
+independent Bernoulli variables:
+\[
+Z_j\sim\operatorname{Bernoulli}(B_j),\qquad
+E_{ij}\sim\operatorname{Bernoulli}(w_{ij}),\qquad
+X_j=Z_j\lor\bigvee_{i\in P(j)}(X_i\land E_{ij}).
+\eqtag{3-10}
+\]
+All primitive $Z$ and $E$ variables will be mutually independent; derived
+node activations need not be independent. The Boolean recursion will be
+evaluated in topological order. A trial will draw each primitive once and
+reuse its value wherever its consequences recur. The reference output will
+be $\pi_j=\Pr(X_j=1)$, not expected spread obtained by selecting $j$ as a seed.
+
+Conditional transmission will use $w_{ij}$, not $Q_{ij}=w_{ij}R_i$.
+Sampling the upstream activation and then using $Q_{ij}$ would incorporate
+the upstream marginal twice. GBBRPM will retain its deterministic index
+definition. Differences $R_j-\pi_j$ will be called approximation errors only
+within this explicitly probabilistic benchmark. Agreement will not calibrate
+the domain adapters or establish real-world failure, exploitation, or
+inspection utility.
+
+For small fixtures with at most 16 non-degenerate primitive variables,
+the exact solver will enumerate their binary configurations, evaluate the
+Boolean recursion, and sum configuration probabilities for each activated
+node. Probabilities of zero or one will be fixed, not enumerated. The solver
+will check total probability mass and chain, isolated-node, independent-
+convergence, and diamond identities before larger runs proceed. On graphs
+whose incoming activation events have disjoint primitive ancestry, the
+complement-product recursion will agree with this reference by independence
+and induction. The study will state that sufficient condition explicitly;
+structural overlap will not be assumed to make it necessary.
+
+For larger graphs, the Monte Carlo solver will estimate
+$\widehat\pi_j=N^{-1}\sum_{t=1}^{N}X_j^{(t)}$ from $N=100{,}000$
+independent trials in memory-bounded batches. A predeclared seed will be
+stored per graph and scenario. Sampling uncertainty will be reported using
+simultaneous Hoeffding intervals \citep{hoeffding1963} $[\widehat\pi_j-h,\widehat\pi_j+h]$
+clipped to $[0,1]$, where a two-sided concentration bound and a union bound over nodes give
+\[
+h=\sqrt{\frac{\log(2|V|/0.05)}{2N}}.
+\eqtag{3-11}
+\]
+This conservative concentration bound applies to the sampling estimator
+across nodes in one scenario; it is not an error bound for GBBRPM or a
+simultaneous guarantee across every experiment. Monte Carlo will be checked
+against enumeration on the eligible fixtures. Validation discrepancies and
+interval coverage will be recorded, not silently removed. Graphs sharing
+primitive draws will share the same reference for all deterministic methods.
+
+\input{chapters/benchmark_bound}
+
+\subsubsection{Matched Dependence Controls and Graph Inventory}
+\label{dependence-controls}
+
+The first experiment will separate uncertain common origins from independent
+origins on a fixed graph. A root $a$ will connect with weight one to $m$
+branch-start nodes $s_1,\ldots,s_m$. Each branch start will connect to a
+common receiver $d$ through an edge-disjoint path of $\ell$ edges, all with
+weight $p$. Intermediate local disturbances and $B_d$ will be zero. In the
+shared-origin condition, $B_a=b$ and all branch-start local terms will be
+zero. In the independent-origin condition, $B_a=0$ and every $B_{s_r}=b$.
+The graph, weights, and branch-start activation marginals will match; only
+the joint source construction will change. Both conditions will include
+the inactive root in their node inventory.
+
+For $u=p^\ell$, this constructed family has exact receiver references
+\[
+\pi_d^{\mathrm{shared}}=b\{1-(1-u)^m\},\qquad
+\pi_d^{\mathrm{independent}}=1-(1-bu)^m.
+\eqtag{3-15}
+\]
+GBBRPM will give $1-(1-bu)^m$ in both conditions. This identity will provide
+an analytical benchmark, not a claim of a newly invented dependence theory.
+For two branches, the shared-origin discrepancy is $b(1-b)u^2$.
+Thus shared ancestry alone does not force discrepancy: $b=1$ gives
+agreement in this family. With $b=0.5$ and $u=1$, the reference is $0.5$
+and GBBRPM is $0.75$. With $b=1$ and $u=0.25$, both are $0.4375$;
+retaining only the strongest branch gives $0.25$. These algebraic controls
+will prevent strongest-path pruning from being assumed correct in advance.
+
+\begin{table}[H]
+\centering
+\caption{Planned reference-benchmark inventory, separate from historical runs.}
+\label{tab:reference-inventory}
+\small
+\begin{tabularx}{\textwidth}{@{}L L r@{}}
+\toprule
+Family & Fixed protocol & Scenarios\\
+\midrule
+Matched branch family & Four branch counts, two path lengths, seven
+edge weights, five source probabilities, and two origin conditions & 560\\
+Generated DAGs & Three families, four sizes, 25 graph seeds, six weights,
+and two initial-activation settings & 3600\\
+Express topology & One verified snapshot, six weights, and two controlled
+initial-activation settings & 12\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The branch-family grid will use $m\in\{1,2,4,8\}$,
+$\ell\in\{2,4\}$, $p\in\{0.05,0.10,0.20,0.25,0.50,0.75,1\}$,
+and $b\in\{0.10,0.25,0.50,0.75,1\}$, under both origin conditions.
+The closed form will supply exact receiver references at every size,
+including rare-event regimes; the 16-variable enumeration cap will remain
+an implementation-validation choice rather than the limit of exact evidence.
+Conditioning or decision-diagram solvers will be optional future tooling,
+not required to establish these references.
+
+The generated-DAG stage will use $|V|\in\{20,50,100,250\}$ and three
+explicit constructions. Each will have $2|V|$ unique edges and a recorded
+topological ordering:
+\begin{enumerate}[label=\alph*.,leftmargin=*]
+\item A forward-edge family will sample edges uniformly from all ordered
+pairs consistent with a seeded random node ordering.
+\item A layered family will distribute nodes as evenly as possible over
+$\lceil\sqrt{|V|}\rceil$ ordered layers, randomize order within each layer,
+and sample edges uniformly between adjacent layers. The available-pair
+count will be checked before sampling; no hidden generator fallback will
+replace an infeasible configuration.
+\item A preferential-attachment DAG will start with all ten forward edges
+among five ordered nodes. Each later node will choose two distinct earlier
+predecessors without replacement, proportional to their current total degree
+plus one, and receive edges from them. This supplies exactly $2|V|$ edges.
+The construction will be called preferential attachment; a scale-free degree
+law will not be asserted without evidence.
+\end{enumerate}
+
+Per family and size, seeds 41--45 will supply five development graphs and
+1001--1020 will supply 20 evaluation graphs, yielding 300 distinct topologies.
+Each topology will retain its edges under
+$w\in\{0.05,0.10,0.20,0.25,0.50,0.75\}$. The first
+$\lceil0.10|V|\rceil$ nodes in its ordering will receive either $B=0.5$
+or $B=1$; other local terms will be zero. These changes will create 3600
+scenarios, of which 720 are development and 2880 are evaluation scenarios.
+A local-origin node need not have in-degree zero. The controlled uniform
+weights will isolate topology, dependence, and attenuation; heterogeneous
+N1--N5 inputs will remain a separate information-construction comparison.
+
+The record will include depth, degree distributions, reachability, source
+coverage, and the fraction of receivers with overlapping incoming local-origin
+lineages. Structural overlap will not be equated with statistical dependence
+strength. Family comparisons will be descriptive, because depth and degree
+patterns differ even with equal node and edge counts. The fixed branch
+family will supply the controlled dependence manipulation.
+
+A further 12 scenarios will use the Express 4.18.2 topology, subject to
+recovering a verified snapshot. The historical manifest records hashes for
+\texttt{nodes.csv} and \texttt{edges.csv}, but those raw inputs are absent
+from this manuscript package. The original files will be recovered and hash-
+checked, or a new resolved-dependency snapshot will be acquired, versioned,
+and explicitly distinguished from the historical 71-node, 128-edge case.
+Edges will run from dependency to dependent; acyclicity and the reported
+shared paths will be checked. Cycles will not be silently deleted.
+
+For each of the six weights above, the seven historical advisory-origin
+identities will receive controlled initial probabilities of either $0.5$
+or $1$, with other local terms zero. Their identities will be verified from
+the source records; real advisory severity values will not be interpreted
+as calibrated probabilities. This will be a stochastic experiment on real
+topology, not incident validation. If required records cannot be recovered,
+the case will be reported unavailable rather than reconstructed from figures.
+It will remain separate from generated-graph averages.
+
+At $N=100{,}000$ trials, small receiving probabilities may be unresolved.
+The study will therefore preselect 48 precision-audit scenarios: evaluation
+seed 1001 for every family and size, $w\in\{0.05,0.10\}$, and both
+initial-activation settings. Each will receive an additional independent
+$N=1{,}000{,}000$-trial reference with its own interval. Both estimates
+will be retained; this subset will be selected before outcomes are inspected.
+Coverage statements will remain per solve, not a joint guarantee for all
+solves. Zero observed activations will not be called zero true probability.
+Elsewhere unresolved differences will remain unresolved. Batching will cap
+memory; development timing will determine whether the full prospective
+inventory is feasible. Any reduction will be documented and frozen before
+evaluation outcomes, including its resulting scenario counts.
+
+\subsubsection{Task-Matched Comparators and Recursion Ablation}
+\label{reference-comparators}
+
+Every deterministic method will receive the same graph, $B$, and effective
+weights $w$. The comparison will include local-only scoring and the three
+recursive aggregators in Equation~(3-9). A recursion ablation will retain
+the complement-product operator but substitute original local input for
+current upstream state:
+\[
+R_j^{\mathrm{local\text{-}upstream}}
+=1-(1-B_j)\prod_{i\in P(j)}(1-w_{ij}B_i).
+\eqtag{3-16}
+\]
+This condition will isolate inherited multihop state rather than be called
+an equivalent cascade solver. Recursive maximum aggregation will supply
+the strongest local-origin weighted-path comparator; an additional
+strongest-path method would duplicate it under these inputs. An arithmetic
+mean will not be required because adding a zero input can reduce its state,
+contrary to the selected accumulation requirement.
+
+A MIA-inspired restricted-in-arborescence comparator will also be evaluated
+\citep{chen2010mia}. For each target $j$, reverse topological dynamic
+programming will compute the maximum positive weighted-path product from
+every ancestor to $j$. Each ancestor will retain one next edge on a maximizing
+path, with exact ties broken consistently by node identifier. The union of
+these target-directed paths will form an in-arborescence. No positive-path
+threshold will be applied in the primary comparator. Original local $B$
+terms on retained nodes and the retained edge weights will be preserved.
+Complement-product recursion on that tree will compute the target's exact
+activation probability for the restricted independent-primitive process.
+Edge deletion makes this a lower bound on the full benchmark marginal.
+This will be an adaptation of MIA's tree-restriction idea to fixed receiving
+queries, not its complete greedy seed-selection algorithm. Building one tree
+per target will have a different cost from a single global scalar pass.
+
+The ancestry-aware diagnostic in Section~\ref{behavioral-evaluation} will
+also be compared with the same reference. Each recursive variant will
+compute its own upstream states. In-degree will remain a descriptive
+structural comparison; descendant count and seed-spread measures will not
+be used as receiving-probability accuracy baselines without a separately
+specified task. Exact and Monte Carlo methods will be reference solvers,
+with their precision and computational cost stated.
+
+\subsubsection{Bound Tightness and Fixed-Budget Ranking Metrics}
+\label{reference-metrics}
+
+Fixed-budget selection and ranking will be the primary benchmark outcomes;
+score evaluation will characterize the analytic bracket's tightness.
+Per scenario, the study will report width $R_j-M_j$, actual upper slack
+$R_j-\pi_j$, lower slack $\pi_j-M_j$, mean and maximum absolute error,
+and terminal error relative to exact or estimated marginals. The guaranteed
+nonnegative GBBRPM slack will not be treated as an untested hypothesis.
+Numerical bound violations against exact references will be investigated
+as implementation or assumption defects. Node averages will first be computed within a graph;
+cross-graph summaries will give graphs equal weight and show their spread.
+Graph families, sizes, weight regimes, and source settings will be reported
+separately. Each graph will remain the replication unit; its 12 weight/source
+conditions will not be treated as independent graphs. Evaluation summaries
+will include paired method differences and their distribution across the
+20 graph replicates. Development summaries will remain separate.
+Monte Carlo intervals will accompany score discrepancies. For example,
+a Monte Carlo interval $[L_j,U_j]$ can be intersected with the analytic
+bracket $[M_j,R_j]$. If nonempty, $[L'_j,U'_j]$ gives possible upper
+slack $[R_j-U'_j,R_j-L'_j]$. An empty intersection will be recorded as a
+sampling-coverage or implementation discrepancy, not silently repaired. A difference smaller than reference uncertainty
+will not be interpreted as a resolved advantage. Reports will include the
+fractions of estimated reference states and model scores at or above $0.95$,
+the existing numerical-saturation fraction, and the number of distinct score
+groups. Near-saturation and near-zero cases will not be discarded because
+they give inconvenient rankings. Bracket-certified pairwise orderings will
+be counted separately from Monte Carlo-based rank estimates.
+
+Ranking evaluation will exclude nodes with positive local inputs, so that
+high supplied disturbances do not trivially dominate a receiving-state task.
+The common candidate set $C$ will contain all remaining nodes, including
+unreachable nodes. The study will report tie-aware Spearman association,
+and selection at budgets $k=\max(1,\lceil f|C|\rceil)$ for
+$f\in\{0.10,0.20,0.30\}$. Exactly $k$ nodes will be selected. Boundary
+ties will be handled by averaging over 100 seeded random node-order
+permutations, shared by all methods and unrelated to reference outcomes. Permutations will
+use seed 140 and the $10^{-12}$ anchored score-tie policy stated in
+Section~\ref{analysis-reproducibility}.
+This policy will differ from the expanded cutoff sets used for descriptive
+Jaccard comparisons in Section~\ref{analysis-reproducibility}.
+
+For a selected set $T_k$, the benchmark captured activation mass and
+selection regret will be
+\[
+\begin{aligned}
+\operatorname{Capture}(T_k)&=
+\frac{\sum_{j\in T_k}\pi_j}{\sum_{j\in C}\pi_j},\\
+\operatorname{Regret}_k&=
+\sum_{j\in T_k^*}\pi_j-\sum_{j\in T_k}\pi_j,
+\end{aligned}
+\eqtag{3-17}
+\]
+where $T_k^*$ maximizes activation mass over $k$ candidates. Capture will
+be undefined when the denominator is zero; the all-zero case will be
+reported explicitly. Monte Carlo-based oracle membership and regret will
+be labeled estimates. A conservative bound for the difference in mass
+between two selected sets is $h$ times their symmetric-difference size;
+results unresolved at that precision will remain unresolved. These metrics
+concern expected node activation, not avoided loss or intervention benefit.
+
+The main comparisons will be paired by graph and scenario. They will ask
+when the analytic bounds are tight and whether complement-product recursion
+improves receiving-state selection over simpler rules or the restricted-tree
+comparator. Clipped sum is analytically a looser upper bound; ranking superiority
+does not follow from that fact. The study will also ask whether the dependence diagnostic
+improves either measure without unacceptable resource growth. Negative,
+equivalent, and mixed findings will be retained. The study will describe
+an empirical applicability boundary rather than presume a correction wins
+or claim universal probabilistic accuracy for the index.
