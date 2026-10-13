@@ -1,24 +1,20 @@
-# Preliminary pages
+# Current proposal preliminaries
 
-Everything before Chapter I, formatted to the CITC Manuscript Guidelines (2nd ed.), Article 3 and Article 8.
+The compiled proposal includes the title page, table of contents, lists of
+tables/figures/equations, acronyms, and an abstract placeholder.
 
-| File | Page | Guideline |
-|---|---|---|
-| `metadata.tex` | Shared title, authors, degree, date, signatories | 3.2, 3.3 |
-| `setup.tex` | Preamble: page styles, contents and list formatting, equation list | 3.5, 3.6, 8.1 |
-| `preliminary.tex` | Master file: order and numbering | 3.1, 8.1 |
-| `title_page.tex` | Title page (i, number hidden) | 3.2 |
-| `approval_sheet.tex` | Approval sheet (ii, number hidden) | 3.3 |
-| `acknowledgment.tex` | Acknowledgement | 3.4 |
-| `contents.tex` | Table of contents | 3.5 |
-| `list_of_tables.tex`, `list_of_figures.tex`, `list_of_equations.tex` | Lists | 3.6 |
-| `acronyms.tex` | Acronyms and abbreviations | 3.7 |
-| `abstract.tex` | Abstract and keywords | 3.8 |
+The approval sheet and acknowledgement are omitted at the authors’ request.
+Their earlier source layouts, together with the previous draft abstract, are
+preserved in archive/preliminary/ and are not compiled.
 
-Fill in first (red text is a placeholder): middle names, signatory names (`metadata.tex`), acknowledgement, abstract.
+The title is counted as Roman page i with its number hidden. Contents begins
+at ii; body numbering restarts at Arabic 1. No blank pages are reserved for
+omitted material. The contents retains all heading levels, with a small gap
+between entries and shortened appendix labels. Body tables and the other
+preliminary lists retain the previous spacing.
 
-Approval sheet: print the official FM-USTP-ACAD-11, sign it, scan it as `FM-USTP-ACAD-11.pdf` in this folder, and the build uses the scan instead of the typeset stand-in.
+The current build does not load pdfpages or pdflscape. A future approved form
+would require explicit source inclusion and its appropriate dependencies.
 
-Lists build automatically from captions. In `\eqtag{3-1}`, add a description with `\eqtag[Short description]{3-1}` to show it in the List of Equations.
-
-Build with two or three `pdflatex main.tex` passes.
+Build main.tex with latexmk. Equation descriptions and PDF destinations remain
+automatic through setup.tex and equation_descriptions.tex.

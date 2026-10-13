@@ -272,52 +272,29 @@ regression comparison with the specified equations.
 
 \subsubsection{Prototype Integration and Visualization}
 
-The prototype will retain three layers: a React/Vite interface with directed
-graph visualization, a FastAPI validation service, and the versioned
-GBBRPM evaluation engine. The preliminary implementation used the
-\texttt{gbbrpm} v0.1.0 package; the evaluated proposal implementation
-will pin and record its actual version or revision.
+The research prototype will connect a React/Vite graph interface, a FastAPI
+validation service, and the versioned GBBRPM evaluation engine
+(Figure~\ref{fig:prototype-architecture}). Synthetic and user-imported DAGs
+will use the same input contract; an operational adapter will remain inactive
+until suitable provenance-complete data are available. The evaluated package
+version or source revision will be recorded.
 
 \input{figures/fig_prototype_architecture}
 
-Synthetic and user-imported modes will pass the same validated schema to
-the engine. An operational adapter will remain inactive until a suitable,
-provenance-complete dataset is available. The interface will support
-parameter inspection and editing, explicit execution, graph inspection,
-rankings, and incoming-contribution traces.
-
-Each evaluation response will also carry the topological order computed by
-the evaluation service and an ordered evaluation trace. A trace step will
-declare its type as source, transfer, or aggregate, together with the
-receiving node, that node's local disturbance $B$ and computed risk state
-$R$, and, for a transfer step, the corresponding edge contribution $Q$.
-Trace steps will be assembled directly from quantities already computed by
-the engine, and the service will not re-evaluate the propagation rule
-during trace generation, so the trace serves as a presentation record of a
-single evaluation rather than a redundant re-computation.
-
-The interface will expose the analytical quantities needed to inspect a
-reported value: relation susceptibility and incoming contributions
-alongside the aggregation expression of Equation~(3-4) for a selected
-node, the numerical substitution of Equation~(3-2) for a selected
-relation, and the explicit susceptibility $S_{ij}$ for an imported network
-lacking physical parameters $L$ and $C$. Selection will be coordinated
-between the ranking table and the graph canvas so that a reported rank and
-its topological realization are examined concurrently.
-
-Presentation of a completed evaluation will be optional and disabled by
-default. When enabled, the interface will replay the stored trace after
-execution, without issuing a further evaluation request: a node's state is
-revealed only after all of its incoming contributions have arrived,
-independent branches advance concurrently under a single clock, and while
-a step is displayed the quantities of Equations~(3-2) and~(3-4) are
-reported as they converge on the values returned by the engine. The
-ranking will remain withheld until the replay completes or is skipped.
-The replay schedule will be derived from the topological order computed
-by the evaluation service. Because presentation operates on a returned
-result, it adds no computation and cannot alter numerical values, and its
-timing will remain presentational: sequential, concurrent, or layered
-arrangement will not be interpreted as physical propagation speed.
+The interface will support parameter inspection and editing, explicit engine
+execution, node rankings, and inspection of incoming contributions. The
+service will return its topological order and a trace assembled from the
+engine's evaluated $B$, $Q$, and $R$ quantities. Optional replay, disabled by
+default, will present that stored trace. Independent branches may advance
+concurrently, while each receiving node's final displayed state will settle
+only after its incoming contributions arrive. Intermediate interpolated
+readouts will be distinguished from settled values. Presentation modes and
+timing will preserve the numerical results and will not represent physical
+propagation speed. Trace assembly and rendering will have costs even though
+replay will not request a second propagation evaluation.
+Appendix~\ref{app:prototype-contract} specifies the supporting trace contract
+and planned verification; these interface functions will support inspection
+of the model rather than constitute its scientific contribution.
 
 \subsection{Data Sources, DAG Construction, and Parameterization}
 \label{domain-parameterization}
@@ -684,32 +661,23 @@ establish common calibration.
 
 \subsection{Prototype Functional Verification}\label{prototype-verification}
 
-The prototype will be checked against the versioned engine for fixture
-inventory, reproduction of frozen reference states within declared
-tolerance, valid explicit-susceptibility imports, and rejection of unknown
-endpoints, duplicate records, NaN and negative-infinity inputs, invalid
-bounds, and cycles.
+Functional verification will compare the recorded prototype revision with
+the versioned engine on the N1--N5 fixtures, valid imports, and malformed
+inputs. Checks will cover reference states within declared tolerance,
+trace coverage and deterministic values, receiving-state reconstruction,
+and controlled rejection of invalid graphs or non-finite numeric inputs.
+The member-reported positive-infinity validation gap will require a fix and
+regression evidence before that safeguard is described as passed.
 
-Verification will treat the prototype as a presentation layer over the
-frozen engine, testing agreement rather than re-deriving results. The
-returned trace will be checked across all benchmark fixtures (N1--N5) for
-determinism and for strict correspondence with reported outputs: it must
-account for each node and each edge exactly once, and each step must
-reproduce the reported local disturbance $B$ and state $R$ of its node.
-The replay schedule will be checked for settlement causality and for
-deterministic execution that does not mutate its input. Numerical results and the final ranking must be
-identical across display modes and with presentation disabled, and
-displayed quantities must agree with the engine's values once a
-contribution has arrived and once a node has aggregated all of its
-incoming contributions.
-
-A production frontend build and the parameter-edit-and-run workflow will
-be checked. Interactive graph transitions, selection correspondence, and
-responsive layout will be verified manually in a browser because automated
-headless tests do not evaluate interactive canvas rendering. These checks
-will assess implementation consistency only; usability, accessibility,
-security, multi-user operation, persistence, and deployment hardening will
-require separate evaluation if added to scope.
+Replay checks will assess predecessor-settlement order, concurrent branches,
+input non-mutation, agreement of settled readouts with returned quantities,
+and invariance of numerical results across display modes. Automated and
+manual browser checks will inspect the supported controls and graph layout;
+manual inspection is currently reported as pending. The detailed checklist
+and evidence-recording requirements appear in
+Appendix~\ref{app:prototype-contract}. These checks will establish functional
+consistency in the tested configuration; they will not establish usability,
+operational utility, or deployment readiness.
 
 \subsection{Analysis, Evidence Synthesis, and Reproducibility}
 \label{analysis-reproducibility}
@@ -723,13 +691,10 @@ correlation. Numerical tie grouping will use a declared absolute tolerance
 of $10^{-12}$, with each descending group's highest score as its anchor.
 
 Top-$k$ sets will use the nominal cutoff
-\[
-    k = \min(3,|V|)\quad\text{or}\quad
-    k = \max(1,\lceil 0.20|V|\rceil),
-\]
-depending on the declared metric. All scores within the numerical
-tolerance of the cutoff score will be included. The resulting set can
-exceed nominal $k$. Jaccard similarity will be
+$k=\min(3,|V|)$ or $k=\max(1,\lceil0.20|V|\rceil)$, depending on the
+declared metric. All scores within the numerical tolerance of the cutoff
+score will be included. The resulting set can exceed nominal $k$.
+Jaccard similarity will be
 $J(A,B)=|A\cap B|/|A\cup B|$.
 Top-three and top-20\% measures will be labeled separately.
 These descriptive overlap conventions will be applied consistently to
@@ -774,17 +739,33 @@ operational observations.
 
 \subsection{Timeline of the Study}\label{study-timeline}
 
-Figure~\ref{fig:timeline} provides a provisional 24-week schedule
-spanning October 2026 to April 2027, with W1 beginning October 12, 2026.
-Defense, submission, and event dates
-will be aligned with confirmed institutional schedules. Literature
-gathering, initial formulation, exploratory implementation, and preliminary
-tests conducted before this proposal will be recorded with their actual
-dates rather than shown as uncompleted work.
+Figure~\ref{fig:timeline} gives a provisional calendar for completing the
+revised proposal and its planned evaluation. The model formulation,
+prototype, and exploratory experiments already exist; the opening activity
+identifies work completed before W1 without assigning its original duration.
+Their record will be consolidated during proposal revision.
+Literature review, proposal revision, and data follow-up will continue while
+the team prepares for the proposal presentation and addresses adviser comments.
 
-Writing and data follow-up will overlap appropriate phases. W8 will serve
-as an acquisition checkpoint. Revision buffers will follow both proposal
-and final presentation. Dissemination will be conditional on acceptance
-and event scheduling rather than treated as a model-validation criterion.
+The subsequent phases will finalize the specification and engine, validate
+the exact and Monte Carlo references, implement comparators, and freeze the
+protocol before held-out evaluation. The W8 data checkpoint will review
+available domain evidence and missing software-snapshot records. A
+computational pilot during reference development will assess whether the
+prospective scenario inventory is feasible. Any reduction will be documented
+and frozen before evaluation outcomes, as specified in
+Section~\ref{dependence-controls}. Mechanism comparisons will be followed by
+cost and separate domain analyses; prototype checks and writing will overlap
+these phases. Adviser review and revision buffers will precede and follow the
+final defense. New evaluation-stage protocol changes will require unused
+cases under Section~\ref{analysis-reproducibility}.
+
+The 24-week duration remains a planning placeholder. If W1 begins on
+October 12, 2026, W24 ends on March 28, 2027, and the W8 checkpoint falls
+at the start of the week of November 30, 2026. Defense, submission, and event
+dates will be confirmed separately. Conditional dissemination may extend
+beyond the core period; its dashed tail is not an additional committed
+research phase. Data unavailability will narrow the supported domain claims
+rather than block the independently specified controlled benchmark.
 
 \input{figures/fig_study_timeline}

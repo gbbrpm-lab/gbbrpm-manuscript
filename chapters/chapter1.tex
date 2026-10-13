@@ -141,8 +141,8 @@ characterize the frozen core?
 \item What runtime, memory, and input requirements accompany GBBRPM,
 the matched comparators, and the reference solvers at stated precision?
 \item Can the same core be instantiated coherently in drainage,
-software-dependency, and electrical-network cases, and what
-applicability limits follow from each case's data and evaluation?
+software-dependency, and electrical-network cases, and what applicability
+limits follow from each case's data and evaluation?
 \end{enumerate}
 
 \subsection{Objectives of the Study}\label{objectives-of-the-study}
@@ -180,6 +180,7 @@ behavior, sensitivity, and perturbation robustness;
 \item characterize the evaluation engine's computational and input
 requirements through complexity analysis, runtime and memory measurements,
 and a documented comparison of required information and modeled mechanisms;
+and
 \item assess whether the same core formulation can be instantiated
 coherently in the three selected domains through documented DAG
 construction, parameter mappings, within-domain experiments, and explicit
@@ -348,14 +349,14 @@ probabilistic union because its inputs are not calibrated probabilities.
 
 The resulting $R_j$ is the node's current modeled receiving state, including
 local and inherited disturbance. It is not an estimate of the benefit from
-mitigating that node. A separately specified stochastic reference will support
+mitigating that node. It can serve as the upstream state for later relations,
+so subsequent calculations retain the accumulated influence. Node ranking
+will be derived from the final receiving states rather than treated as an
+additional propagation mechanism.
+
+A separately specified stochastic reference will support
 controlled evaluation of the recursion; domain usefulness will require
 independent outcomes rather than agreement with the index itself.
-It may then
-serve as the upstream state for later relations, allowing risk to be
-recursively updated through the network. Node ranking is therefore a
-decision-support output derived from the resulting risk states rather
-than the propagation mechanism itself.
 
 \subsection{Definition of Terms}\label{definition-of-terms}
  
@@ -376,7 +377,7 @@ GBBRPM. &
 Graph-Based Bounded Risk Propagation Model, the name assigned in this study to its proposed bounded, non-probabilistic comparative-risk model on DAGs; not an established model-family name. \\
 \addlinespace
  
-GBBRPM evaluation\\engine. &
+GBBRPM evaluation engine. &
 Software that will validate inputs and apply the versioned GBBRPM equations in topological order; the implementation of the model. \\
 \addlinespace
 

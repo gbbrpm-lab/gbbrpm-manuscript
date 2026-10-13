@@ -6,7 +6,20 @@ model. The title retains cross-domain emphasis and explicitly limits the propose
 core to **directed acyclic graphs**.
 
 Build **main.tex**. Its main chapter sequence is Chapters I–III, followed by
-references and Appendices A–D. **main.pdf** is the compiled proposal.
+references and Appendices A–E. **main.pdf** is the compiled proposal.
+
+## Integrated member additions
+
+The preliminary pages, updated prototype passages, and provisional timeline
+chart have been merged into the latest research draft. See
+**docs/MEMBER_INTEGRATION_REVIEW.md** for corrections and evidence boundaries.
+The current proposal omits the approval sheet and acknowledgement and uses an
+abstract placeholder, as requested. Earlier layouts are retained only in the
+uncompiled archive. Prototype revision reports were supplied
+by the team, not independently executed during this manuscript pass; the reported
+positive-infinity validation defect and manual browser inspection remain open.
+The 24-week core calendar is provisional, with conditional dissemination shown
+separately beyond the core period.
 
 ## Current structure
 
@@ -25,6 +38,22 @@ references and Appendices A–D. **main.pdf** is the compiled proposal.
 - Appendix C: preliminary electrical worked calculation.
 - Appendix D: selected preliminary evidence, including unfavorable hydraulic
   agreement and known dependence limitations.
+- Appendix E: supporting prototype trace/replay contract and planned functional
+  verification, separate from completed preliminary evidence.
+
+## Latest full-paper review
+
+The preliminary pages use compact contents/list spacing based on the supplied
+proposal examples. The full chapter heading hierarchy remains visible; no body
+sections were deleted to shorten the contents. The later preliminary adjustment
+removes the approval sheet and acknowledgement from the compiled proposal,
+replaces the abstract with a placeholder, and adds a small gap between contents
+entries. Appendix labels in the contents are shortened; full titles remain in
+the appendices. See **docs/PRELIMINARY_ADJUSTMENT_NOTES.md**.
+Chapter III retains a concise prototype description and verification summary;
+implementation-level replay details appear in Appendix E. The timeline uses the
+manuscript's navy/gray style and explicitly marks the W8 data review and protocol
+freeze. See **docs/FULL_PAPER_PASS_NOTES.md** for the review scope and changes.
 
 ## Completed work versus planned work
 
@@ -88,6 +117,23 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
 The generated document is `main.pdf`. `main.tex` is the root file.
+
+### Missing `pdflscape.sty` after merging
+
+The current proposal does not include an approval sheet or load `pdfpages` or
+`pdflscape`. If an official approval-sheet PDF is included in a future submission,
+restore the appropriate source and explicitly load its PDF-insertion dependencies.
+An unused PDF in the preliminary folder does not activate that route.
+
+After replacing an older merged source, clean its local build cache and rebuild:
+
+```powershell
+latexmk -c main.tex
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+```
+
+Build from the extracted project folder. Do not merge generated `.aux`, `.fls`,
+`.fdb_latexmk`, or `.log` files from someone else's machine into the source.
 
 Clean auxiliary build files with:
 

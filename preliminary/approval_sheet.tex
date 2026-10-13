@@ -1,61 +1,60 @@
-% Approval sheet (Section 3.3). Counted as page ii, number hidden.
-% The official FM-USTP-ACAD-11 must be printed and signed with wet signatures (3.3.17).
-% After signing, scan it as preliminary/FM-USTP-ACAD-11.pdf and the build uses the scan
-% instead of the typeset version below.
+% Reserve the official approval-sheet position without asserting approval.
 \thispagestyle{empty}
+\phantomsection
+\addcontentsline{toc}{section}{Approval Sheet}
 \IfFileExists{preliminary/FM-USTP-ACAD-11.pdf}{%
   \includepdf[pages=1,pagecommand={\thispagestyle{empty}}]{preliminary/FM-USTP-ACAD-11.pdf}%
 }{%
-\begingroup
-\setlength{\parindent}{1.25cm}
-\hyphenpenalty=10000 \exhyphenpenalty=10000 \tolerance=2000
+  \prelimheading{Approval Sheet}
+  \vspace{\baselineskip}
+  \noindent\placeholder{Draft layout: approval and signatories pending.}
 
-{\centering\bfseries APPROVAL SHEET\par}
-\vspace{1.5\baselineskip}
+  \vspace{\baselineskip}
+  \noindent The proposal entitled ``\ThesisTitleInline'', prepared by
+  \AuthorsInline, is submitted for examination in partial fulfillment of the
+  requirements for the degree of \DegreeFull. Approval, examination outcome,
+  and acceptance have not yet been recorded.
 
-The Thesis entitled \textbf{``\ThesisTitleInline''}, prepared and submitted by \textbf{\AuthorsInline} in partial fulfillment of the requirements for the degree of \textbf{\DegreeFull} has been examined and approved.
+  \vspace{1.5\baselineskip}
+  \begin{center}
+  \rule{0.62\textwidth}{0.4pt}\\
+  {\small\AdviserName}\\
+  Adviser
+  \end{center}
 
-\vspace{2\baselineskip}
-{\centering
-\begin{tabular}[t]{@{}c@{}}
-\rule{7cm}{0.4pt}\\\textbf{\AdviserName}\\Adviser
-\end{tabular}\par}
+  \vspace{\baselineskip}
+  \hrule
+  \vspace{\baselineskip}
+  \begin{center}
+  PANEL OF EXAMINERS\\[1.5\baselineskip]
+  \rule{0.62\textwidth}{0.4pt}\\
+  {\small\ChairName}\\
+  Chair
+  \end{center}
 
-\vspace{1.5\baselineskip}
-\noindent\rule{\textwidth}{1.2pt}
-\vspace{1\baselineskip}
+  \vspace{\baselineskip}
+  \noindent\begin{minipage}[t]{0.47\textwidth}
+  \centering
+  \rule{\linewidth}{0.4pt}\\
+  {\small\MemberOneName}\\
+  Member
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.47\textwidth}
+  \centering
+  \rule{\linewidth}{0.4pt}\\
+  {\small\MemberTwoName}\\
+  Member
+  \end{minipage}
 
-{\centering PANEL OF EXAMINERS\par}
-\vspace{1\baselineskip}
-\noindent Approved by the committee on Oral Examination with a grade of \underline{PASSED}.
+  \vspace{1.5\baselineskip}
+  \begin{center}
+  \rule{0.62\textwidth}{0.4pt}\\
+  {\small\DeanName}\\
+  Dean\\
+  College of Information Technology and Computing
+  \end{center}
 
-\vspace{2\baselineskip}
-{\centering
-\begin{tabular}[t]{@{}c@{}}
-\rule{7cm}{0.4pt}\\\textbf{\ChairName}\\Chair
-\end{tabular}\par}
-
-\vspace{1.5\baselineskip}
-\noindent\begin{minipage}[t]{0.49\textwidth}\centering
-\rule{5.5cm}{0.4pt}\\\textbf{\MemberOneName}\\Member
-\end{minipage}\hfill
-\begin{minipage}[t]{0.49\textwidth}\centering
-\rule{5.5cm}{0.4pt}\\\textbf{\MemberTwoName}\\Member
-\end{minipage}
-
-\vspace{1.5\baselineskip}
-\noindent Approved and accepted in partial fulfillment of the requirements for the degree of \DegreeFull.
-
-\vspace{2\baselineskip}
-{\centering
-\begin{tabular}[t]{@{}c@{}}
-\rule{7cm}{0.4pt}\\\textbf{\DeanName}\\Dean\\College of Information Technology and Computing
-\end{tabular}\par}
-
-\vspace{1.5\baselineskip}
-\noindent\begin{tabular}[t]{@{}l@{}}
-\rule{5cm}{0.4pt}\\Date of Final Defense
-\end{tabular}
-\endgroup
+  \vspace{\baselineskip}
+  \noindent\rule{0.45\textwidth}{0.4pt}\\
+  \noindent Date of Final Defense \textit{(to be confirmed)}
 }
-\addcontentsline{toc}{section}{Approval Sheet}
