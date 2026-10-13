@@ -12,9 +12,14 @@ H_j=\min\left(1,B_j+\sum_{i\in P(j)}w_{ij}H_i\right),
 \eqtag{3-12}
 \]
 where the incoming maximum is zero for an empty predecessor set. Let $R_j$
-be ordinary GBBRPM and $\pi_j=\Pr(X_j=1)$ under the benchmark. Then
+be ordinary GBBRPM and $\pi_j=\Pr(X_j=1)$ under the benchmark. Let $T_j$
+be the exact activation probability on the target-specific restricted
+in-arborescence defined in Section~\ref{reference-comparators}. It will
+retain a consistent maximum-weight path from every positive-path ancestor,
+the original local inputs and weights, and target $j$ itself; no path-weight
+threshold will be applied. Then
 \[
-M_j\le\pi_j\le R_j\le H_j\qquad\text{for every }j\in V.
+M_j\le T_j\le\pi_j\le R_j\le H_j\qquad\text{for every }j\in V.
 \eqtag{3-13}
 \]
 
@@ -26,13 +31,29 @@ its own initial event and every successful incoming event,
 $\pi_j\ge\max(B_j,\max_i w_{ij}\pi_i)$. A predecessor-free node has
 $M_j=\pi_j=B_j$; induction over topological order establishes the lower bound.
 
+The maximum recursion also has the path representation
+$M_j=\max_{a,\gamma:a\rightarrow j}B_a\prod_{e\in\gamma}w_e$,
+including the zero-length path at $j$. The restricted tree retains a
+maximum-weight path for each positive-path ancestor by consistent next-edge
+choices. Activation at $a$ through its own local event followed by successful
+transmission along that retained path is sufficient to activate $j$ in the
+tree. Its probability is $B_a\prod_{e\in\gamma}w_e$ by primitive independence.
+The tree probability is at least each such path contribution and $B_j$, so
+$M_j\le T_j$. Ancestors without a positive path contribute zero to $M_j$.
+Couple the restricted and full processes using the same local and edge draws.
+Deleting edges cannot create an activation, hence $T_j\le\pi_j$.
+On the target-directed tree, incoming ancestor subtrees have disjoint
+primitives; complement-product recursion therefore evaluates $T_j$ exactly.
+This argument relies on the stated unthresholded, path-preserving construction;
+arbitrary pruning need not retain the $T_j\ge M_j$ guarantee.
+
 For the upper bound, let $F_{ij}$ denote failure of incoming activation
 through $(i,j)$, that is, the complement of $\{X_i=1,E_{ij}=1\}$.
 Every $X_i$ is an increasing Boolean function of the primitive variables,
 so every $F_{ij}$ is decreasing. Positive association under a product
 Bernoulli measure, the Harris/FKG principle, gives
 $\Pr(\bigcap_iF_{ij})\ge\prod_i\Pr(F_{ij})$. This established principle
-is also used for cascade upper bounds by \citet{abbe2017}; it is not a
+is also used for cascade upper bounds by \citet{abbe2017,abbe2020}; it is not a
 new correlation inequality. Since $Z_j$ is independent of the incoming
 events,
 \[
@@ -53,23 +74,31 @@ This completes the argument.
 
 The proposition will be presented as a specialization of established
 association and bounded-aggregation arguments, not as a verified first
-theorem about cascade approximation. Abbe et al.'s nonbacktracking bounds
-use length-indexed messages and aggregate influence; this topological
-receiving-state argument will not be asserted to be identical to their
-algorithm without an equation-level comparison. Independent local activation
+theorem about cascade approximation. Abbe et al.'s journal treatment
+also bounds individual activation probabilities before summing them into
+seed-set influence. Its upper method uses length-indexed messages; its
+DAG-based lower method uses a different incoming-message recurrence
+\citep{abbe2020}. Section~\ref{cascade-bounds-prior-art} compares the
+constructions and limits. Independent local activation
 can also be represented by one certainly active auxiliary source with
 independent edges of probabilities $B_j$ to all original nodes. That
 construction facilitates comparison with fixed-seed literature; it will
 not conceal the model's mathematical precedents.
 
 For this benchmark, score discrepancy is one-sided: $R_j-\pi_j\ge0$.
-Its computable certificate is $0\le R_j-\pi_j\le R_j-M_j$.
+Its scalar certificate is $0\le R_j-\pi_j\le R_j-M_j$.
+When the tree comparator is computed, the tighter certificate is
+$0\le R_j-\pi_j\le R_j-T_j\le R_j-M_j$.
+Computing $T_j$ requires tree construction and evaluation for each requested
+target; the tighter certificate is not free relative to the scalar pass.
+Its reporting will reuse the already computed comparator result.
 GBBRPM is no looser than recursive clipped addition as a nodewise upper
 bound; this ordering need not be rediscovered experimentally. Experiments
 will measure bound width, actual slack, conditions of equality, and
 ranking or selection effects. A smaller pointwise score error does not
-guarantee better rank order. The condition $M_a>R_b$ certifies
-$\pi_a>\pi_b$ for that pair; overlapping brackets remain inconclusive,
+guarantee better rank order. The condition $T_a>R_b$ certifies
+$\pi_a>\pi_b$ when tree bounds are available; $M_a>R_b$ remains a cheaper
+sufficient certificate. Overlapping brackets remain inconclusive,
 not evidence of a reversed ordering.
 
 These guarantees concern only the stated independent-primitive benchmark.

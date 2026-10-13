@@ -12,87 +12,47 @@
 }
 \vspace{\baselineskip}
 
-\subsection{Status and Research Role}
+\subsection{Scope and Trace Contract}
 
-This appendix specifies supporting implementation details for the proposed
-evaluation. It is a design and verification plan, not a record of tests
-completed in this manuscript pass. The prototype will make the model
-inspectable; the principal research evaluation will remain the controlled
-mechanism comparisons in Chapter III. The member-reported preliminary
-implementation evidence remains in Appendix~\ref{app:preliminary}.
+This is a supporting design and verification plan, not a completed test
+report. Prototype work will be limited to input validation, engine integration,
+and inspection of evaluated quantities. The planned mechanism experiments
+will take priority over additional presentation features.
 
-\subsection{Returned Trace and Inspectable Quantities}
+Synthetic and imported DAGs will share one schema. Explicit susceptibility
+will be displayed as supplied. The service will return its topological order
+and engine-computed $B$, $Q$, and $R$ quantities, with one source-or-aggregate
+settlement record per node and one transfer record per edge. A receiving node
+may appear in several transfer records. Trace assembly will not repeat the
+propagation evaluation, but its processing and storage costs will be recorded.
 
-Synthetic and imported inputs will use the same validated schema. Required
-node disturbances and edge susceptibility will be distinguished from missing
-observations. Direct susceptibility will be displayed as supplied; loading
-and capacity will not be invented for an explicit-$S$ import. An operational
-adapter will remain inactive until a suitable dataset is available.
+\subsection{Presentation Boundary}
 
-The service will return its topological order and an ordered trace assembled
-from engine-computed quantities. Source and aggregate records will identify
-the node, local $B$, and resulting $R$; transfer records will identify the
-directed edge and its $Q$. Every node will have one source-or-aggregate
-settlement record, and every edge one transfer record. A receiving node may
-therefore be mentioned in several transfer records. Trace assembly will not
-perform a second propagation evaluation; its processing and storage costs
-will nevertheless be recorded.
+Optional replay will present stored results without changing inputs, final
+states, or rankings. Independent branches may progress concurrently; a
+receiving state will settle after its incoming contributions arrive.
+Interpolated readouts will be presentation values, checked against engine
+quantities only after settlement. Display timing will not represent physical
+propagation speed. Supported completion, cancellation, and reduced-motion
+behavior will be documented for the tested revision.
 
-Node and relation inspection will expose susceptibility, incoming
-contributions, and the numerical terms of Equations~(3-2) and~(3-4).
-Selecting a ranking row will highlight its graph node. Reciprocal selection
-behavior will be claimed only if implemented and checked.
+\subsection{Verification and Outstanding Evidence}
 
-\subsection{Replay and Output Agreement}
+The verification record will retain engine/prototype revisions, fixtures,
+expected quantities, tolerances, and test evidence. It will cover N1--N5
+numerical agreement and trace coverage, selected receiving-state
+reconstruction, valid imports, invalid-input rejection, predecessor-settlement
+order, concurrent branches, input non-mutation, and settled-value agreement
+across display modes. Frontend build and edit/run checks will be complemented
+by automated and manual browser inspection.
 
-Replay will be optional and disabled by default. It will use the stored
-evaluation, the service's topological order, and predecessor-settlement
-dependencies. Independent branches may progress concurrently; a receiver's
-final displayed state will settle after all required incoming contributions
-arrive. This scheduling will be presentation timing, not a physical process
-or an additional model update.
-
-Readouts may interpolate while a contribution is displayed in transit.
-Agreement with returned $Q$ and $R$ will be assessed after the corresponding
-transfer or aggregation settles. The final states and ranking will agree
-across supported display modes and with replay disabled.
-
-The ranking view will be withheld until replay completes or is skipped.
-Parameter edits, dataset changes, and disabling replay will cancel the
-current replay according to the implemented interface contract. Comparison
-and export views will retain their own reported-output behavior. The
-supported controls, including reduced-motion behavior, will be documented
-for the tested revision rather than assumed from a design description.
-
-\subsection{Planned Checks and Outstanding Evidence}
-
-The verification record will identify the engine version, prototype revision,
-fixture inputs, expected quantities, tolerances, and test evidence. It will
-cover:
-\begin{enumerate}[label=\arabic*.,leftmargin=*]
-\item Numerical and trace consistency: N1--N5 inventory, frozen engine
-states, trace determinism and coverage, and reconstruction of selected
-receiving states from the returned contributions.
-\item Input handling: valid explicit-susceptibility imports; rejection of
-unknown endpoints, duplicate records, invalid bounds, cycles, and non-finite
-numbers. The team reports that positive infinity in $L$ or $C$ currently
-reaches HTTP 500 rather than controlled validation. Regression cases will
-cover NaN and both infinity signs in both fields after the defect is fixed.
-\item Replay consistency: predecessor settlement, concurrent independent
-branches, deterministic scheduling, input non-mutation, and equality of
-settled readouts with returned values on controlled replay fixtures.
-N1--N5 trace coverage will remain separate from displayed-value checks.
-\item Interface integration: frontend build, edit/run workflow, supported
-completion and cancellation controls, selection highlighting, containment,
-and responsive layout. Automated browser checks will be complemented by
-manual inspection of motion and interaction.
-\end{enumerate}
-
-The supplied changelog reports revision \texttt{eafec4d}, but the matching
-application source and test logs were not included in the manuscript ZIP.
-Those reports have not been independently reproduced in this review. Manual
-browser inspection is reported as pending. The evaluated revision will need
-retained source and test evidence before its checks are reported as completed.
-Functional verification alone will not establish usability, accessibility
-compliance, security, multi-user operation, or deployment readiness.
+The team reports that positive infinity in $L$ or $C$ can reach HTTP 500.
+The fix will require finite-number validation and regression cases for NaN
+and both infinity signs in both fields: each invalid request should return a
+documented client validation error, never HTTP 500. This functional check
+will precede a prototype demonstration; replay polish will not delay the
+reference experiments. Manual browser inspection remains reported as pending. The supplied
+revision \texttt{eafec4d} and test claims have not been independently reproduced
+from matching application source/logs in this manuscript package. Functional
+checks will not establish operational utility or deployment readiness.
 

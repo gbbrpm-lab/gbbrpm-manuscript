@@ -3,12 +3,32 @@
 
 The stochastic-reference direction introduces additional close prior art.
 \citet{abbe2017} derive cascade bounds using FKG inequalities and
-nonbacktracking message passing. Their Section 3 uses length-indexed
-messages and influence bounds. This precedent prevents positive-association
-arguments or empirical tightness analysis from being treated as a new
-research direction solely because they are attached to the GBBRPM name.
-The proposed DAG bracket will require explicit comparison with that
-established bounding framework.
+nonbacktracking message passing. The expanded journal treatment
+\citep{abbe2020} defines the activation probability of each node before
+summing those probabilities into seed-set influence. Its upper construction
+combines length-indexed incoming messages by complement product
+(Section~3.1, Equations~6--8). Its lower construction processes a directed
+acyclic subnetwork in topological order with an incoming-message inequality
+(Section~4.1, Equations~21--23), including an $O(|V|+|E|)$ implementation.
+Thus nodewise bounds, positive-association arguments, and efficient DAG
+lower bounds already have clear precedents; the aggregate influence target
+does not erase their relevance to receiving-node evaluation.
+
+The present benchmark uses independently sampled local activations, a
+single topological complement-product pass for $R_j$, a recursive maximum
+lower bound, and an optional target-specific restricted tree. Abbe et al.'s
+upper messages are indexed by path length, while their lower recurrence
+and subnetwork restriction differ from these two proposed lower
+comparators. An auxiliary certain seed with independent edges of weights
+$B_j$ can encode the random local starts, so that input convention alone
+will not be presented as a novelty distinction. The published DAG lower
+recursion will be tested as a separate matched nodewise comparator after
+this transformation in Section~\ref{reference-comparators}. No ordering
+between its lower values and $M_j,T_j$ will be assumed. The intended result
+is a transparent DAG specialization and
+measured tightness, ranking, and computational tradeoffs under this
+declared benchmark; any stronger novelty claim will depend on the final
+comparison and evidence.
 
 \citet{chen2010mia} construct maximum-influence in-arborescences by retaining
 consistent maximum-probability paths and applying an influence threshold.

@@ -281,20 +281,17 @@ version or source revision will be recorded.
 
 \input{figures/fig_prototype_architecture}
 
-The interface will support parameter inspection and editing, explicit engine
-execution, node rankings, and inspection of incoming contributions. The
-service will return its topological order and a trace assembled from the
-engine's evaluated $B$, $Q$, and $R$ quantities. Optional replay, disabled by
-default, will present that stored trace. Independent branches may advance
-concurrently, while each receiving node's final displayed state will settle
-only after its incoming contributions arrive. Intermediate interpolated
-readouts will be distinguished from settled values. Presentation modes and
-timing will preserve the numerical results and will not represent physical
-propagation speed. Trace assembly and rendering will have costs even though
-replay will not request a second propagation evaluation.
-Appendix~\ref{app:prototype-contract} specifies the supporting trace contract
-and planned verification; these interface functions will support inspection
-of the model rather than constitute its scientific contribution.
+The interface will expose validated inputs, node rankings, and engine-computed
+$B$, $Q$, and $R$ traces. Optional replay will present stored results, with
+concurrent independent branches and receiving states that settle after incoming
+contributions arrive. Display modes will preserve numerical results; their
+timing will not represent physical propagation speed. Trace assembly and
+rendering costs will be distinguished from scalar evaluation.
+
+Prototype work for this study will prioritize functional consistency and
+inspection of the specified model. Additional presentation features will be
+outside the planned mechanism evaluation. Appendix~\ref{app:prototype-contract}
+records the supporting contract and outstanding checks.
 
 \subsection{Data Sources, DAG Construction, and Parameterization}
 \label{domain-parameterization}

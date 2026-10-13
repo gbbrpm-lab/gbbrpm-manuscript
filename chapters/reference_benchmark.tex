@@ -100,6 +100,8 @@ Matched branch family & Four branch counts, two path lengths, seven
 edge weights, five source probabilities, and two origin conditions & 560\\
 Generated DAGs & Three families, four sizes, 25 graph seeds, six weights,
 and two initial-activation settings & 3600\\
+Heterogeneous-weight subset & Three families, four sizes, one development
+and five evaluation seeds, one weight assignment, and two initial settings & 144\\
 Express topology & One verified snapshot, six weights, and two controlled
 initial-activation settings & 12\\
 \bottomrule
@@ -145,6 +147,25 @@ A local-origin node need not have in-degree zero. The controlled uniform
 weights will isolate topology, dependence, and attenuation; heterogeneous
 N1--N5 inputs will remain a separate information-construction comparison.
 
+A secondary heterogeneous-weight benchmark will use the same three families
+and four sizes, development seed 41 and evaluation seeds 1001--1005, and both
+initial settings. This adds 24 development and 120 evaluation scenarios,
+separate from the 3600 uniform-weight scenarios and paired to the existing
+$w=0.20$ cases on those graphs. For each graph, its $2|V|$ edges will be
+ordered by the SHA-256 digest of the UTF-8 string
+\texttt{family|size|seed|source|destination|hetero-v1}, with literal
+family names and integer node identifiers from the graph manifest.
+Digest ties will be resolved by $(\text{source},\text{destination})$.
+The first quarter will receive $w=0.10$, the middle
+half $w=0.20$, and the last quarter $w=0.30$. These sizes make each count
+integral and fix the mean at $0.20$ without choosing weights from outcomes.
+In this synthetic benchmark $S_{ij}=w_{ij}$ and $\tau_{ij}=1$; the same
+independent-primitive reference and ranking metrics will apply. Paired
+differences will describe sensitivity to effective-weight heterogeneity,
+not real-domain calibration or identification of the two factors. Five
+evaluation graphs per family and size limit inference; this secondary subset
+will not be merged with the primary uniform summaries.
+
 The record will include depth, degree distributions, reachability, source
 coverage, and the fraction of receivers with overlapping incoming local-origin
 lineages. Structural overlap will not be equated with statistical dependence
@@ -152,11 +173,13 @@ strength. Family comparisons will be descriptive, because depth and degree
 patterns differ even with equal node and edge counts. The fixed branch
 family will supply the controlled dependence manipulation.
 
-A further 12 scenarios will use the Express 4.18.2 topology, subject to
-recovering a verified snapshot. The historical manifest records hashes for
+A further 12 scenarios will use the Express 4.18.2 topology, conditional
+on a verified snapshot. The acquisition plan will target a newly acquired
+resolved-dependency snapshot before the W8 data checkpoint; a recovered,
+hash-verified original may instead support the historical topology. The historical manifest records hashes for
 \texttt{nodes.csv} and \texttt{edges.csv}, but those raw inputs are absent
-from this manuscript package. The original files will be recovered and hash-
-checked, or a new resolved-dependency snapshot will be acquired, versioned,
+from this manuscript package. Any recovered original files will be hash-checked. A newly acquired
+snapshot will be versioned,
 and explicitly distinguished from the historical 71-node, 128-edge case.
 Edges will run from dependency to dependent; acyclicity and the reported
 shared paths will be checked. Cycles will not be silently deleted.
@@ -168,7 +191,10 @@ the source records; real advisory severity values will not be interpreted
 as calibrated probabilities. This will be a stochastic experiment on real
 topology, not incident validation. If required records cannot be recovered,
 the case will be reported unavailable rather than reconstructed from figures.
-It will remain separate from generated-graph averages.
+Eligibility, advisory-origin records, and DAG verification will be reviewed
+at W8. If they are incomplete, the Express benchmark case will be omitted
+from the frozen main inventory and the limitation recorded; the controlled
+benchmark will proceed. It will remain separate from generated-graph averages.
 
 At $N=100{,}000$ trials, small receiving probabilities may be unresolved.
 The study will therefore preselect 48 precision-audit scenarios: evaluation
@@ -182,6 +208,31 @@ Elsewhere unresolved differences will remain unresolved. Batching will cap
 memory; development timing will determine whether the full prospective
 inventory is feasible. Any reduction will be documented and frozen before
 evaluation outcomes, including its resulting scenario counts.
+
+Before evaluation, a computational pilot will use development seed 41 at
+sizes 20, 100, and 250 in each family. It will time both initial settings
+at $w=0.10$ and $0.75$, as well as the heterogeneous assignment, with staged
+1{,}000- and 10{,}000-trial batches; at least one size-250 case will run at the proposed
+100{,}000 trials if memory permits. Pilot records will distinguish graph
+generation, reference sampling, deterministic methods (including the
+published DAG lower comparator), target-specific tree construction, and
+output storage. Hardware, implementation revision,
+trials per second, edge-trial throughput, and peak memory will be recorded.
+The generated-DAG reference entails 360 million trial trajectories across
+graphs with 210 edges on average, or $75.6\times10^9$ potential edge-trial
+checks under straightforward edge-by-edge execution. The 48 additional
+million-trial audits add
+$10.08\times10^9$ such checks; the 144 heterogeneous scenarios add
+$3.024\times10^9$ at 100{,}000 trials. These counts are workload estimates,
+not measured runtimes; implementations may avoid many literal checks.
+Extrapolations will include the extra per-target tree costs and be compared
+with the compute allocation recorded before evaluation. If the plan is not
+feasible, batching or a validated equivalent implementation will be tried
+first. Any reduced scenario grid, trial count, or precision-audit inventory
+will be declared with revised interval widths and graph-level replication
+before held-out outcomes are inspected. The controlled branch family,
+family/size coverage, and independent evaluation graphs will receive
+priority over extra display work or exploratory domain expansion.
 
 \subsubsection{Task-Matched Comparators and Recursion Ablation}
 \label{reference-comparators}
@@ -218,6 +269,21 @@ This will be an adaptation of MIA's tree-restriction idea to fixed receiving
 queries, not its complete greedy seed-selection algorithm. Building one tree
 per target will have a different cost from a single global scalar pass.
 
+The nodewise lower messages of \citet[Section~4.1, Equation~22]{abbe2020}
+will provide a published-bound comparator. For this condition only, an
+always-active auxiliary source will connect to each original node $j$ by
+an independent edge of probability $B_j$; the original edges retain
+$w_{ij}$. The resulting fixed-seed live-edge process has the same original
+node marginals as Equation~(3-10). The published minimum-distance directed
+acyclic subnetwork and lower recursion will be implemented as specified,
+with its nodewise outputs compared against exact small fixtures and timed
+separately. It may delete original edges even though the input is already a
+DAG. No ordering relative to $M_j$ or $T_j$ is assumed. The journal upper
+method uses length-indexed messages with a different computational cost;
+its equations will be compared in Section~\ref{cascade-bounds-prior-art},
+but the full upper algorithm is not required for the fixed-budget method
+comparison.
+
 The ancestry-aware diagnostic in Section~\ref{behavioral-evaluation} will
 also be compared with the same reference. Each recursive variant will
 compute its own upstream states. In-degree will remain a descriptive
@@ -231,8 +297,9 @@ with their precision and computational cost stated.
 
 Fixed-budget selection and ranking will be the primary benchmark outcomes;
 score evaluation will characterize the analytic bracket's tightness.
-Per scenario, the study will report width $R_j-M_j$, actual upper slack
-$R_j-\pi_j$, lower slack $\pi_j-M_j$, mean and maximum absolute error,
+Per scenario, the study will report scalar width $R_j-M_j$, tree-refined
+width $R_j-T_j$, actual upper slack $R_j-\pi_j$, both lower slacks
+$\pi_j-M_j$ and $\pi_j-T_j$, mean and maximum absolute error,
 and terminal error relative to exact or estimated marginals. The guaranteed
 nonnegative GBBRPM slack will not be treated as an untested hypothesis.
 Numerical bound violations against exact references will be investigated
@@ -245,7 +312,8 @@ will include paired method differences and their distribution across the
 20 graph replicates. Development summaries will remain separate.
 Monte Carlo intervals will accompany score discrepancies. For example,
 a Monte Carlo interval $[L_j,U_j]$ can be intersected with the analytic
-bracket $[M_j,R_j]$. If nonempty, $[L'_j,U'_j]$ gives possible upper
+bracket $[T_j,R_j]$ when the tree comparator is available
+(or $[M_j,R_j]$ for a scalar-only certificate). If nonempty, $[L'_j,U'_j]$ gives possible upper
 slack $[R_j-U'_j,R_j-L'_j]$. An empty intersection will be recorded as a
 sampling-coverage or implementation discrepancy, not silently repaired. A difference smaller than reference uncertainty
 will not be interpreted as a resolved advantage. Reports will include the
@@ -268,18 +336,18 @@ Section~\ref{analysis-reproducibility}.
 This policy will differ from the expanded cutoff sets used for descriptive
 Jaccard comparisons in Section~\ref{analysis-reproducibility}.
 
-For a selected set $T_k$, the benchmark captured activation mass and
+For a selected set $\mathcal{T}_k$, the benchmark captured activation mass and
 selection regret will be
 \[
 \begin{aligned}
-\operatorname{Capture}(T_k)&=
-\frac{\sum_{j\in T_k}\pi_j}{\sum_{j\in C}\pi_j},\\
+\operatorname{Capture}(\mathcal{T}_k)&=
+\frac{\sum_{j\in \mathcal{T}_k}\pi_j}{\sum_{j\in C}\pi_j},\\
 \operatorname{Regret}_k&=
-\sum_{j\in T_k^*}\pi_j-\sum_{j\in T_k}\pi_j,
+\sum_{j\in \mathcal{T}_k^*}\pi_j-\sum_{j\in \mathcal{T}_k}\pi_j,
 \end{aligned}
 \eqtag{3-17}
 \]
-where $T_k^*$ maximizes activation mass over $k$ candidates. Capture will
+where $\mathcal{T}_k^*$ maximizes activation mass over $k$ candidates. Capture will
 be undefined when the denominator is zero; the all-zero case will be
 reported explicitly. Monte Carlo-based oracle membership and regret will
 be labeled estimates. A conservative bound for the difference in mass
@@ -287,11 +355,30 @@ between two selected sets is $h$ times their symmetric-difference size;
 results unresolved at that precision will remain unresolved. These metrics
 concern expected node activation, not avoided loss or intervention benefit.
 
+A pairwise analysis will explicitly test whether unequal upper slack
+reverses receiving-node order. On the same candidate set, a strict reversal
+will have $R_a>R_b+\epsilon$ but $\pi_a<\pi_b-\epsilon$, with
+$\epsilon=10^{-12}$. For Monte Carlo references, an interval-resolved reversal will
+require $U'_a<L'_b-\epsilon$ using the nonempty intersected intervals above.
+This classification will be conditional on the per-solve sampling coverage
+in Equation~(3-11), not an unconditional proof of reference order.
+The reversal rate will use pairs with strict model order and a resolved strict
+reference order as its denominator. Counts and the fraction of strict-model
+pairs with resolved reference order will accompany the rate; ties and
+unresolved pairs will be reported separately. Estimated rank associations
+will remain distinct from these interval-resolved reversals. Nodewise slack and
+selection regret will also be examined alongside recorded lineage overlap,
+without assuming that more reconvergence necessarily means more error.
+Associations across unmatched graph families will be descriptive; the matched
+branch family will provide the controlled dependence comparison.
+
 The main comparisons will be paired by graph and scenario. They will ask
 when the analytic bounds are tight and whether complement-product recursion
 improves receiving-state selection over simpler rules or the restricted-tree
-comparator. Clipped sum is analytically a looser upper bound; ranking superiority
-does not follow from that fact. The study will also ask whether the dependence diagnostic
+comparator. Clipped sum will remain an inexpensive comparator and outer upper bound.
+Its saturation fraction will be measured rather than presumed to make it
+uninformative. The main bracket-tightness comparison will emphasize $R$
+and $T$; their pointwise bound ordering will not imply ranking superiority. The study will also ask whether the dependence diagnostic
 improves either measure without unacceptable resource growth. Negative,
 equivalent, and mixed findings will be retained. The study will describe
 an empirical applicability boundary rather than presume a correction wins
