@@ -23,9 +23,9 @@
 \usepackage{hyperref} 
 \hypersetup{
     colorlinks=true,
-    citecolor=blue,
-    linkcolor=blue,
-    urlcolor=blue
+    citecolor=black,
+    linkcolor=black,
+    urlcolor=black,
 }
 \usepackage{microtype}
 \usepackage{titlesec}
@@ -33,6 +33,7 @@
 \usepackage{caption}
 \usepackage{fancyhdr}
 \usepackage{etoolbox}
+\usepackage{pdfpages}
 \captionsetup{
     font=normalsize,
     labelfont=bf,
@@ -42,6 +43,13 @@
 }
 \captionsetup[figure]{position=bottom,skip=6pt}
 \captionsetup[table]{position=top,skip=6pt}
+
+% Top-align floats that occupy a dedicated float page, so a large figure such
+% as the study timeline sits at the top of its page instead of the center.
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpbot}{0pt \@plus 1fil}
+\makeatother
 
 % Pandoc table compatibility
 \providecommand{\real}[1]{#1}
@@ -84,28 +92,16 @@
 % Every chapter begins on a new page; its page number is counted but hidden.
 \pretocmd{\section}{\clearpage\thispagestyle{empty}}{}{}
 
+% Preliminary pages (see preliminary/): shared metadata and page-format setup.
+% Guard these includes so the manuscript still compiles when the auxiliary files
+% are not present in a minimal build environment.
+\IfFileExists{preliminary/metadata.tex}{\input{preliminary/metadata}}{}
+\IfFileExists{preliminary/setup.tex}{\input{preliminary/setup}}{}
+
 \begin{document}
 
-\pagenumbering{gobble}
-\begin{titlepage}
-\thispagestyle{empty}
-\centering
-\vspace*{2.5cm}
-{\bfseries\fontsize{14}{17}\selectfont
-DESIGN AND EVALUATION OF GBBRPM: A GRAPH-BASED BOUNDED RISK PROPAGATION MODEL FOR COMPARATIVE PRIORITIZATION ON DIRECTED ACYCLIC GRAPHS ACROSS NETWORK DOMAINS\par}
-\vfill
-{\fontsize{12}{14}\selectfont
-G.M. Anino\\D.J. Antonio\\J.J. Casia\\J.C. Espina\\S.M. Flores\par}
-\vfill
-{\fontsize{12}{14}\selectfont
-Department of Computer Science\\
-College of Information Technology and Computing\\
-University of Science and Technology of Southern Philippines\\
-Cagayan de Oro City, Philippines\par}
-\vspace*{1.5cm}
-\end{titlepage}
-
-\pagenumbering{arabic}
+% Title page through abstract, then switches to arabic numbering for the main body.
+\input{preliminary/preliminary}
 
 \input{chapters/chapter1}
 \input{chapters/chapter2}
