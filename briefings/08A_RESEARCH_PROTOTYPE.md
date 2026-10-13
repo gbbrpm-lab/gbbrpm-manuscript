@@ -10,7 +10,7 @@ The prototype demonstrates that the frozen GBBRPM workflow can be used through a
 2. **FastAPI service:** dataset retrieval, schema validation, and evaluation requests.
 3. **Pinned `gbbrpm` v0.1.0 engine:** the same versioned evaluator used by the computational workflow.
 4. **Cytoscape graph view:** directed topology, risk coloring, and component selection.
-5. **Evaluation response contract:** topological order plus an ordered trace (`source`, `transfer`, `aggregate`) assembled from engine-computed values.
+5. **Evaluation response contract:** topological order computed by the evaluation service, plus an ordered trace (`source`, `transfer`, `aggregate`) assembled from engine-computed values.
 
 ## Data modes
 
@@ -49,13 +49,14 @@ Validation rejects duplicate nodes or edges, unknown endpoints, partial `L/C` in
 
 ## Evaluation trace and trace presentation
 
-The evaluation response carries the engine's topological order and an ordered trace. Each step records its type (source, transfer, or aggregate), the receiving node, that node's `B` and computed state, and, for a transfer, the corresponding edge contribution. Steps are assembled from values the engine has already computed; the service does not re-evaluate the propagation rule to build them, so the trace is a record of one evaluation rather than a second evaluation.
+The evaluation response carries the topological order computed by the evaluation service and an ordered trace. Each step records its type (source, transfer, or aggregate), the receiving node, that node's `B` and computed state, and, for a transfer, the corresponding edge contribution. Steps are assembled from values the engine has already computed; the service does not re-evaluate the propagation rule to build them, so the trace is a record of one evaluation rather than a second evaluation.
 
 Trace presentation is optional and disabled by default:
 
-- a node becomes active only after all of its predecessors have settled, so independent branches are presented concurrently on a single clock;
+- a node becomes active when its first predecessor settles and begins transmitting, and its displayed state converges and is revealed only after every incoming contribution has landed, so independent branches proceed concurrently on a single clock;
+- each contribution begins traversing its edge only after its source has settled, and the schedule is derived from the service's topological evaluation order;
 - the displayed contribution and aggregation terms converge on the values returned by the engine;
-- the ranking is withheld until the replay completes, is skipped, or is dismissed;
+- the ranking list is withheld until the replay completes or is skipped, and is released if playback is terminated by a parameter edit, a dataset change, or disabling presentation (comparison and export views are unaffected);
 - replay issues no additional evaluation request, and modifying a parameter or changing the dataset discards it;
 - a reduced-motion environment initializes in a paused state with continuous motion suppressed while the same schedule and values remain available; and
 - presentation timing is display order only, never physical propagation speed.
@@ -69,8 +70,8 @@ Trace presentation is optional and disabled by default:
 | Imported `A -> B -> C` case returns `R_C = 0.28` | Passed |
 | Unknown endpoints and directed cycles rejected | Passed |
 | Trace covers every node and edge once; step values equal reported results (N1--N5) | Passed |
-| Replay schedule causality, ordered event boundaries, input non-mutation | Passed |
-| Displayed contribution and aggregation values equal engine values at event boundaries | Passed |
+| Replay schedule settlement causality, ordered event boundaries, input non-mutation | Passed |
+| Displayed contribution and node-risk values equal engine values once the corresponding contributions have arrived (controlled trace) | Passed |
 | Frontend production compilation | Passed with bundle-size warning |
 | Graph motion, selection correspondence, responsive layout | Not yet verified; manual browser inspection required |
 
@@ -80,7 +81,7 @@ Trace presentation is optional and disabled by default:
 - reuse of the versioned model engine;
 - common-schema validation;
 - interactive parameter and graph inspection;
-- agreement between displayed and reported quantities; and
+- agreement between displayed and reported quantities once settled; and
 - traceable comparative outputs.
 
 ## What it does not establish
@@ -96,11 +97,11 @@ Trace presentation is optional and disabled by default:
 
 ### “Did you rewrite the model in the frontend?”
 
-No. The frontend sends the validated dataset to the service, which invokes the pinned `gbbrpm` v0.1.0 evaluator. This avoids a second implementation of the equation in the interface. The trace shown during replay is assembled from values that evaluator already computed, so it is a record of one evaluation rather than a second implementation.
+No. The frontend sends the validated dataset to the service, which invokes the pinned `gbbrpm` v0.1.0 evaluator. This avoids a second implementation of the equation in the interface. The trace shown during replay is assembled from values that evaluator already computed, so it is a record of one evaluation rather than a second implementation. The live readout interpolates between those stored values for display and converges on them; it issues no request and computes no new result.
 
 ### “Does the replay animation represent physical propagation?”
 
-No. The schedule reproduces the engine's topological evaluation order and exists to expose intermediate calculation states. Timing, playback rate, and display mode are presentational and cannot change any computed value; a topological order is a dependency order, not a timeline.
+No. The schedule is derived from the service's topological evaluation order: every contribution begins only after its source has settled, and a node's state is revealed only after all of its incoming contributions have landed. Independent branches run concurrently, so display order is not a strict sequence. The schedule exists to expose intermediate calculation states. Timing, playback rate, and display mode are presentational and cannot change any computed value; a topological order is a dependency order, not a timeline.
 
 ### “Why is operational mode disabled?”
 

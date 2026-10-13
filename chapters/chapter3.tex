@@ -267,11 +267,12 @@ provenance-complete dataset is available. The interface will support
 parameter inspection and editing, explicit execution, graph inspection,
 rankings, and incoming-contribution traces.
 
-Each evaluation response will also carry the engine's topological order
-and an ordered evaluation trace. A trace step will declare its type as
-source, transfer, or aggregate, together with the receiving node, that
-node's local disturbance $B$ and computed risk state $R$, and, for a transfer
-step, the corresponding edge contribution $Q$. Trace steps will be assembled
+Each evaluation response will also carry the topological order computed by
+the evaluation service and an ordered evaluation trace. A trace step will
+declare its type as source, transfer, or aggregate, together with the
+receiving node, that node's local disturbance $B$ and computed risk state
+$R$, and, for a transfer step, the corresponding edge contribution $Q$.
+Trace steps will be assembled
 directly from quantities already computed by the engine; the service will not
 re-evaluate the propagation rule during trace generation, ensuring that
 displayed steps cannot diverge from reported results. The trace serves as
@@ -284,9 +285,10 @@ contributions alongside the aggregation expression of Equation~(3-4); for a
 selected relation, it will display the numerical substitution of
 Equation~(3-2); and for an imported network lacking physical parameters $L$
 and $C$, the explicit susceptibility $S_{ij}$ will remain editable under
-the same unit-interval bounds as adapted edges. Selection state will be
-shared between the ranking table and the graph canvas so that a reported
-rank position and its topological node are examined concurrently.
+the same unit-interval bounds as adapted edges. Selection will be
+coordinated between the ranking table and the graph canvas, so that
+choosing a reported rank position highlights the corresponding node and
+a rank and its topological realization are examined concurrently.
 
 \subsubsection{Evaluation Trace Presentation}
 
@@ -296,19 +298,28 @@ stored trace can be replayed without issuing a further evaluation
 request. Because presentation operates on a returned result, it adds no
 computation and cannot alter numerical values.
 
-Replay will follow a deterministic schedule compiled once from the trace. A
-node will become active only after all of its predecessors have settled,
-ensuring that independent branches are presented concurrently under a single
-clock and that the displayed sequence reproduces the engine's topological
-evaluation order. Arriving contributions will be rendered while traversing
-their edges, and the schedule's event boundaries will establish discrete
+Replay will follow a deterministic schedule compiled once from the trace.
+Rather than presenting the evaluation as a strictly sequential listing,
+the schedule will pipeline it: a node will begin receiving contributions
+as soon as its earliest predecessor has settled, so that independent
+branches advance concurrently under a single clock. Each contribution
+will traverse its edge only after its source has settled, and a node's
+displayed state will converge and be revealed only after all of its
+incoming contributions have arrived. The presentation will thus respect
+the topological evaluation order computed by the service as a dependency
+constraint while permitting concurrent branches to interleave in display
+order. Arriving contributions will be rendered as they traverse their
+edges, and the event boundaries of the schedule will establish discrete
 transition marks to which playback can seek. While a step is displayed,
-the interface will report the edge contribution defined by Equation~(3-2)
-and the partially aggregated state defined by Equation~(3-4), in each case
-converging on the value returned by the engine. The derived ranking will
-remain withheld until replay completes, is explicitly skipped, or is
-dismissed, ensuring that intermediate quantities are examined before final
-outputs are read.
+the interface will report the edge contribution defined by
+Equation~(3-2) and the partially aggregated state defined by
+Equation~(3-4), in each case converging on the value returned by the
+engine. The ranking derived from the evaluation will remain withheld
+until the replay completes or is explicitly skipped, and will be released
+when playback is terminated, as when a parameter is modified, the dataset
+is changed, or presentation is disabled. The withholding is confined to
+the ranking panel, so intermediate quantities are examined before final
+outputs are read without restricting the comparison and export views.
 
 Replay will be interruptible and reproducible: modifying a parameter or
 changing the dataset will discard active playback, whereas restoring a
@@ -589,7 +600,8 @@ establish common calibration.
 The prototype will be checked against the versioned engine for fixture
 inventory, reproduction of frozen reference states within declared
 tolerance, valid explicit-susceptibility imports, and rejection of unknown
-endpoints, duplicate records, non-finite values, invalid bounds, and cycles.
+endpoints, duplicate records, NaN and negative-infinity inputs, invalid
+bounds, and cycles.
 
 Verification will treat the prototype as a presentation layer over the
 frozen engine, testing agreement rather than re-deriving results. The
@@ -602,14 +614,19 @@ and each step's classification must correspond to the presence of incoming
 contributions. Selected receiving states will be reconstructed algebraically
 from displayed contributions as an independent check on trace completeness.
 
-The replay schedule will be verified for causality, ensuring that no node
-becomes active before its predecessors have settled; for strictly
-ordered event boundaries; for valid concurrency of independent branches;
-and for deterministic execution that does not mutate its input. Two
-invariance conditions will be tested explicitly: (1)~numerical results
+The replay schedule will be verified for settlement causality, which
+requires that no node's displayed state be revealed before every incoming
+contribution has landed and that each contribution begin only after its
+source has settled; for strictly ordered event boundaries; for valid
+concurrency of independent branches; and for deterministic execution that
+does not mutate its input. Two invariance conditions will be tested
+explicitly: (1)~numerical results
 and the final ranking must be identical across display modes and with
-presentation disabled, and (2)~intermediate quantities reported during
-replay must equal the engine's values at every event boundary.
+presentation disabled, and (2)~displayed quantities must agree with the
+engine's values at settled points, namely once a contribution has arrived
+and once a node has aggregated all of its incoming contributions; values
+between these points are presentational interpolation and are not held to
+this condition.
 
 A production frontend build and the parameter-edit-and-run workflow will
 be checked. Presentation geometry will be inspected for containment
