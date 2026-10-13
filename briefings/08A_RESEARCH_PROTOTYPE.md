@@ -70,7 +70,7 @@ Trace presentation is optional and disabled by default:
 | Imported `A -> B -> C` case returns `R_C = 0.28` | Passed |
 | Unknown endpoints and directed cycles rejected | Passed |
 | Trace covers every node and edge once; step values equal reported results (N1--N5) | Passed |
-| Replay schedule settlement causality, ordered event boundaries, input non-mutation | Passed |
+| Replay schedule settlement causality, input non-mutation | Passed |
 | Displayed contribution and node-risk values equal engine values once the corresponding contributions have arrived (controlled trace) | Passed |
 | Frontend production compilation | Passed with bundle-size warning |
 | Graph motion, selection correspondence, responsive layout | Not yet verified; manual browser inspection required |

@@ -272,70 +272,33 @@ the evaluation service and an ordered evaluation trace. A trace step will
 declare its type as source, transfer, or aggregate, together with the
 receiving node, that node's local disturbance $B$ and computed risk state
 $R$, and, for a transfer step, the corresponding edge contribution $Q$.
-Trace steps will be assembled
-directly from quantities already computed by the engine; the service will not
-re-evaluate the propagation rule during trace generation, ensuring that
-displayed steps cannot diverge from reported results. The trace serves as
-a presentation record of a single evaluation rather than a redundant
-re-computation.
+Trace steps will be assembled directly from quantities already computed by
+the engine, and the service will not re-evaluate the propagation rule
+during trace generation, so the trace serves as a presentation record of a
+single evaluation rather than a redundant re-computation.
 
-The interface will expose the analytical quantities required for that check.
-For a selected node, it will report relation susceptibility and incoming
-contributions alongside the aggregation expression of Equation~(3-4); for a
-selected relation, it will display the numerical substitution of
-Equation~(3-2); and for an imported network lacking physical parameters $L$
-and $C$, the explicit susceptibility $S_{ij}$ will remain editable under
-the same unit-interval bounds as adapted edges. Selection will be
-coordinated between the ranking table and the graph canvas, so that
-choosing a reported rank position highlights the corresponding node and
-a rank and its topological realization are examined concurrently.
-
-\subsubsection{Evaluation Trace Presentation}
+The interface will expose the analytical quantities needed to inspect a
+reported value: relation susceptibility and incoming contributions
+alongside the aggregation expression of Equation~(3-4) for a selected
+node, the numerical substitution of Equation~(3-2) for a selected
+relation, and the explicit susceptibility $S_{ij}$ for an imported network
+lacking physical parameters $L$ and $C$. Selection will be coordinated
+between the ranking table and the graph canvas so that a reported rank and
+its topological realization are examined concurrently.
 
 Presentation of a completed evaluation will be optional and disabled by
-default. When enabled, the trace will be presented after execution, and a
-stored trace can be replayed without issuing a further evaluation
-request. Because presentation operates on a returned result, it adds no
-computation and cannot alter numerical values.
-
-Replay will follow a deterministic schedule compiled once from the trace.
-Rather than presenting the evaluation as a strictly sequential listing,
-the schedule will pipeline it: a node will begin receiving contributions
-as soon as its earliest predecessor has settled, so that independent
-branches advance concurrently under a single clock. Each contribution
-will traverse its edge only after its source has settled, and a node's
-displayed state will converge and be revealed only after all of its
-incoming contributions have arrived. The presentation will thus respect
-the topological evaluation order computed by the service as a dependency
-constraint while permitting concurrent branches to interleave in display
-order. Arriving contributions will be rendered as they traverse their
-edges, and the event boundaries of the schedule will establish discrete
-transition marks to which playback can seek. While a step is displayed,
-the interface will report the edge contribution defined by
-Equation~(3-2) and the partially aggregated state defined by
-Equation~(3-4), in each case converging on the value returned by the
-engine. The ranking derived from the evaluation will remain withheld
-until the replay completes or is explicitly skipped, and will be released
-when playback is terminated, as when a parameter is modified, the dataset
-is changed, or presentation is disabled. The withholding is confined to
-the ranking panel, so intermediate quantities are examined before final
-outputs are read without restricting the comparison and export views.
-
-Replay will be interruptible and reproducible: modifying a parameter or
-changing the dataset will discard active playback, whereas restoring a
-stored replay will reproduce the identical schedule and values. Continuous
-motion will be suppressed, and replay will initialize in a paused state,
-when the environment declares a reduced-motion preference; the underlying
-schedule, event boundaries, and reported values remain unaffected. The
-reporting panel will render as an overlay layered over the visualization
-region so that its size cannot perturb the graph layout or trigger canvas
-reflows, and its vertical dimension will be adjustable by either pointer
-or keyboard within that constraint.
-
-Presentation timing will remain presentational. Sequential, concurrent,
-or layered arrangement will not be interpreted as physical propagation
-speed, and no presentation option will alter the engine's topological
-computation or numerical outputs.
+default. When enabled, the interface will replay the stored trace after
+execution, without issuing a further evaluation request: a node's state is
+revealed only after all of its incoming contributions have arrived,
+independent branches advance concurrently under a single clock, and while
+a step is displayed the quantities of Equations~(3-2) and~(3-4) are
+reported as they converge on the values returned by the engine. The
+ranking will remain withheld until the replay completes or is skipped.
+The replay schedule will be derived from the topological order computed
+by the evaluation service. Because presentation operates on a returned
+result, it adds no computation and cannot alter numerical values, and its
+timing will remain presentational: sequential, concurrent, or layered
+arrangement will not be interpreted as physical propagation speed.
 
 \subsection{Data Sources, DAG Construction, and Parameterization}
 \label{domain-parameterization}
@@ -605,33 +568,19 @@ bounds, and cycles.
 
 Verification will treat the prototype as a presentation layer over the
 frozen engine, testing agreement rather than re-deriving results. The
-returned trace will be evaluated across all benchmark fixtures (N1--N5)
-for determinism and strict correspondence with reported engine outputs:
-it must account for each node and each edge exactly once; each step must
-reproduce the reported local disturbance $B$ and state $R$ of its node;
-transfer steps must reference already-evaluated sources in topological order;
-and each step's classification must correspond to the presence of incoming
-contributions. Selected receiving states will be reconstructed algebraically
-from displayed contributions as an independent check on trace completeness.
-
-The replay schedule will be verified for settlement causality, which
-requires that no node's displayed state be revealed before every incoming
-contribution has landed and that each contribution begin only after its
-source has settled; for strictly ordered event boundaries; for valid
-concurrency of independent branches; and for deterministic execution that
-does not mutate its input. Two invariance conditions will be tested
-explicitly: (1)~numerical results
-and the final ranking must be identical across display modes and with
-presentation disabled, and (2)~displayed quantities must agree with the
-engine's values at settled points, namely once a contribution has arrived
-and once a node has aggregated all of its incoming contributions; values
-between these points are presentational interpolation and are not held to
-this condition.
+returned trace will be checked across all benchmark fixtures (N1--N5) for
+determinism and for strict correspondence with reported outputs: it must
+account for each node and each edge exactly once, and each step must
+reproduce the reported local disturbance $B$ and state $R$ of its node.
+The replay schedule will be checked for settlement causality and for
+deterministic execution that does not mutate its input. Numerical results and the final ranking must be
+identical across display modes and with presentation disabled, and
+displayed quantities must agree with the engine's values once a
+contribution has arrived and once a node has aggregated all of its
+incoming contributions.
 
 A production frontend build and the parameter-edit-and-run workflow will
-be checked. Presentation geometry will be inspected for containment
-within the visualization region under both pointer and keyboard
-adjustment. Interactive graph transitions, selection correspondence, and
+be checked. Interactive graph transitions, selection correspondence, and
 responsive layout will be verified manually in a browser because automated
 headless tests do not evaluate interactive canvas rendering. These checks
 will assess implementation consistency only; usability, accessibility,
