@@ -5,8 +5,10 @@
 The study will follow a quantitative model-design and computational-evaluation
 approach. It will formulate GBBRPM, implement the formulation in a deterministic
 evaluation engine, prepare documented inputs, and assess the resulting behavior
-and resource requirements. Three separate domain cases will examine coherent
-instantiation of the same equations. An interactive prototype will expose the
+and resource requirements. Its scientific emphasis will be the receiving-state
+accuracy--cost tradeoff under a separately defined stochastic reference,
+with controlled shared-origin dependence and task-matched comparisons.
+Three separate domain cases will examine coherent instantiation of the same equations. An interactive prototype will expose the
 engine's inputs, calculations, and comparative outputs.
 
 The research will proceed through design, implementation, data preparation,
@@ -29,11 +31,11 @@ Objective & Planned method & Expected evidence or output\\
 Specified GBBRPM architecture and properties\\
 2: Implement & Deterministic engine, schema checks, prototype integration &
 Versioned evaluation engine and traceable prototype\\
-3: Compare & Paired local-only, uniform, heterogeneous, and structural conditions &
-Magnitude and ranking differences under controlled changes\\
-4: Assess behavior & Boundary tests, scenario sweeps, perturbations, dependence diagnostics &
-Property checks, sensitivity, stability, and reconvergence limits\\
-5: Characterize cost & Complexity analysis, separated runtime and memory measurements, input inventory &
+3: Compare & Exact/Monte Carlo references, matched aggregators and recursion ablation &
+Receiving-state errors, fixed-budget selection, and separate input effects\\
+4: Assess dependence & Matched shared/independent sources, diagnostic evaluation, property and robustness checks &
+Dependence conditions, diagnostic gains/failures, and core properties\\
+5: Characterize cost & Complexity, matched resource measurements, reference precision, input inventory &
 Computational and data-requirement account of lightweight design\\
 6: Instantiate & Separate DAG construction, mappings, and within-domain analyses &
 Case-specific feasibility and applicability boundaries\\
@@ -59,7 +61,11 @@ the mechanisms used to update it
 
 The study will distinguish GBBRPM, the named mathematical model, from the
 \textbf{GBBRPM evaluation engine}, its software implementation. The core
-will specify how supplied bounded inputs are combined. Domain adapters will
+will specify how supplied bounded inputs are combined. The primary output
+will rank accumulated receiving state. Inspection selection will be evaluated
+only against a stated outcome, and intervention value will require a separate
+before-and-after task. The stochastic reference will be an evaluation model
+with its own primitive assumptions, not a replacement domain adapter. Domain adapters will
 supply their meanings and calculations; an adapter will not be permitted
 to silently replace the core update rule.
 
@@ -149,9 +155,13 @@ R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij}).
 \eqtag{3-4}
 \]
 The local complement and incoming complements jointly determine the
-remaining modeled margin. This construction is an algebraic choice for a
-bounded saturating index. Its resemblance to noisy-OR does not confer
-probabilistic independence or event-union semantics.
+remaining modeled margin. Equation~(3-4) is exactly the associative
+extension of the established probabilistic-sum t-conorm to the local
+input and all incoming contributions \citep{klement2004}. The name
+GBBRPM will identify the specified graph-index architecture rather than
+a new aggregation operator. The chosen non-probabilistic interpretation
+does not confer probabilistic independence or event-union semantics,
+and does not itself establish a new mathematical mechanism.
 
 The study will explain this choice relative to alternative bounded
 aggregators. Sum with clipping admits cumulative contributions but reaches
@@ -159,7 +169,13 @@ its cap directly; a maximum retains only the strongest input; and an
 arithmetic mean can fall when a weak input is added. The selected product
 complement permits several nonzero contributions to increase the state
 without exceeding one. This rationale concerns required mathematical
-behavior; it does not establish superior physical realism.
+behavior; it does not establish superior physical realism. The planned
+matched-aggregation comparison in Section~\ref{aggregation-comparison}
+will assess that selection explicitly. RIPA's current-state modifiers
+and leaky noisy-OR's background-plus-parent form will be compared as
+close prior art \citep{faraji2026,fallet2012}; their domain-specific
+probability or risk meanings will not be silently replaced to claim
+a matched performance benchmark.
 
 \subsubsection{Initialization, Recursion, and Output}
 
@@ -191,7 +207,10 @@ not an additional propagation mechanism.
 
 \subsubsection{Analytical Properties and Dependence Boundary}
 
-Boundedness follows because every term in Equation~(3-4) belongs to
+The operator's basic boundedness and monotonicity are established
+properties \citep{klement2004}. The following arguments will confirm
+their consequences for this specified recursion, not claim a new theorem
+about t-conorms. Boundedness follows because every term in Equation~(3-4) belongs to
 $[0,1]$. For an incoming contribution $x_k=Q_{kj}$,
 \[
 \frac{\partial R_j}{\partial x_k}
@@ -253,52 +272,29 @@ regression comparison with the specified equations.
 
 \subsubsection{Prototype Integration and Visualization}
 
-The prototype will retain three layers: a React/Vite interface with directed
-graph visualization, a FastAPI validation service, and the versioned
-GBBRPM evaluation engine. The preliminary implementation used the
-\texttt{gbbrpm} v0.1.0 package; the evaluated proposal implementation
-will pin and record its actual version or revision.
+The research prototype will connect a React/Vite graph interface, a FastAPI
+validation service, and the versioned GBBRPM evaluation engine
+(Figure~\ref{fig:prototype-architecture}). Synthetic and user-imported DAGs
+will use the same input contract; an operational adapter will remain inactive
+until suitable provenance-complete data are available. The evaluated package
+version or source revision will be recorded.
 
 \input{figures/fig_prototype_architecture}
 
-Synthetic and user-imported modes will pass the same validated schema to
-the engine. An operational adapter will remain inactive until a suitable,
-provenance-complete dataset is available. The interface will support
-parameter inspection and editing, explicit execution, graph inspection,
-rankings, and incoming-contribution traces.
-
-Each evaluation response will also carry the topological order computed by
-the evaluation service and an ordered evaluation trace. A trace step will
-declare its type as source, transfer, or aggregate, together with the
-receiving node, that node's local disturbance $B$ and computed risk state
-$R$, and, for a transfer step, the corresponding edge contribution $Q$.
-Trace steps will be assembled directly from quantities already computed by
-the engine, and the service will not re-evaluate the propagation rule
-during trace generation, so the trace serves as a presentation record of a
-single evaluation rather than a redundant re-computation.
-
-The interface will expose the analytical quantities needed to inspect a
-reported value: relation susceptibility and incoming contributions
-alongside the aggregation expression of Equation~(3-4) for a selected
-node, the numerical substitution of Equation~(3-2) for a selected
-relation, and the explicit susceptibility $S_{ij}$ for an imported network
-lacking physical parameters $L$ and $C$. Selection will be coordinated
-between the ranking table and the graph canvas so that a reported rank and
-its topological realization are examined concurrently.
-
-Presentation of a completed evaluation will be optional and disabled by
-default. When enabled, the interface will replay the stored trace after
-execution, without issuing a further evaluation request: a node's state is
-revealed only after all of its incoming contributions have arrived,
-independent branches advance concurrently under a single clock, and while
-a step is displayed the quantities of Equations~(3-2) and~(3-4) are
-reported as they converge on the values returned by the engine. The
-ranking will remain withheld until the replay completes or is skipped.
-The replay schedule will be derived from the topological order computed
-by the evaluation service. Because presentation operates on a returned
-result, it adds no computation and cannot alter numerical values, and its
-timing will remain presentational: sequential, concurrent, or layered
-arrangement will not be interpreted as physical propagation speed.
+The interface will support parameter inspection and editing, explicit engine
+execution, node rankings, and inspection of incoming contributions. The
+service will return its topological order and a trace assembled from the
+engine's evaluated $B$, $Q$, and $R$ quantities. Optional replay, disabled by
+default, will present that stored trace. Independent branches may advance
+concurrently, while each receiving node's final displayed state will settle
+only after its incoming contributions arrive. Intermediate interpolated
+readouts will be distinguished from settled values. Presentation modes and
+timing will preserve the numerical results and will not represent physical
+propagation speed. Trace assembly and rendering will have costs even though
+replay will not request a second propagation evaluation.
+Appendix~\ref{app:prototype-contract} specifies the supporting trace contract
+and planned verification; these interface functions will support inspection
+of the model rather than constitute its scientific contribution.
 
 \subsection{Data Sources, DAG Construction, and Parameterization}
 \label{domain-parameterization}
@@ -452,6 +448,56 @@ dependence, not universal superiority over structural methods.
 Additional structural-comparison runs will be recorded separately from
 the preliminary 136-run count.
 
+\subsubsection{Matched Bounded-Aggregation Comparison}
+\label{aggregation-comparison}
+
+The study will separately compare the maximum, probabilistic-sum, and
+bounded-sum t-conorms \citep{klement2004}. For a bounded input vector
+$\mathbf{x}$, their definitions are
+\[
+\begin{aligned}
+\mathcal{A}_{M}(\mathbf{x})&=\max_k x_k,\qquad
+\mathcal{A}_{P}(\mathbf{x})=1-\prod_k(1-x_k),\\
+\mathcal{A}_{L}(\mathbf{x})&=\min\left(1,\sum_k x_k\right).
+\end{aligned}
+\eqtag{3-9}
+\]
+The input vector at each receiver will contain its local $B_j$ and
+every incoming contribution. Graph, $B$, $S$, $\tau$, and topological
+order will be held fixed across conditions. Two complementary analyses
+will be performed: an operator-only comparison using identical supplied
+contribution vectors, and an end-to-end comparison in which each variant
+recomputes all upstream states recursively with its own aggregator.
+This prevents a comparison variant from incorrectly inheriting states
+computed by the GBBRPM baseline.
+
+For illustration, inputs $(0,0.5,0.5)$ give $0.5$, $0.75$, and $1.0$
+under maximum, probabilistic sum, and bounded sum respectively. These
+are algebraic examples, not new experimental findings. A chain with
+one source disturbance and no intermediate local disturbance will
+provide an agreement control because each receiver has only one
+nonzero input. Independent convergence, multiple local-plus-incoming
+terms, and reconvergence will expose differing accumulation behavior.
+
+The comparison will use the documented N1--N5 configurations and their
+severity and source-condition sweeps. Per-node paired differences,
+terminal states, saturation fraction, Spearman agreement, and
+tie-aware top-$k$ overlap will be reported. Saturation fraction will
+count nodes with $R\ge1-10^{-12}$ and will be labeled as a numerical
+reporting criterion. Constant-rank cases will follow the undefined
+correlation policy in Section~\ref{analysis-reproducibility}.
+Source count and reconvergence will be reported separately.
+
+All three operators are bounded and monotone; those properties alone
+will not identify a preferred choice. The analysis will characterize
+accumulation, saturation, and ranking tradeoffs under the declared
+index semantics. Improved physical or operational prioritization will
+require an independent reference. Diagnostic variants will be separately
+versioned in the experiment runner and counted outside the historical
+136-run suite; they will not overwrite the frozen GBBRPM baseline.
+
+\input{chapters/reference_benchmark}
+
 \subsection{Properties, Sensitivity, Robustness, and Dependence}
 \label{behavioral-evaluation}
 
@@ -478,13 +524,38 @@ Topology, disturbances, and transmission will remain fixed.
 This stated protocol will be versioned; earlier outputs will not be
 assumed identical if their generation conventions differ.
 
-The dependence diagnostic will compare ordinary aggregation with the
-preliminary ancestry-aware path-pruned counterfactual. Overlapping source
-lineages will be grouped and their strongest incoming contribution retained;
-nonoverlapping groups will retain complement-product aggregation.
-Differences will quantify sensitivity to that particular diagnostic
-construction. The counterfactual will not be presented as ground truth
-or an independently validated dependence solution.
+\subsubsection{Specified Ancestry-Aware Diagnostic and Its Evaluation}
+
+The prospective diagnostic will assign each node a set of local-origin labels.
+A positive local term will introduce that node's own label; a positive incoming
+contribution will carry the union of its predecessor's labels. At each receiver,
+positive incoming contributions will be vertices in an overlap graph, joined
+when their label sets intersect. Connected components will define groups,
+including transitive overlap; within each group only the largest contribution
+will be retained. The receiver's local term and these group maxima will be
+combined by complement product. The variant will compute its own upstream
+states and carry union label sets in topological order. This definition will
+be versioned prospectively; it will not retroactively authenticate historical
+outputs whose exact grouping convention differs.
+
+The grouping may merge partially overlapping lineages that also contain
+independent origins, and may discard independent edge opportunities from a
+certain common source. The matched controls in Section~\ref{dependence-controls}
+will test these failure cases. Reference error and fixed-budget selection will
+be reported alongside ordinary GBBRPM and the restricted-tree comparator,
+not merely the difference between
+variants. Runtime, peak memory, lineage-set sizes, and pairwise overlap checks
+will also be recorded. With $K$ origin labels and in-degree $d_j$
+at receiver $j$, a straightforward set implementation can require
+$O(K\sum_j d_j^2)$ overlap work in addition to propagation and label storage;
+it will not inherit the scalar core's linear-time claim.
+
+The protocol will not promise a successful correction. The diagnostic may
+improve some regimes and worsen others. Any newly designed extension will
+require a revised specification, development evaluation, and unused evaluation
+cases; it will not be tuned on the held-out reference outcomes and then
+reported as independently validated. Findings about this diagnostic will not
+be generalized to all dependence-aware methods.
 
 \subsection{Computational and Input-Cost Assessment}
 \label{computational-scalability}
@@ -495,7 +566,7 @@ DAG checking, topological ordering, and propagation require
 \[
 O(|V|+|E|),
 \quad\text{whereas complete comparison sorting adds }O(|V|\log|V|).
-\eqtag{3-9}
+\eqtag{3-18}
 \]
 Graph and stored contribution-trace memory will be $O(|V|+|E|)$.
 The claim applies to one scenario with prepared inputs. Domain adapters,
@@ -516,9 +587,19 @@ will be timed separately, alongside peak memory under a stated measurement
 boundary. Hardware, operating system, language, library versions, and
 timer/memory instrumentation will be recorded.
 
-The same prepared inputs will be used for relevant local, uniform, and
-structural comparison implementations. Simpler baselines may remain
-cheaper. A required-input inventory will separately list observed and
+The same prepared inputs will be used for relevant local, uniform, structural,
+aggregation, restricted-tree, and recursion-ablation implementations. The ancestry-aware variant
+will be timed separately with label preparation included. Restricted-tree
+construction and per-target calculation will also be timed, including all
+requested targets; it will not be compared as if its preprocessing were free. Simpler baselines may
+remain cheaper. Reference comparisons will state trial count and sampling
+precision. They will time one full $N=100{,}000$-trial solve per general-DAG
+scenario and repeat the solve five times on one preselected graph per size
+(forward-edge family, seed 1001, $w=0.5$, initial $B=0.5$). Deterministic methods will retain the
+30-repetition protocol on those same graphs. Reference preparation, simulation,
+and ranking will be separated, and batching/vectorization choices will be
+reported. A one-pass index and repeated probabilistic estimation will not be
+claimed to provide identical fidelity simply because they share inputs. A required-input inventory will separately list observed and
 derived quantities, adapter effort, and missingness requirements.
 A smaller core will not imply easy data acquisition.
 
@@ -530,6 +611,26 @@ hardware, and timing boundaries. A hydraulic simulation and a static
 comparative-index evaluation remain different tasks.
 
 \subsection{Separate Domain-Case Evaluation}\label{domain-evaluation}
+
+The controlled reference study will be the primary mechanism evaluation.
+The three domain cases will support documented instantiation and assessment
+of evidence limits. Before selecting a primary operational validation case,
+the study will require an independently measured target, compatible DAG and
+entity mapping, adequate outcome coverage, and a mapping frozen before final
+outcome inspection. Software will not be selected automatically because its
+topology is available. If no case meets these conditions, the contribution
+will remain a controlled methodological evaluation with supporting
+instantiations, and practical usefulness will remain unestablished.
+
+For an eligible receiving-state or inspection case, the protocol will specify
+the outcome and time window, candidate population, input provenance,
+development/evaluation separation, matched comparators, and fixed inspection
+budgets before testing. An outcome already used to construct $B$, $S$, or
+$\tau$ will not serve as an independent label. Consequence captured will use
+the selected domain outcome; activation-mass capture from the synthetic
+benchmark will not be relabeled as observed loss. Intervention evaluation
+would require independently assessed avoided consequence and will not be
+inferred from current receiving states.
 
 The drainage case will compare scenario-induced priority changes with
 SWMM maximum-depth and flooding changes under the aligned intervention
@@ -560,32 +661,23 @@ establish common calibration.
 
 \subsection{Prototype Functional Verification}\label{prototype-verification}
 
-The prototype will be checked against the versioned engine for fixture
-inventory, reproduction of frozen reference states within declared
-tolerance, valid explicit-susceptibility imports, and rejection of unknown
-endpoints, duplicate records, NaN and negative-infinity inputs, invalid
-bounds, and cycles.
+Functional verification will compare the recorded prototype revision with
+the versioned engine on the N1--N5 fixtures, valid imports, and malformed
+inputs. Checks will cover reference states within declared tolerance,
+trace coverage and deterministic values, receiving-state reconstruction,
+and controlled rejection of invalid graphs or non-finite numeric inputs.
+The member-reported positive-infinity validation gap will require a fix and
+regression evidence before that safeguard is described as passed.
 
-Verification will treat the prototype as a presentation layer over the
-frozen engine, testing agreement rather than re-deriving results. The
-returned trace will be checked across all benchmark fixtures (N1--N5) for
-determinism and for strict correspondence with reported outputs: it must
-account for each node and each edge exactly once, and each step must
-reproduce the reported local disturbance $B$ and state $R$ of its node.
-The replay schedule will be checked for settlement causality and for
-deterministic execution that does not mutate its input. Numerical results and the final ranking must be
-identical across display modes and with presentation disabled, and
-displayed quantities must agree with the engine's values once a
-contribution has arrived and once a node has aggregated all of its
-incoming contributions.
-
-A production frontend build and the parameter-edit-and-run workflow will
-be checked. Interactive graph transitions, selection correspondence, and
-responsive layout will be verified manually in a browser because automated
-headless tests do not evaluate interactive canvas rendering. These checks
-will assess implementation consistency only; usability, accessibility,
-security, multi-user operation, persistence, and deployment hardening will
-require separate evaluation if added to scope.
+Replay checks will assess predecessor-settlement order, concurrent branches,
+input non-mutation, agreement of settled readouts with returned quantities,
+and invariance of numerical results across display modes. Automated and
+manual browser checks will inspect the supported controls and graph layout;
+manual inspection is currently reported as pending. The detailed checklist
+and evidence-recording requirements appear in
+Appendix~\ref{app:prototype-contract}. These checks will establish functional
+consistency in the tested configuration; they will not establish usability,
+operational utility, or deployment readiness.
 
 \subsection{Analysis, Evidence Synthesis, and Reproducibility}
 \label{analysis-reproducibility}
@@ -599,22 +691,24 @@ correlation. Numerical tie grouping will use a declared absolute tolerance
 of $10^{-12}$, with each descending group's highest score as its anchor.
 
 Top-$k$ sets will use the nominal cutoff
-\[
-    k = \min(3,|V|)\quad\text{or}\quad
-    k = \max(1,\lceil 0.20|V|\rceil),
-\]
-depending on the declared metric. All scores within the numerical
-tolerance of the cutoff score will be included. The resulting set can
-exceed nominal $k$. Jaccard similarity will be
+$k=\min(3,|V|)$ or $k=\max(1,\lceil0.20|V|\rceil)$, depending on the
+declared metric. All scores within the numerical tolerance of the cutoff
+score will be included. The resulting set can exceed nominal $k$.
+Jaccard similarity will be
 $J(A,B)=|A\cap B|/|A\cup B|$.
 Top-three and top-20\% measures will be labeled separately.
-These conventions will be applied consistently to planned runs and
-will not be retroactively attributed to every historical table.
+These descriptive overlap conventions will be applied consistently to
+planned runs and will not be retroactively attributed to every historical
+table. Fixed-budget reference evaluation will instead select exactly $k$
+nodes using the shared, outcome-independent tie permutations in
+Section~\ref{reference-metrics}. Expanded cutoff sets will not be used to
+claim an advantage at a fixed inspection budget.
 
-Boundary and analytical tests will assess formal correctness; comparator
-differences will assess added information dependence; resource measures
-will assess cost; and domain analyses will support only their declared
-case-specific claims. Output disagreement alone will not establish
+Boundary and analytical tests will assess formal correctness. Comparator
+differences without a reference will assess added information dependence;
+reference-based errors and selection metrics will assess accuracy under the
+specified stochastic process. Resource measures will assess cost and domain
+analyses will support only their declared case-specific claims. Output disagreement alone will not establish
 better prioritization.
 
 \subsubsection{Provenance and Acquisition Contingencies}
@@ -626,6 +720,15 @@ lost original raw dataset. The software topology and electrical measured
 loading will remain real-data inputs despite the preliminary status of
 their experiments.
 
+The generated-DAG benchmark will use seeds 41--45 for development and
+1001--1020 for evaluation after the simulator, diagnostic, metrics, exclusions,
+and reporting protocol are frozen. The precision-audit subset will also be fixed.
+Development and evaluation summaries will
+be reported separately. The analytically specified branch examples will be
+mechanism controls, not unseen confirmatory discoveries. Any amendment after
+evaluation outcomes are inspected will be recorded and will require new
+unused cases for a further confirmatory claim.
+
 Previously examined scenarios will remain exploratory. Any new
 confirmatory evaluation will specify its criteria and independent data
 before inspecting outcomes. If suitable agency records or event-aligned
@@ -636,17 +739,33 @@ operational observations.
 
 \subsection{Timeline of the Study}\label{study-timeline}
 
-Figure~\ref{fig:timeline} provides a provisional 24-week schedule
-spanning October 2026 to April 2027, with W1 beginning October 12, 2026.
-Defense, submission, and event dates
-will be aligned with confirmed institutional schedules. Literature
-gathering, initial formulation, exploratory implementation, and preliminary
-tests conducted before this proposal will be recorded with their actual
-dates rather than shown as uncompleted work.
+Figure~\ref{fig:timeline} gives a provisional calendar for completing the
+revised proposal and its planned evaluation. The model formulation,
+prototype, and exploratory experiments already exist; the opening activity
+identifies work completed before W1 without assigning its original duration.
+Their record will be consolidated during proposal revision.
+Literature review, proposal revision, and data follow-up will continue while
+the team prepares for the proposal presentation and addresses adviser comments.
 
-Writing and data follow-up will overlap appropriate phases. W8 will serve
-as an acquisition checkpoint. Revision buffers will follow both proposal
-and final presentation. Dissemination will be conditional on acceptance
-and event scheduling rather than treated as a model-validation criterion.
+The subsequent phases will finalize the specification and engine, validate
+the exact and Monte Carlo references, implement comparators, and freeze the
+protocol before held-out evaluation. The W8 data checkpoint will review
+available domain evidence and missing software-snapshot records. A
+computational pilot during reference development will assess whether the
+prospective scenario inventory is feasible. Any reduction will be documented
+and frozen before evaluation outcomes, as specified in
+Section~\ref{dependence-controls}. Mechanism comparisons will be followed by
+cost and separate domain analyses; prototype checks and writing will overlap
+these phases. Adviser review and revision buffers will precede and follow the
+final defense. New evaluation-stage protocol changes will require unused
+cases under Section~\ref{analysis-reproducibility}.
+
+The 24-week duration remains a planning placeholder. If W1 begins on
+October 12, 2026, W24 ends on March 28, 2027, and the W8 checkpoint falls
+at the start of the week of November 30, 2026. Defense, submission, and event
+dates will be confirmed separately. Conditional dissemination may extend
+beyond the core period; its dashed tail is not an additional committed
+research phase. Data unavailability will narrow the supported domain claims
+rather than block the independently specified controlled benchmark.
 
 \input{figures/fig_study_timeline}

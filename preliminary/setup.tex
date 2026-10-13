@@ -34,12 +34,13 @@
 
 % ---------- Table of contents, lists (Sections 3.5 and 3.6) ----------
 % No dot leaders; page numbers centered under the PAGE heading;
-% one blank line between entries and single spacing inside entries.
-\renewcommand{\@pnumwidth}{2cm}
-\renewcommand{\@tocrmarg}{2.3cm}
+% Compact, single-spaced entries following the supplied proposal examples.
+% Keep the full heading hierarchy; separate major groups with a small gap.
+\renewcommand{\@pnumwidth}{1cm}
+\renewcommand{\@tocrmarg}{1.25cm}
 \renewcommand*\@dottedtocline[5]{%
   \ifnum #1>\c@tocdepth \else
-    \vskip\baselineskip
+    \vskip0.05\baselineskip
     {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
      \parindent #2\relax\@afterindenttrue
      \interlinepenalty\@M
@@ -53,7 +54,10 @@
 % Main headings: uppercase, no number, flush left.
 \renewcommand*\l@section[2]{%
   \begingroup
+    \vskip0.5\baselineskip
     \let\numberline\@gobble
+    \let\hyper@linkstart\@gobbletwo
+    \let\hyper@linkend\@empty
     \@dottedtocline{1}{0cm}{0cm}{\MakeUppercase{#1}}{#2}%
   \endgroup}
 % Each lower level is indented 1.25 cm from the previous one.
@@ -63,7 +67,7 @@
 
 % Lists of tables, figures, equations: number column centered under its heading.
 \newcommand*\prelim@listline[2]{%
-  \vskip\baselineskip
+  \vskip0.2\baselineskip
   {\leftskip \dimexpr\prelimnumwidth+0.2cm\relax \rightskip \@tocrmarg
    \parfillskip -\rightskip \parindent 0pt \interlinepenalty\@M
    \leavevmode
@@ -76,9 +80,22 @@
 
 % Equation tag with an automatic entry for the List of Equations.
 % Usage: \eqtag{3-1}  or  \eqtag[Short description]{3-1}
+\input{preliminary/equation_descriptions}
 \renewcommand{\eqtag}[2][]{%
-  \tag{\textit{Equation #2}}%
-  \addcontentsline{loe}{equation}{\protect\numberline{#2}#1}}
+  \tag{\hypertarget{eqtag.#2}{\textit{Equation #2}}}%
+  \begingroup
+  \edef\@currentHref{eqtag.#2}%
+  \def\prelim@eqdesc{#1}%
+  \ifx\prelim@eqdesc\@empty
+    \ifcsname eqdesc@#2\endcsname
+      \edef\prelim@eqdesc{\csname eqdesc@#2\endcsname}%
+    \else
+      \def\prelim@eqdesc{Equation #2}%
+    \fi
+  \fi
+  \addcontentsline{loe}{equation}{\protect\numberline{#2}\prelim@eqdesc}%
+  \endgroup}
+
 
 % Heading row: column titles over the number and page columns.
 \newcommand{\prelim@colrow}[1]{%
@@ -90,10 +107,11 @@
 % ---------- Appendices in the table of contents ----------
 % APPENDICES is a main heading; each appendix sits one level below it and
 % its lettered subsections one level further (switched on by \apptocmode).
+\providecommand*{\toclevel@appendixtitle}{2}
 \newcommand*\l@appendixtitle[2]{{\raggedright\@dottedtocline{2}{1.25cm}{0cm}{#1}{#2}}}
 \newcommand*\apptocmode{\renewcommand*\l@subsection{\@dottedtocline{3}{2.5cm}{1.5cm}}}
 
 % ---------- Entries for REFERENCES in the table of contents ----------
-\apptocmd{\thebibliography}{\phantomsection\addcontentsline{toc}{section}{References}}{}{}
+\apptocmd{\thebibliography}{\addcontentsline{toc}{section}{References}}{}{}
 
 \makeatother

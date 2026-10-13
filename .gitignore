@@ -5,7 +5,6 @@
 *.out
 *.synctex.gz
 *.toc
-*.loe
 *.lof
 *.lot
 *.bbl

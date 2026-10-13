@@ -1,0 +1,60 @@
+% Reserve the official approval-sheet position without asserting approval.
+\thispagestyle{empty}
+\phantomsection
+\addcontentsline{toc}{section}{Approval Sheet}
+\IfFileExists{preliminary/FM-USTP-ACAD-11.pdf}{%
+  \includepdf[pages=1,pagecommand={\thispagestyle{empty}}]{preliminary/FM-USTP-ACAD-11.pdf}%
+}{%
+  \prelimheading{Approval Sheet}
+  \vspace{\baselineskip}
+  \noindent\placeholder{Draft layout: approval and signatories pending.}
+
+  \vspace{\baselineskip}
+  \noindent The proposal entitled ``\ThesisTitleInline'', prepared by
+  \AuthorsInline, is submitted for examination in partial fulfillment of the
+  requirements for the degree of \DegreeFull. Approval, examination outcome,
+  and acceptance have not yet been recorded.
+
+  \vspace{1.5\baselineskip}
+  \begin{center}
+  \rule{0.62\textwidth}{0.4pt}\\
+  {\small\AdviserName}\\
+  Adviser
+  \end{center}
+
+  \vspace{\baselineskip}
+  \hrule
+  \vspace{\baselineskip}
+  \begin{center}
+  PANEL OF EXAMINERS\\[1.5\baselineskip]
+  \rule{0.62\textwidth}{0.4pt}\\
+  {\small\ChairName}\\
+  Chair
+  \end{center}
+
+  \vspace{\baselineskip}
+  \noindent\begin{minipage}[t]{0.47\textwidth}
+  \centering
+  \rule{\linewidth}{0.4pt}\\
+  {\small\MemberOneName}\\
+  Member
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.47\textwidth}
+  \centering
+  \rule{\linewidth}{0.4pt}\\
+  {\small\MemberTwoName}\\
+  Member
+  \end{minipage}
+
+  \vspace{1.5\baselineskip}
+  \begin{center}
+  \rule{0.62\textwidth}{0.4pt}\\
+  {\small\DeanName}\\
+  Dean\\
+  College of Information Technology and Computing
+  \end{center}
+
+  \vspace{\baselineskip}
+  \noindent\rule{0.45\textwidth}{0.4pt}\\
+  \noindent Date of Final Defense \textit{(to be confirmed)}
+}

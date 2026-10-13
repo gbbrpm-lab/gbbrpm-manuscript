@@ -9,7 +9,11 @@ research problem. The second concerns foundational and modern
 propagation models across influence diffusion, epidemics, cascading
 failure, cybersecurity, finance, transportation, and infrastructure.
 This literature establishes the mechanisms and state semantics that can
-inform a general graph-risk architecture.
+inform a general graph-risk architecture. Within this study, drainage literature provides
+motivating evidence and one application context. The general mechanism-
+selection question introduced in Chapter 1 remains the study's scientific
+focus; the review's domain-first order does not designate drainage as the
+primary outcome-validation case.
 
 The review follows a two-stage synthesis. It first establishes the
 domain-specific problem through drainage monitoring and graph-based
@@ -18,7 +22,7 @@ literature on propagation-state semantics, topology, transmission,
 susceptibility, recursion, aggregation, dependence, model complexity,
 and ranking. The final sections compare reusable architectures and
 domain-specific parameterization before synthesizing the research
-problems and the architectural gap addressed by the study.
+problems and the design and evaluation question addressed by the study.
 
 \subsection{Local Assessment and Structural Network Prioritization}
 The following studies establish why local condition and network importance
@@ -150,7 +154,7 @@ single metric.
 
 Taken together, these studies establish two important points. First,
 prioritization is already a legitimate drainage-network task; the
-novelty of the present study is therefore not the act of ranking nodes
+proposed contribution of the present study is therefore not the act of ranking nodes
 or pipes. Second, the literature repeatedly augments topology with
 runoff, hydraulic relevance, storage/discharge capacity, edge
 vulnerability, siltation condition, or other operational information.
@@ -295,17 +299,74 @@ is crossed, and probabilities may be combined through Bayesian or
 noisy-OR structures when the required assumptions are satisfied
 \citep{kempe2003,munoz2017,buldyrev2010}.
 
-For a bounded non-probabilistic comparative risk state, simple addition
-creates a practical difficulty because multiple contributions can exceed
-the declared {[}0,1{]} range. Clipping can restore the range but introduces
-an abrupt ceiling that loses information about how additional
-contributions accumulate. Multiplicative-complement aggregation is a
-candidate bounded, saturating operator, although its resemblance to
-noisy-OR algebra requires an explicit warning: it has a probabilistic
-interpretation only when the inputs and dependence assumptions justify
-one \citep{munoz2017}. The selected operator must therefore follow the
-declared state semantics rather than visual similarity to an established
-probability formula.
+For bounded inputs, established t-conorms provide alternatives to
+unrestricted addition. A t-conorm is commutative, associative, monotone,
+and has zero as a neutral element. The probabilistic sum is
+\[
+\mathcal{S}_{P}(x,y)=x+y-xy=1-(1-x)(1-y).
+\eqtag{2-1}
+\]
+The maximum and bounded-sum t-conorms are also established
+\citep{klement2004}. Associative repetition of Equation~(2-1) yields
+$1-\prod_k(1-x_k)$. Its standard name does not require every application
+to assign probabilistic semantics, nor does selecting it establish a
+new aggregation operator.
+
+These alternatives represent different accumulation behavior. Maximum
+retains the strongest input; bounded sum reaches one when its sum reaches
+the cap; and probabilistic sum combines nonzero inputs with a gradual
+approach to saturation. Basic boundedness and monotonicity are therefore
+insufficient to justify one choice over the others
+\citep{klement2004}. Selection requires a declared index interpretation
+and examination of the resulting response and ranking behavior.
+
+\subsubsection{Close Mathematical and Risk-Architecture Precedents}
+\label{close-prior-art}
+
+Leaky noisy-OR provides a close background-plus-parent algebraic precedent.
+In an efficacy-parameter representation, its conditional probability
+has the form
+\[
+\Pr(Y=1\mid\mathbf{X}=\mathbf{x})
+=1-(1-\ell)\prod_{i:x_i=1}(1-p_i),
+\eqtag{2-2}
+\]
+where $\ell$ accounts for a leak cause and $p_i$ are causal-effect
+parameters under the model's assumptions. Fallet-Fidry et al.
+develop evidential extensions for uncertainty in these structures
+\citep{fallet2012}. A bounded local input can occupy an analogous algebraic
+position, but it need not mean an unmodeled probabilistic cause.
+A forward index recursion using scalar upstream states is not
+automatically equivalent to Bayesian inference over correlated parents.
+
+RIPA is a close architectural precedent for propagating current total
+risk through multiplicative relation and context factors. Its published
+propagation and node aggregation rules are
+\[
+\begin{aligned}
+R_{\mathrm{pro},ij}
+&=R_{\mathrm{total}}(i)(1-RE(i))(1-RE(j))LI(i,j)C(j),\\
+R_{\mathrm{total}}(j)
+&=R_0(j)+\sum_i R_{\mathrm{pro},ij}.
+\end{aligned}
+\eqtag{2-3}
+\]
+Here the factors represent resilience, linkage intensity, and receiver
+criticality \citep{faraji2026}. Current-state updating and multiplicative
+modifiers therefore already have direct risk-model precedents. The
+additive versus bounded aggregation choice is a comparison dimension,
+not evidence that all other architectural features are new.
+
+\input{tables/table_close_prior_art}
+
+The comparison separates operator equivalence, architectural overlap,
+state interpretation, and study evidence. A different model name,
+DAG restriction, non-probabilistic label, prototype, or selected
+combination of cases will not by itself establish mathematical novelty.
+The review will need to consider equivalent formulations under other
+names; the selected comparisons are not an exhaustive database search.
+
+\input{chapters/cascade_prior_art}
 
 \subsubsection{Dependence, Shared Paths, and
 Reconvergence}\label{dependence-shared-paths-and-reconvergence}
@@ -381,7 +442,7 @@ The matrix shows that existing studies already provide local condition
 signals, graph-based criticality, capacity-aware screening, propagation
 pathways, and richer hydraulic state modeling. These strands remain
 distributed across methods with different purposes and state semantics,
-which creates an integrative question rather than an absence of ranking
+which creates a mechanism-selection question rather than an absence of ranking
 methods \citep{iqbal2021,simone2022,dastgir2023,meijer2023,zhang2024,
 zhang2025}.
 
@@ -504,17 +565,18 @@ dastgir2023}.
 
 This structure resembles a reusable computational backbone with
 application-specific adaptation, but it should not be interpreted as
-transfer learning. A learned surrogate transfers fitted
-representations or parameters; by contrast, an explicit architecture
-reuses a declared computational rule whose variables must be
-reinterpreted and validated in each domain \citep{zhang2024}.
+machine-learning transfer learning. A learned surrogate transfers fitted
+representations or parameters; an explicit architecture instead reuses a
+declared computational rule whose variables must be reinterpreted and
+validated in each domain \citep{zhang2024}.
 
-\subsection{Synthesis of the Research Problem and Architectural Gap}
+\subsection{Synthesis of the Research Problem and Evaluation Gap}
 The closing synthesis connects the evidence on state semantics, mechanisms,
 ranking, and cost to a bounded comparative-risk design problem. It does not
 presume that a new model name establishes a new mathematical mechanism.
 
-\subsubsection{Synthesis of Research Problems}\label{synthesis-of-research-problems}
+\subsubsection{Synthesis of Research
+Problems}\label{synthesis-of-research-problems}
 
 The reviewed evidence supports three major research problems.
 
@@ -545,72 +607,73 @@ operating response while remaining interpretable enough to explain why
 one node receives a higher comparative risk state than another
 \citep{simone2022,dastgir2023,meijer2023,zhang2024}.
 
-\subsubsection{Architectural and Integrative Research
-Gap}\label{architectural-and-integrative-research-gap}
+\subsubsection{Unresolved Design and Evaluation Question}
+\label{architectural-and-integrative-research-gap}
 
-The literature does not support claiming that graph propagation,
-recursive updating, capacity-based response, bounded state, edge
-weighting, or multi-source aggregation are individually novel. Each has
-precedent in established model families \citep{kempe2003,buldyrev2010,
-munoz2017,faraji2026,petrone2018}.
+The operator-level problem is not the absence of bounded aggregation.
+Probabilistic sum already supplies it; leaky noisy-OR combines a background
+term and parent influences; and related risk models propagate current
+states through modifiers \citep{klement2004,fallet2012,faraji2026}.
+The study will not claim invention of these components or infer that
+their particular packaging proves a first-of-its-kind architecture.
 
-The gap is instead architectural and integrative. Within the reviewed
-drainage, infrastructure, cybersecurity, finance, transportation,
-cascade, epidemic, influence-diffusion, and graph-surrogate evidence, no
-clearly established lightweight directed-graph formulation was
-identified that combines all of the following under one explicit
-comparative-risk semantics: a bounded continuous non-probabilistic node
-state; recursive propagation of current upstream risk; explicit
-separation of directed reachability, optional transmission, and
-relation-specific susceptibility; local disturbance at receiving nodes;
-bounded aggregation of converging contributions; and explicit
-recognition that shared-path or common-cause dependence is distinct from
-local aggregation. This gap statement is a synthesis bounded to the
-literature set examined in this chapter \citep{simone2022,dastgir2023,
-meijer2023,zhang2025,kempe2003,buldyrev2010,sheyner2002}.
+The unresolved question for the intended static comparative-index task is
+when the selected recursion gives accurate receiving-state rankings under
+a declared reference process, how shared origins and uncertain local inputs
+limit that agreement, and what computational and data costs accompany
+alternative aggregation and dependence treatments. Relation heterogeneity
+and saturation will remain separate behavior questions.
+The established algebra and the related models do not themselves
+determine which aggregator is appropriate for this declared interpretation.
+The study will examine maximum, probabilistic-sum, and bounded-sum
+conditions while preserving input and recursion controls. Association-based
+cascade bounds and restricted-tree approximation already exist
+\citep{abbe2017,chen2010mia}; the proposed benchmark will investigate
+bracket tightness and ranking quality, not claim that bounding cascade
+marginals or pruning influence paths is newly introduced. Independent Cascade
+provides a conditional-transmission process and live-edge reference
+\citep{kempe2003}; it does not supply calibration for the domain index.
+A controlled stochastic benchmark can expose dependence effects that agreement
+with GBBRPM itself cannot measure. The ancestry-overlap diagnostic will remain a
+candidate whose reference accuracy must be tested, distinct from MIA's
+restricted-tree calculation and LDAG's Linear Threshold computation.
 
-The reviewed evidence therefore establishes an architectural and
-integrative research gap rather than the absence of individual graph,
-propagation, or ranking mechanisms. A response to this gap would need to
-combine a clearly defined bounded state, recursive updating,
-relation-specific modifiers, receiving-node disturbance, convergence,
-and explicit dependence limits while preserving the distinction between
-generic computation and domain-specific evidence
-\citep{kempe2003,buldyrev2010,sheyner2002,dastgir2023,zhang2025}.
+This is an evaluative research opportunity whose contribution will depend
+on the specification, controlled comparisons, and interpretation of
+evidence. It is not a verified absence claim about all earlier risk models.
+The literature search and equation-level comparison will be extended
+before any stronger novelty statement is made.
 
-Figure~\ref{fig:literature-gap} summarizes how the three reviewed
-evidence streams lead to this architectural and integrative gap.
+A separate question concerns whether domain mappings support the same
+index interpretation without changing the core. Comparable variable roles
+do not create a common empirical risk scale, and coherent instantiation
+does not establish outcome usefulness. Physical or operational benefit
+will require independent reference evidence. Computational efficiency,
+rank changes, or disagreement with a higher-fidelity simulator will not
+substitute for that evidence.
+
+Figure~\ref{fig:literature-gap} connects these precedents to the
+specific evaluation question rather than suggesting that bounded
+aggregation has no prior art.
 
 \input{figures/fig_literature_gap}
 
 \subsubsection{Chapter Synthesis}\label{chapter-synthesis}
 
-The literature establishes a clear progression from practical drainage
-prioritization to a broader network-risk modeling problem. Local
-assessment provides necessary component-level condition information,
-graph metrics provide structural context, and high-fidelity models
-provide domain-rich physical behavior. Broader propagation research
-contributes mechanisms for recursive updating, transmission,
-susceptibility, aggregation, and dependence. However, these mechanisms
-are distributed across models with different state semantics and
-purposes \citep{kempe2003,kermack1927,buldyrev2010,sheyner2002,
-kavallieratos2021,petrone2018}.
+The literature connects local condition assessment, structural
+prioritization, and domain-rich physical simulation with established
+propagation mechanisms. It also supplies bounded non-probabilistic
+aggregation and close risk architectures
+\citep{klement2004,fallet2012,faraji2026}. These precedents require an
+explicit account of adopted mathematics rather than a novelty argument
+based on a new acronym or output label.
 
-The drainage literature also demonstrates that prioritization methods
-already range from local condition scoring to tailored centrality,
-weakest-link analysis, siltation-chain risk, hydrodynamic consequence
-analysis, and learned hydraulic surrogates. The research opportunity is
-therefore not to introduce ranking itself, but to formulate a distinct
-comparative-risk semantics and propagation process that can explain why
-one node ranks above another after both local and network context are
-considered \citep{iqbal2021,simone2022,dastgir2023,meijer2023,
-zhang2024}.
-
-Accordingly, the reviewed literature supports a methodological response
-that declares its state semantics, separates topology from relation-level
-response, propagates current state recursively, bounds converging
-contributions, and limits its claims to comparative prioritization. The
-specific formulation adopted by the study is presented in Chapter 3 so
-that this chapter remains a synthesis of prior work rather than a
-duplicate statement of the proposed model \citep{kempe2003,buldyrev2010,
-munoz2017,dastgir2023,zhang2025}.
+The study's methodological response will specify the intended index and
+investigate receiving-state reference accuracy, matched aggregation and
+recursion alternatives, shared-origin dependence, and computational cost.
+A separate stochastic benchmark will make those comparisons falsifiable
+without changing the domain index semantics. Relation heterogeneity and
+robustness will supply complementary behavior evidence. Domain instantiation will be reported separately
+from physical-outcome validation. Chapter 3 will describe that
+specification and evaluation plan; the contribution will be assessed
+through the evidence produced rather than presumed from the model name.

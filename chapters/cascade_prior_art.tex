@@ -1,0 +1,37 @@
+\subsubsection{Cascade Bounds and Restricted Influence Structures}
+\label{cascade-bounds-prior-art}
+
+The stochastic-reference direction introduces additional close prior art.
+\citet{abbe2017} derive cascade bounds using FKG inequalities and
+nonbacktracking message passing. Their Section 3 uses length-indexed
+messages and influence bounds. This precedent prevents positive-association
+arguments or empirical tightness analysis from being treated as a new
+research direction solely because they are attached to the GBBRPM name.
+The proposed DAG bracket will require explicit comparison with that
+established bounding framework.
+
+\citet{chen2010mia} construct maximum-influence in-arborescences by retaining
+consistent maximum-probability paths and applying an influence threshold.
+Their Algorithm 2 evaluates activation through complement-product recursion
+on a restricted tree, where multiple seed influences can be aggregated.
+The tree removes the dependency issue associated with alternative paths
+from the same origin. MIA therefore provides both a mathematical precedent
+and a relevant restriction-based comparator; it is not equivalent to
+retaining one largest contribution globally. Its complete algorithm selects
+seeds for influence maximization, whereas this study fixes local inputs and
+evaluates receiving-state queries.
+
+\citet{chen2010ldag} instead develop local DAG influence computation under
+the Linear Threshold model. Their DAG activation recurrence is additive
+under that model's incoming-weight constraints. LDAG is consequently
+related structural approximation literature, not an interchangeable
+Independent Cascade reference or the same ancestry-grouping algorithm.
+
+These studies will be distinguished from the prospective diagnostic that
+groups overlapping local-origin label sets and keeps one group maximum.
+Overlap grouping does not construct target-specific arborescences and does
+not automatically supply exact restricted-process probabilities. The study
+will compare its assumptions and failure cases with the tree restriction
+before any extension is described as original. A targeted literature review
+of equivalent approximations will continue; neither the bracket proof nor
+the proposed evaluation protocol is a verified priority claim.

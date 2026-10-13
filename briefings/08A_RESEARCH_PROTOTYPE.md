@@ -1,5 +1,9 @@
 # Briefing 08A: Research Prototype
 
+This briefing incorporates member-reported prototype changes (reported revision
+`eafec4d`). The manuscript upload contains no application source or test logs;
+these checks have not been independently rerun during manuscript integration.
+
 ## Why the prototype exists
 
 The prototype demonstrates that the frozen GBBRPM workflow can be used through an inspectable interface without rewriting the propagation rule. It is a research implementation artifact, not a claim of production deployment.
@@ -28,10 +32,10 @@ Nodes require:
 - local disturbance `B` in `[0,1]`; and
 - optional outlet and display metadata.
 
-Edges require:
+Edges use:
 
 - declared source and target nodes;
-- `tau` in `[0,1]`; and
+- supplied `tau` in `[0,1]`, or the explicitly permitted neutral default; and
 - either explicit `S`, or both `L` and `C`.
 
 Validation rejects duplicate nodes or edges, unknown endpoints, partial `L/C` input, invalid bounds, and cycles.
@@ -53,7 +57,7 @@ The evaluation response carries the topological order computed by the evaluation
 
 Trace presentation is optional and disabled by default:
 
-- a node becomes active when its first predecessor settles and begins transmitting, and its displayed state converges and is revealed only after every incoming contribution has landed, so independent branches proceed concurrently on a single clock;
+- a node is highlighted when its first predecessor settles and begins transmitting, and its displayed state converges and is revealed only after every incoming contribution has landed, so independent branches proceed concurrently on a single clock;
 - each contribution begins traversing its edge only after its source has settled, and the schedule is derived from the service's topological evaluation order;
 - the displayed contribution and aggregation terms converge on the values returned by the engine;
 - the ranking list is withheld until the replay completes or is skipped, and is released if playback is terminated by a parameter edit, a dataset change, or disabling presentation (comparison and export views are unaffected);
@@ -61,7 +65,7 @@ Trace presentation is optional and disabled by default:
 - a reduced-motion environment initializes in a paused state with continuous motion suppressed while the same schedule and values remain available; and
 - presentation timing is display order only, never physical propagation speed.
 
-## Functional verification
+## Member-reported functional verification
 
 | Verification | Result |
 |---|---|
@@ -69,10 +73,11 @@ Trace presentation is optional and disabled by default:
 | N5 outlet `R_N20 = 0.7086404493`; top node `N13` | Passed |
 | Imported `A -> B -> C` case returns `R_C = 0.28` | Passed |
 | Unknown endpoints and directed cycles rejected | Passed |
-| Trace covers every node and edge once; step values equal reported results (N1--N5) | Passed |
+| Trace coverage of node settlement and edge transfer records; step values match returned results (N1--N5) | Passed |
 | Replay schedule settlement causality, input non-mutation | Passed |
 | Displayed contribution and node-risk values equal engine values once the corresponding contributions have arrived (controlled trace) | Passed |
 | Frontend production compilation | Passed with bundle-size warning |
+| Positive-infinity loading/capacity validation | Known gap reported in the changelog: HTTP 500 instead of controlled rejection; fix and regression test pending |
 | Graph motion, selection correspondence, responsive layout | Not yet verified; manual browser inspection required |
 
 ## What the prototype establishes
@@ -97,7 +102,7 @@ Trace presentation is optional and disabled by default:
 
 ### “Did you rewrite the model in the frontend?”
 
-No. The frontend sends the validated dataset to the service, which invokes the pinned `gbbrpm` v0.1.0 evaluator. This avoids a second implementation of the equation in the interface. The trace shown during replay is assembled from values that evaluator already computed, so it is a record of one evaluation rather than a second implementation. The live readout interpolates between those stored values for display and converges on them; it issues no request and computes no new result.
+No. The frontend sends the validated dataset to the service, which invokes the pinned `gbbrpm` v0.1.0 evaluator. This avoids a second implementation of the equation in the interface. The trace shown during replay is assembled from values that evaluator already computed, so it is a record of one evaluation rather than a second implementation. The live readout interpolates between those stored values for display and converges on them; it issues no new evaluation request and computes no new propagation result. Trace assembly, interpolation, scheduling, and rendering still require processing.
 
 ### “Does the replay animation represent physical propagation?”
 

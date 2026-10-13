@@ -1,0 +1,79 @@
+\subsubsection{Benchmark Bracket and Its Interpretation}
+\label{benchmark-bracket}
+
+\textit{Proposition (receiving-state bracket under independent primitives).}
+Let $G$ be a finite DAG and let all initial-activation and edge-transmission
+variables in Equation~(3-10) be mutually independent, with supplied parameters
+in $[0,1]$. On the same graph and inputs, define recursive maximum and
+clipped-additive states by
+\[
+M_j=\max\left(B_j,\max_{i\in P(j)}w_{ij}M_i\right),\qquad
+H_j=\min\left(1,B_j+\sum_{i\in P(j)}w_{ij}H_i\right),
+\eqtag{3-12}
+\]
+where the incoming maximum is zero for an empty predecessor set. Let $R_j$
+be ordinary GBBRPM and $\pi_j=\Pr(X_j=1)$ under the benchmark. Then
+\[
+M_j\le\pi_j\le R_j\le H_j\qquad\text{for every }j\in V.
+\eqtag{3-13}
+\]
+
+\textit{Proof.} In a DAG, $X_i$ cannot depend on the primitive $E_{ij}$,
+and no incoming activation at $j$ can depend on $Z_j$. Independence of
+the primitives therefore gives
+$\Pr(X_i\land E_{ij})=w_{ij}\pi_i$. Since activation at $j$ includes
+its own initial event and every successful incoming event,
+$\pi_j\ge\max(B_j,\max_i w_{ij}\pi_i)$. A predecessor-free node has
+$M_j=\pi_j=B_j$; induction over topological order establishes the lower bound.
+
+For the upper bound, let $F_{ij}$ denote failure of incoming activation
+through $(i,j)$, that is, the complement of $\{X_i=1,E_{ij}=1\}$.
+Every $X_i$ is an increasing Boolean function of the primitive variables,
+so every $F_{ij}$ is decreasing. Positive association under a product
+Bernoulli measure, the Harris/FKG principle, gives
+$\Pr(\bigcap_iF_{ij})\ge\prod_i\Pr(F_{ij})$. This established principle
+is also used for cascade upper bounds by \citet{abbe2017}; it is not a
+new correlation inequality. Since $Z_j$ is independent of the incoming
+events,
+\[
+\pi_j=1-(1-B_j)\Pr\left(\bigcap_{i\in P(j)}F_{ij}\right)
+\le1-(1-B_j)\prod_{i\in P(j)}(1-w_{ij}\pi_i).
+\eqtag{3-14}
+\]
+Complement product is increasing in each predecessor marginal.
+Starting from $\pi_j=R_j=B_j$ at predecessor-free nodes, topological
+induction yields $\pi_j\le R_j$.
+
+Finally, for nonnegative inputs in $[0,1]$,
+$1-\prod_k(1-x_k)\le\min(1,\sum_kx_k)$. Applying this inequality to
+the local term and incoming contributions, followed by topological
+induction and monotonicity of clipped addition, gives $R_j\le H_j$.
+Primitive probabilities of zero or one follow directly or by continuity.
+This completes the argument.
+
+The proposition will be presented as a specialization of established
+association and bounded-aggregation arguments, not as a verified first
+theorem about cascade approximation. Abbe et al.'s nonbacktracking bounds
+use length-indexed messages and aggregate influence; this topological
+receiving-state argument will not be asserted to be identical to their
+algorithm without an equation-level comparison. Independent local activation
+can also be represented by one certainly active auxiliary source with
+independent edges of probabilities $B_j$ to all original nodes. That
+construction facilitates comparison with fixed-seed literature; it will
+not conceal the model's mathematical precedents.
+
+For this benchmark, score discrepancy is one-sided: $R_j-\pi_j\ge0$.
+Its computable certificate is $0\le R_j-\pi_j\le R_j-M_j$.
+GBBRPM is no looser than recursive clipped addition as a nodewise upper
+bound; this ordering need not be rediscovered experimentally. Experiments
+will measure bound width, actual slack, conditions of equality, and
+ranking or selection effects. A smaller pointwise score error does not
+guarantee better rank order. The condition $M_a>R_b$ certifies
+$\pi_a>\pi_b$ for that pair; overlapping brackets remain inconclusive,
+not evidence of a reversed ordering.
+
+These guarantees concern only the stated independent-primitive benchmark.
+They do not certify probabilities or physical bounds for the domain index,
+dependent initial events, correlated transmission primitives, feedback, or
+other cascade mechanisms. The ancestry-aware diagnostic will require its
+own analysis and will not inherit the GBBRPM upper-bound guarantee.

@@ -6,7 +6,20 @@ model. The title retains cross-domain emphasis and explicitly limits the propose
 core to **directed acyclic graphs**.
 
 Build **main.tex**. Its main chapter sequence is Chapters I–III, followed by
-references and Appendices A–D. **main.pdf** is the compiled proposal.
+references and Appendices A–E. **main.pdf** is the compiled proposal.
+
+## Integrated member additions
+
+The preliminary pages, updated prototype passages, and provisional timeline
+chart have been merged into the latest research draft. See
+**docs/MEMBER_INTEGRATION_REVIEW.md** for corrections and evidence boundaries.
+The current proposal omits the approval sheet and acknowledgement and uses an
+abstract placeholder, as requested. Earlier layouts are retained only in the
+uncompiled archive. Prototype revision reports were supplied
+by the team, not independently executed during this manuscript pass; the reported
+positive-infinity validation defect and manual browser inspection remain open.
+The 24-week core calendar is provisional, with conditional dissemination shown
+separately beyond the core period.
 
 ## Current structure
 
@@ -25,15 +38,35 @@ references and Appendices A–D. **main.pdf** is the compiled proposal.
 - Appendix C: preliminary electrical worked calculation.
 - Appendix D: selected preliminary evidence, including unfavorable hydraulic
   agreement and known dependence limitations.
+- Appendix E: supporting prototype trace/replay contract and planned functional
+  verification, separate from completed preliminary evidence.
+
+## Latest full-paper review
+
+The preliminary pages use compact contents/list spacing based on the supplied
+proposal examples. The full chapter heading hierarchy remains visible; no body
+sections were deleted to shorten the contents. The later preliminary adjustment
+removes the approval sheet and acknowledgement from the compiled proposal,
+replaces the abstract with a placeholder, and adds a small gap between contents
+entries. Appendix labels in the contents are shortened; full titles remain in
+the appendices. See **docs/PRELIMINARY_ADJUSTMENT_NOTES.md**.
+Chapter III retains a concise prototype description and verification summary;
+implementation-level replay details appear in Appendix E. The timeline uses the
+manuscript's navy/gray style and explicitly marks the W8 data review and protocol
+freeze. See **docs/FULL_PAPER_PASS_NOTES.md** for the review scope and changes.
 
 ## Completed work versus planned work
 
 The core mathematical equations and retained preliminary numerical results are
-unchanged. The revised proposal adds planned structural comparison, separated
+unchanged. The prior-art pass explicitly credits the established
+probabilistic-sum t-conorm and compares close leaky noisy-OR and RIPA
+precedents. The revised proposal adds planned bounded-aggregation and structural comparison, separated
 runtime and memory measurement, explicit cutoff-tie reporting, and reviewed
 input-validation conventions. These additions are proposed methods, not newly
 executed tests. See **docs/PROPOSAL_REVISION_NOTES.md** for decisions and
-remaining confirmations.
+remaining confirmations. See **docs/PRIOR_ART_REVISION_NOTES.md** for
+the narrowed research question, verified sources, and planned aggregator
+comparison. The new aggregation variants have not been executed by this pass.
 
 The schedule is provisional. W1 is anchored to October 12, 2026; official
 proposal/final defense, submission, data-access, and dissemination dates remain
@@ -84,6 +117,23 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
 The generated document is `main.pdf`. `main.tex` is the root file.
+
+### Missing `pdflscape.sty` after merging
+
+The current proposal does not include an approval sheet or load `pdfpages` or
+`pdflscape`. If an official approval-sheet PDF is included in a future submission,
+restore the appropriate source and explicitly load its PDF-insertion dependencies.
+An unused PDF in the preliminary folder does not activate that route.
+
+After replacing an older merged source, clean its local build cache and rebuild:
+
+```powershell
+latexmk -c main.tex
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+```
+
+Build from the extracted project folder. Do not merge generated `.aux`, `.fls`,
+`.fdb_latexmk`, or `.log` files from someone else's machine into the source.
 
 Clean auxiliary build files with:
 
@@ -169,3 +219,46 @@ git push
 ```
 
 This workflow keeps equations native to LaTeX, makes chapter and section numbering automatic, preserves traceable cross-references and citations, and allows each manuscript revision to be reproduced from version-controlled sources.
+
+## Focused reference-evaluation revision
+
+The proposal now makes receiving-state reference accuracy, shared-origin dependence,
+and accuracy--cost tradeoffs the primary controlled research questions. The new
+`chapters/reference_benchmark.tex` specifies exact and Monte Carlo reference solvers,
+560 matched branch scenarios, 3600 generated-DAG scenarios across three families,
+and 12 prospective Express-topology scenarios, task-matched aggregation
+and recursion comparisons, a prospective ancestry-aware diagnostic, and exactly-k
+selection metrics. All are planned work; the full benchmark and diagnostic have not
+been implemented or executed in this revision. See
+`docs/SCIENTIFIC_FOCUS_REVISION.md` for the contribution argument and execution order.
+Core equations, preliminary results, and the timeline are preserved.
+
+## Benchmark bound and expanded protocol
+
+`chapters/benchmark_bound.tex` proves the conditional nodewise bracket
+recursive maximum <= cascade marginal <= GBBRPM <= recursive clipped sum.
+It is grounded in established positive association and aggregation arguments,
+not claimed as a first result. `chapters/cascade_prior_art.tex` distinguishes
+Abbe--Kulkarni--Lee bounds, MIA, LDAG, and the ancestry-overlap diagnostic.
+The model remains a domain comparative index; only the separately specified
+synthetic benchmark assigns probabilistic meanings to the supplied numbers.
+
+The expanded protocol uses low weights, 20 evaluation graphs plus five development
+graphs per family/size, a restricted-tree comparator, and 48 preselected precision
+audits. Express raw topology files are absent from this manuscript package;
+their recovery or reacquisition is an explicit prerequisite, not an executed result.
+See `docs/BOUND_AND_PROTOCOL_REVISION.md` for changes and current experiment counts.
+The full benchmark is still planned; only algebraic and small-graph proof checks
+were performed during authoring.
+
+## Chapter 1 opening and alignment revision
+
+Chapter 1 now starts with general network-state assessment, mechanism choices,
+and shared ancestry. It introduces GBBRPM and its controlled evaluation before
+placing drainage as the original motivation and a supporting instantiation.
+The problem statement leads directly with the mechanism-selection question,
+and practical significance describes the three cases without making drainage
+the main research subject. Research questions, objectives, equations, title,
+Chapter 3 protocols, historical evidence, and the provisional timeline are retained.
+Chapter 2 has a short bridge explaining its existing domain-first review order.
+See `docs/CHAPTER1_REFOCUS_NOTES.md`.
