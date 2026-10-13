@@ -9,14 +9,14 @@
   note/.style={font=\sffamily\footnotesize, text=gbgray, align=center}
 ]
 \node[box] (b) {Local disturbance\\$B_i\in[0,1]$};
-\node[box, below=8mm of b] (g) {Directed topology\\$G=(V,E)$};
+\node[box, below=8mm of b] (g) {Directed acyclic graph\\$G=(V,E)$};
 \node[box, below=8mm of g] (s) {Relation parameters\\$S_{ij},\;\tau_{ij}\in[0,1]$};
 \node[core, right=20mm of g] (core) {\textbf{GBBRPM propagation core}\\[2mm]
 $Q_{ij}=S_{ij}\tau_{ij}R_i$\\[1mm]
 $R_j=1-(1-B_j)\displaystyle\prod_{i\in P(j)}(1-Q_{ij})$};
 \node[box, right=20mm of core, yshift=10mm] (risk) {Current node states\\$R_i\in[0,1]$};
 \node[box, below=8mm of risk] (rank) {Comparative ranking\\descending $R_i$; ties retained};
-\node[note, below=5mm of rank] (decision) {Inspection, maintenance, or\\higher-fidelity-analysis support};
+\node[note, below=5mm of rank] (decision) {Scenario exploration and screening\\operational utility requires validation};
 
 % Distinct connection ports along the core's west edge
 \coordinate (core-in-top) at
