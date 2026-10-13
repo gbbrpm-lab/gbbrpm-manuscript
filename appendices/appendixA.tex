@@ -2,6 +2,13 @@
 \thispagestyle{empty}
 \refstepcounter{section}
 \label{app:worked-example}
+\addcontentsline{toc}{section}{Appendices}
+\addtocontents{toc}{\protect\apptocmode}
+\makeatletter
+\providecommand*{\toclevel@appendixtitle}{1}
+\providecommand*{\l@appendixtitle}{\@dottedtocline{1}{0em}{2.3em}}
+\makeatother
+\addcontentsline{toc}{appendixtitle}{Appendix A. Worked Example of the Generic GBBRPM Core Architecture}
 
 {
 \centering

@@ -650,10 +650,13 @@ correlation. Numerical tie grouping will use a declared absolute tolerance
 of $10^{-12}$, with each descending group's highest score as its anchor.
 
 Top-$k$ sets will use the nominal cutoff
-$k=\min(3,|V|)$ or $k=\max(1,\lceil0.20|V|\rceil)$, depending on the
-declared metric. All scores within the numerical tolerance of the cutoff
-score will be included. The resulting set can exceed nominal $k$.
-Jaccard similarity will be
+\[
+    k = \min(3,|V|)\quad\text{or}\quad
+    k = \max(1,\lceil 0.20|V|\rceil),
+\]
+depending on the declared metric. All scores within the numerical
+tolerance of the cutoff score will be included. The resulting set can
+exceed nominal $k$. Jaccard similarity will be
 $J(A,B)=|A\cap B|/|A\cup B|$.
 Top-three and top-20\% measures will be labeled separately.
 These conventions will be applied consistently to planned runs and

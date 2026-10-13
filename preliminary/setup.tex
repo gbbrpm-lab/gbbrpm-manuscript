@@ -89,6 +89,12 @@
     \hb@xt@\prelimnumwidth{\hss\prelimcolhead{#1}\hss}\fi
   \hfill\hb@xt@\@pnumwidth{\hss\prelimcolhead{Page}\hss}}\par}
 
+% ---------- Appendices in the table of contents ----------
+% APPENDICES is a main heading; each appendix sits one level below it and
+% its lettered subsections one level further (switched on by \apptocmode).
+\newcommand*\l@appendixtitle[2]{{\raggedright\@dottedtocline{2}{1.25cm}{0cm}{#1}{#2}}}
+\newcommand*\apptocmode{\renewcommand*\l@subsection{\@dottedtocline{3}{2.5cm}{1.5cm}}}
+
 % ---------- Entries for REFERENCES in the table of contents ----------
 \apptocmd{\thebibliography}{\addcontentsline{toc}{section}{References}}{}{}
 
