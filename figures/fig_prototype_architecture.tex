@@ -10,13 +10,13 @@
 \node[box] (sources) {Data modes: frozen N1--N5 fixtures \quad user-imported JSON \quad inactive operational adapter};
 \node[box, below=of sources] (ui) {React/Vite interface: dataset selection, graph inspection, parameter editing, and explicit model execution};
 \node[box, below=of ui] (api) {FastAPI validation service: schema, bounds, endpoint, duplicate-edge, and DAG checks};
-\node[box, below=of api] (engine) {Pinned \texttt{gbbrpm} v0.1.0 evaluator: susceptibility derivation, topological propagation, and contribution tracing};
+\node[box, below=of api] (engine) {Versioned GBBRPM evaluation engine: susceptibility derivation, topological propagation, and contribution tracing};
 \node[box, below=of engine] (outputs) {Traceable outputs: risk-colored directed graph, ranked nodes, outlet summary, and edge contributions};
 \draw[arrow] (sources) -- (ui);
 \draw[arrow] (ui) -- (api);
 \draw[arrow] (api) -- (engine);
 \draw[arrow] (engine) -- (outputs);
 \end{tikzpicture}
-\caption{Research prototype architecture and separation between data modes, interface, validation service, versioned evaluator, and comparative outputs.}
+\caption{Proposed research prototype architecture separating data modes, interface, validation service, GBBRPM evaluation engine, and comparative outputs.}
 \label{fig:prototype-architecture}
 \end{figure}

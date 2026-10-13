@@ -1,6 +1,12 @@
 \begingroup
 \small
-\begin{longtable}{@{}p{0.14\textwidth}p{0.15\textwidth}p{0.18\textwidth}p{0.17\textwidth}p{0.19\textwidth}@{}}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.06}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\dimexpr\textwidth-8\tabcolsep\relax}
+>{\raggedright\arraybackslash}p{0.16\dimexpr\textwidth-8\tabcolsep\relax}
+>{\raggedright\arraybackslash}p{0.24\dimexpr\textwidth-8\tabcolsep\relax}
+>{\raggedright\arraybackslash}p{0.18\dimexpr\textwidth-8\tabcolsep\relax}
+>{\raggedright\arraybackslash}p{0.26\dimexpr\textwidth-8\tabcolsep\relax}@{}}
 \caption{Comparison of propagation-model families relevant to comparative network-risk prioritization.}\label{tab:model-families}\\
 \toprule
 Model family & Typical state & Propagation or update basis & Principal analytical use & Limitation for the present problem \\

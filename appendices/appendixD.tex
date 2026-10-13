@@ -1,0 +1,155 @@
+\clearpage
+\thispagestyle{empty}
+\refstepcounter{section}
+\label{app:preliminary}
+\begin{center}
+\textbf{APPENDIX D}
+
+\vspace{\baselineskip}
+\textbf{Selected Preliminary Computational Evidence}
+\end{center}
+\vspace{3\baselineskip}
+
+\subsection{Status, Purpose, and Provenance}
+
+This appendix preserves selected completed exploratory findings that
+motivated the proposed evaluation. These outputs were reported in the
+pre-consultation full-study manuscript and have not been regenerated
+under every newly specified proposal convention. They demonstrate
+implementation feasibility and expose limitations; they are not the final
+results of the proposed study.
+
+The preliminary core used recovered reconstructed validation inputs and
+a frozen formulation. The restored scenario inventory contained 136 runs.
+The five controlled fixtures contain 6, 8, 8, 7, and 20 nodes, respectively.
+The software topology and measured electrical loading are real-data
+inputs, while their disturbance mappings or scenario injections remain
+distinct from independent incident outcomes. A complete pre-consultation
+PDF and the original chapter sources are retained in the accompanying
+research archive.
+
+\subsection{Controlled Behavior and Comparator Differences}
+
+The baseline outlet states were 0.053760, 0.408000, 0.106814, 0.351372,
+and 0.708640 for N1--N5. These values are comparative indices under the
+declared fixtures, not failure probabilities.
+
+\begin{table}[H]
+\centering
+\caption{Preliminary N5 comparator agreement with heterogeneous GBBRPM.}
+\label{tab:prelim-comparators}
+\small
+\begin{tabularx}{\textwidth}{@{}Lrr@{}}
+\toprule
+Comparator & Spearman $\rho$ & Top-three Jaccard\\
+\midrule
+Local-only & 0.108627 & 0.0\\
+Uniform $S=0.25$ & -0.042105 & 0.0\\
+Uniform $S=0.50$ & 0.150376 & 0.0\\
+Uniform $S=0.75$ & 0.696241 & 0.5\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+These differences show that the supplied relation conditions and
+propagated context changed the ordering. Agreement with GBBRPM is not
+a ground-truth accuracy measure, and the table does not establish that
+GBBRPM is operationally superior to the comparison scores.
+
+\subsection{Preliminary Property, Robustness, and Dependence Checks}
+
+The prior report recorded 600 randomized property-test trials with no
+reported failure in its boundedness, local-disturbance monotonicity,
+$B=1$ boundary, and zero-susceptibility checks. This is finite
+implementation evidence alongside the analytical arguments, not a proof
+of all possible extensions or implementations.
+
+\begin{table}[H]
+\centering
+\caption{Preliminary N5 robustness summary, 600 trials per perturbation level.}
+\label{tab:prelim-robustness}
+\small
+\begin{tabularx}{\textwidth}{@{}l*{5}{Y}@{}}
+\toprule
+Perturbation & Mean Spearman & 5th percentile & 95th percentile & Mean top-three Jaccard & Mean top-20\% Jaccard\\
+\midrule
+$\pm5\%$ & 0.979190 & 0.962331 & 0.992481 & 0.744500 & 0.776000\\
+$\pm10\%$ & 0.938267 & 0.886289 & 0.974436 & 0.546667 & 0.604873\\
+$\pm20\%$ & 0.845552 & 0.697067 & 0.935338 & 0.388833 & 0.440823\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+These previously reported set conventions are kept distinguishable from
+the explicit cutoff-tie protocol for planned runs. The top-20\% metric has
+nominal $k=4$ for N5. Small perturbations produced broadly stable
+ordering, while the highest-priority membership was more sensitive.
+
+The ancestry-aware path-pruned diagnostic gave outlet-state differences
+of 0.000000 for N3, 0.099372 for N4, and 0.322637 for N5 relative to
+ordinary aggregation. This is sensitivity to a declared counterfactual,
+not a validated estimate of true physical bias. It demonstrates why a
+bounded output and stable ranking do not establish dependence correction.
+
+\subsection{Preliminary Runtime Evidence}
+
+The existing sparse-DAG experiment reported median timings from
+1.628378 ms for 20 nodes and 60 edges to 16.650025 ms for 1000 nodes
+and 3000 edges, after five warm-ups and 30 repetitions.
+These implementation-specific timings do not provide a matched speed
+comparison with a hydraulic simulator, memory evidence, or a breakdown
+of validation, propagation, and sorting. The planned cost protocol will
+supply those distinctions rather than infer them from this table range.
+
+\subsection{Preliminary Hydraulic-Reference Disagreement}
+
+The prior 12-scenario SWMM comparison reported the following:
+\begin{table}[H]
+\centering
+\caption{Preliminary comparison with simulated hydraulic worsening.}
+\label{tab:prelim-swmm}
+\small
+\begin{tabularx}{\textwidth}{@{}L*{3}{Y}@{}}
+\toprule
+Hydraulic outcome & Mean Spearman & Top-20\% Jaccard & Positive worsening outside downstream scope\\
+\midrule
+Maximum depth & -0.416 & 0.119 & 71.2\%\\
+Flooding volume & -0.485 & 0.000 & 40.5\%\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The negative associations and low priority-set overlaps do not support
+hydraulic-outcome ranking equivalence under this protocol. Outside-scope
+worsening is consistent with mechanisms omitted by the downstream-only
+DAG index, but the comparison does not isolate a causal hydraulic
+mechanism in each scenario. Neither disagreement nor low computation
+cost validates drainage inspection or maintenance utility.
+
+\subsection{Preliminary Software and Electrical Instantiation}
+
+The Express 4.18.2 case used 71 packages, 128 directed relations, and
+seven advisory-backed local disturbances. Root risk increased from
+0.5000 at $\tau=0$ to 0.9975 at $\tau=1$, and its rank became first
+by $\tau=0.50$. Appendix~\ref{app:software-worked-example} traces the
+intermediate setting. Shared \texttt{qs} and \texttt{send} paths may
+inflate the root state; their contribution is not quantified by the
+stable ranking.
+
+The observable Component 2 case used 12 nodes, 11 edges, and loading
+derived from 24 aligned phasor snapshots. The 43 controlled scenarios
+tested severity, location, load scaling, transmission, and multiple local
+sources. The root-disturbance case $B_{\mathrm{C2\_N01}}=0.75$ gave
+risk sum approximately 1.186. Appendix~\ref{app:electrical-worked-example}
+provides its trace. These are injected-disturbance experiments on
+normal-operation measurements, not independent event-response prediction.
+
+\subsection{Preliminary Prototype Feasibility}
+
+The prior implementation report recorded a controlled-fixture inventory,
+frozen N5 reproduction, valid imported-graph evaluation, invalid-input
+rejection, and a production frontend build. Those checks support
+implementation feasibility within the tested configuration. The planned
+study will rerun and extend engine/prototype consistency checks; it will
+not infer usability, security, field applicability, or operational
+readiness from the preliminary functional tests.

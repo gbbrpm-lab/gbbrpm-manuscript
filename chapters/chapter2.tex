@@ -20,7 +20,12 @@ and ranking. The final sections compare reusable architectures and
 domain-specific parameterization before synthesizing the research
 problems and the architectural gap addressed by the study.
 
-\subsection{Urban Drainage Networks as Interconnected
+\subsection{Local Assessment and Structural Network Prioritization}
+The following studies establish why local condition and network importance
+are different analytical targets. They move from drainage connectivity to
+asset-level monitoring and then to structural and condition-aware ranking.
+
+\subsubsection{Urban Drainage Networks as Interconnected
 Systems}\label{urban-drainage-networks-as-interconnected-systems}
 
 Urban drainage networks consist of connected conduits, junctions,
@@ -53,7 +58,7 @@ between local condition and network-context priority recurs in studies
 that combine inspection, topology, capacity, and hydraulic relevance
 \citep{simone2022,simone2023,dastgir2023,meijer2023,zhang2025}.
 
-\subsection{Local Monitoring and Component-Level Condition
+\subsubsection{Local Monitoring and Component-Level Condition
 Assessment}\label{local-monitoring-and-component-level-condition-assessment}
 
 Computer-vision, sensor, and inspection studies have substantially
@@ -88,7 +93,7 @@ the need for a propagation layer that can accept a local disturbance as
 input while separately representing network structure and
 relation-specific response \citep{simone2022,dastgir2023,meijer2023}.
 
-\subsection{Graph-Based Drainage Analysis and Structural
+\subsubsection{Graph-Based Drainage Analysis and Structural
 Prioritization}\label{graph-based-drainage-analysis-and-structural-prioritization}
 
 Drainage research has increasingly used graph theory and complex-network
@@ -194,7 +199,12 @@ the assumptions of its update rule must match the research question.
 
 \input{tables/table_model_families}
 
-\subsection{Topology, Reachability, and
+\subsection{Mechanisms Relevant to Comparative Propagation}
+Having distinguished the states used by existing model families, the review
+examines the mechanisms that shape propagation: permitted paths, relation
+modifiers, recursion, aggregation, and dependence.
+
+\subsubsection{Topology, Reachability, and
 Transmission}\label{topology-reachability-and-transmission}
 
 Across propagation models, topology primarily determines which
@@ -221,7 +231,7 @@ relation-level mechanism. Where heterogeneous influence cannot be
 empirically justified, a neutral coefficient is more defensible than an
 unsupported set of edge weights \citep{kempe2003,simone2022,dastgir2023}.
 
-\subsection{Susceptibility, Capacity, Vulnerability, and Receiver
+\subsubsection{Susceptibility, Capacity, Vulnerability, and Receiver
 Response}\label{susceptibility-capacity-vulnerability-and-receiver-response}
 
 A second distinction concerns transmission versus susceptibility.
@@ -249,7 +259,7 @@ linked to load relative to effective capacity, whereas heterogeneous
 transmission should remain neutral unless empirical evidence justifies its
 calibration \citep{dastgir2023,meijer2023,zhang2025}.
 
-\subsection{Recursive Propagation and Current-State
+\subsubsection{Recursive Propagation and Current-State
 Updating}\label{recursive-propagation-and-current-state-updating}
 
 Many propagation systems are recursive: later effects depend on the
@@ -274,7 +284,7 @@ intermediate accumulation would be lost and downstream ranking would not
 reflect the evolving state of the network \citep{kempe2003,buldyrev2010,
 petrone2018}.
 
-\subsection{Multi-Source Aggregation and Bounded
+\subsubsection{Multi-Source Aggregation and Bounded
 State}\label{multi-source-aggregation-and-bounded-state}
 
 When several upstream relations converge on the same node, their
@@ -297,7 +307,7 @@ one \citep{munoz2017}. The selected operator must therefore follow the
 declared state semantics rather than visual similarity to an established
 probability formula.
 
-\subsection{Dependence, Shared Paths, and
+\subsubsection{Dependence, Shared Paths, and
 Reconvergence}\label{dependence-shared-paths-and-reconvergence}
 
 Bounded aggregation does not solve every multi-source problem. When
@@ -318,43 +328,6 @@ This distinction is important for interpretability. A bounded output
 does not automatically mean that shared-origin information has been
 counted correctly. Dependence-aware correction remains a separate
 extension problem \citep{munoz2017,faraji2026}.
-
-\subsection{Lightweight Graph Models, Learned Surrogates, and
-High-Fidelity
-Simulation}\label{lightweight-graph-models-learned-surrogates-and-high-fidelity-simulation}
-
-The drainage literature contains a spectrum of model complexity. Local
-scores and graph indicators provide relatively inexpensive screening;
-graph-hydrodynamic hybrids combine structural reasoning with physical
-analysis; hydraulic simulators explicitly represent domain dynamics; and
-graph-neural-network surrogates learn simulator-derived hydraulic
-behavior for faster inference \citep{simone2022,dastgir2023,meijer2023,
-zhang2024}.
-
-\citet{dastgir2023} explicitly compare a graph-based critical-pipe
-method with hydrodynamic modeling and report substantially lower data
-and computational requirements for the graph approach, while also
-documenting accuracy loss as complexity and stress increase. Simone et
-al. \citep{simone2022} likewise position tailored complex-network metrics as
-complementary preliminary tools when full hydraulic simulation is more
-complex, data demanding, or computationally expensive.
-
-At the learned-surrogate end of the spectrum, \citet{zhang2024}
-develop a graph-neural-network surrogate for urban-drainage hydraulic
-prediction. The model is trained against physics-based flow-routing
-outputs and predicts hydraulic variables for real-time use.
-Physics-guided mechanisms are included to improve prediction
-consistency. Such a surrogate seeks to emulate hydraulic state transitions,
-which is a different objective from transparent graph screening or
-comparative index construction \citep{zhang2024}.
-
-The literature therefore does not imply that lightweight models are
-universally superior. High-fidelity models provide richer physical
-detail, while learned surrogates can approximate that detail after
-training. Lightweight graph models instead trade physical completeness
-for lower data requirements, simpler computation, and direct
-interpretability. The appropriate model depends on the decision
-question \citep{dastgir2023,simone2022,zhang2024}.
 
 \subsection{Existing Ranking and Prioritization
 Approaches}\label{existing-ranking-and-prioritization-approaches}
@@ -412,7 +385,50 @@ which creates an integrative question rather than an absence of ranking
 methods \citep{iqbal2021,simone2022,dastgir2023,meijer2023,zhang2024,
 zhang2025}.
 
-\subsection{Parameter Patterns in Existing
+\subsection{Computational and Input Tradeoffs}
+The preceding ranking approaches answer different questions. Their
+computational and data requirements must therefore be considered alongside
+their state semantics rather than treated as interchangeable measures of
+performance.
+
+\subsubsection{Lightweight Graph Models, Learned Surrogates, and
+High-Fidelity
+Simulation}\label{lightweight-graph-models-learned-surrogates-and-high-fidelity-simulation}
+
+The drainage literature contains a spectrum of model complexity. Local
+scores and graph indicators provide relatively inexpensive screening;
+graph-hydrodynamic hybrids combine structural reasoning with physical
+analysis; hydraulic simulators explicitly represent domain dynamics; and
+graph-neural-network surrogates learn simulator-derived hydraulic
+behavior for faster inference \citep{simone2022,dastgir2023,meijer2023,
+zhang2024}.
+
+\citet{dastgir2023} explicitly compare a graph-based critical-pipe
+method with hydrodynamic modeling and report substantially lower data
+and computational requirements for the graph approach, while also
+documenting accuracy loss as complexity and stress increase. Simone et
+al. \citep{simone2022} likewise position tailored complex-network metrics as
+complementary preliminary tools when full hydraulic simulation is more
+complex, data demanding, or computationally expensive.
+
+At the learned-surrogate end of the spectrum, \citet{zhang2024}
+develop a graph-neural-network surrogate for urban-drainage hydraulic
+prediction. The model is trained against physics-based flow-routing
+outputs and predicts hydraulic variables for real-time use.
+Physics-guided mechanisms are included to improve prediction
+consistency. Such a surrogate seeks to emulate hydraulic state transitions,
+which is a different objective from transparent graph screening or
+comparative index construction \citep{zhang2024}.
+
+The literature therefore does not imply that lightweight models are
+universally superior. High-fidelity models provide richer physical
+detail, while learned surrogates can approximate that detail after
+training. Lightweight graph models instead trade physical completeness
+for lower data requirements, simpler computation, and direct
+interpretability. The appropriate model depends on the decision
+question \citep{dastgir2023,simone2022,zhang2024}.
+
+\subsubsection{Parameter Patterns in Existing
 Approaches}\label{parameter-patterns-in-existing-approaches}
 
 An important model-design question concerns how many parameters should
@@ -493,7 +509,12 @@ representations or parameters; an explicit architecture instead reuses a
 declared computational rule whose variables must be reinterpreted and
 validated in each domain \citep{zhang2024}.
 
-\subsection{Synthesis of Research
+\subsection{Synthesis of the Research Problem and Architectural Gap}
+The closing synthesis connects the evidence on state semantics, mechanisms,
+ranking, and cost to a bounded comparative-risk design problem. It does not
+presume that a new model name establishes a new mathematical mechanism.
+
+\subsubsection{Synthesis of Research
 Problems}\label{synthesis-of-research-problems}
 
 The reviewed evidence supports three major research problems.
@@ -525,7 +546,7 @@ operating response while remaining interpretable enough to explain why
 one node receives a higher comparative risk state than another
 \citep{simone2022,dastgir2023,meijer2023,zhang2024}.
 
-\subsection{Architectural and Integrative Research
+\subsubsection{Architectural and Integrative Research
 Gap}\label{architectural-and-integrative-research-gap}
 
 The literature does not support claiming that graph propagation,
@@ -563,7 +584,7 @@ evidence streams lead to this architectural and integrative gap.
 
 \input{figures/fig_literature_gap}
 
-\subsection{Chapter Synthesis}\label{chapter-synthesis}
+\subsubsection{Chapter Synthesis}\label{chapter-synthesis}
 
 The literature establishes a clear progression from practical drainage
 prioritization to a broader network-risk modeling problem. Local
