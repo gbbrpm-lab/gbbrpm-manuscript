@@ -129,8 +129,8 @@ For a directed edge, the model will use
 Q_{ij}=S_{ij}\tau_{ij}R_i.
 \eqtag{3-2}
 \]
-This specified rule will make the contribution zero when the upstream state
-or either modifier is zero and will ensure that the contribution cannot exceed
+This specified rule makes the contribution zero when the upstream state
+or either modifier is zero and ensures that the contribution cannot exceed
 the current upstream state. It is a bounded response construction, not
 a physical law of transported load or energy. Branching will allow the same
 upstream state to influence several receivers without interpreting it as a
@@ -377,7 +377,7 @@ supply electrical susceptibility.
 
 The source and terminal-meter assignments, synchronization tolerance,
 unusable meters, neighboring-feeder exclusion, and unallocated residual
-power will be recorded. The preliminary calculation used 24 normal-operation
+power will be recorded. The preliminary calculation uses 24 normal-operation
 snapshots. Declared disturbances will be injected for controlled scenarios;
 they will not be relabeled as observed faults. Mains-register unit
 inconsistencies will be documented, with phasor-derived loading retained
@@ -399,9 +399,12 @@ fixtures, not the abbreviated diagram, will define every node and edge.
 \input{figures/fig_network_set}
 
 The preliminary N1--N5 inventory contains 6, 8, 8, 7, and 20 nodes and
-5, 7, 7, 7, and 27 edges respectively. Its recovered reconstructed inputs
-will be identified as such. Reproduction of historical outputs does not
-recover or authenticate the lost original raw dataset.
+5, 7, 7, 7, and 27 edges respectively. The reconstructed N1--N5 fixture
+inputs will be versioned and frozen for reviewed reruns. Their provenance
+will distinguish them from the earlier fixture inputs, which are unavailable
+for direct file comparison. Agreement with preserved historical outputs
+does not establish that the reconstructed files are identical to those
+earlier inputs.
 
 \begin{table}[H]
 \centering
@@ -642,7 +645,7 @@ disturbance is an input, not an independent incident label. A high root
 state may include shared-path influence, whose contribution is not
 quantified merely by stable ranking.
 
-The observable electrical case will include reruns of the preliminary
+The observable electrical case will propose reruns of the preliminary
 43-scenario configuration: one zero-disturbance reference; four root
 severity levels; disturbance at each of 12 nodes; five load scales; five
 transmission levels; 15 pairs of internal sources; and one all-internal
@@ -660,19 +663,19 @@ establish common calibration.
 
 Functional verification will compare the recorded prototype revision with
 the versioned engine on the N1--N5 fixtures, valid imports, and malformed
-inputs. Checks will cover reference states within declared tolerance,
-trace coverage and deterministic values, receiving-state reconstruction,
-and controlled rejection of invalid graphs or non-finite numeric inputs.
+inputs. Checks will cover reference states within declared tolerance, trace coverage
+and deterministic values, receiving-state reconstruction, and controlled
+rejection of invalid graphs or non-finite numeric inputs.
 
-Replay checks will assess predecessor-settlement order, concurrent branches,
-input non-mutation, agreement of settled readouts with returned quantities,
-and invariance of numerical results across display modes. Automated and
-manual browser checks will inspect the supported controls and graph layout;
-manual inspection is currently reported as pending. The detailed checklist
-and evidence-recording requirements appear in
-Appendix~\ref{app:prototype-contract}. These checks will establish functional
-consistency in the tested configuration; they will not establish usability,
-operational utility, or deployment readiness.
+Replay checks will assess predecessor-settlement order, concurrent
+branches, input non-mutation, agreement of settled readouts with returned
+quantities, and invariance of numerical results across display modes.
+Automated and manual browser checks will inspect the supported controls and
+graph layout; manual inspection is currently reported as pending. The detailed
+checklist and evidence-recording requirements appear in Appendix
+\hyperref[app:prototype-contract]{E}. These
+checks will establish functional consistency in the tested configuration; they
+will not establish usability, operational utility, or deployment readiness.
 
 \subsection{Analysis, Evidence Synthesis, and Reproducibility}
 \label{analysis-reproducibility}
@@ -710,10 +713,13 @@ better prioritization.
 
 The record will include input hashes, source versions, engine revision,
 scenario settings, random seeds, trial counts, environment, and output
-files. Reconstructed historical inputs will be distinguished from their
-lost original raw dataset. The software topology and electrical measured
-loading will remain real-data inputs despite the preliminary status of
-their experiments.
+files. Reconstructed N1--N5 fixtures will be identified separately from
+the earlier fixture inputs and will be versioned for reproducible reruns.
+The original Express node and edge CSVs are available and match the
+SHA-256 hashes in the historical output manifest. The software topology
+and electrical measured loading will remain real-data inputs despite
+the preliminary status of their experiments; input verification does
+not establish independent operational validation.
 
 The generated-DAG benchmark will use seeds 41--45 for development and
 1001--1020 for evaluation after the simulator, diagnostic, metrics, exclusions,
@@ -745,7 +751,8 @@ the team prepares for the proposal presentation and addresses adviser comments.
 The subsequent phases will finalize the specification and engine, validate
 the exact and Monte Carlo references, implement comparators, and freeze the
 protocol before held-out evaluation. The W8 data checkpoint will review
-available domain evidence and missing software-snapshot records. A
+available domain evidence, mapping completeness, and eligibility of the
+verified Express snapshot for the planned benchmark. A
 computational pilot during reference development will assess whether the
 prospective scenario inventory is feasible. Any reduction will be documented
 and frozen before evaluation outcomes, as specified in

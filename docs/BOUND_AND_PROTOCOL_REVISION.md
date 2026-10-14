@@ -44,7 +44,7 @@ task. Agreement with it does not establish inspection or intervention utility.
 | Generated DAGs | 300 topologies, 3600 scenarios | Planned |
 | Generated development subset | 60 topologies, 720 scenarios | Seeds 41--45 |
 | Generated evaluation subset | 240 topologies, 2880 scenarios | Seeds 1001--1020 |
-| Express topology | 12 scenarios | Planned, requires verified raw snapshot |
+| Express topology | 12 scenarios | Planned; original input CSVs included and hash-verified |
 | Low-weight precision audit | 48 additional reference solves | Preselected subset, not new scenarios |
 
 Generated families are uniform forward-edge, adjacent-layer, and directed
@@ -81,14 +81,16 @@ LDAG is discussed as related literature under another cascade model.
 
 ## Express prerequisite
 
-The preserved manifest records historical software node/edge hashes, but
-the raw topology CSVs are absent from this manuscript package. Recover and
-hash-check them, or acquire and freeze a new resolved-dependency snapshot.
-Do not pretend a new snapshot is byte-identical to the historical case or
-reconstruct the full network from its figure. Verify acyclicity and all seven
-historical advisory-origin identities. Controlled initial probabilities of
-0.5 or 1 will test the real topology; advisory severity is not calibrated
-as activation probability. This is not real incident validation.
+The original software node and edge CSVs are now included under
+`data/software/express_4.18.2/`. Their SHA-256 hashes exactly match the
+historical paper-output manifest. The dependency JSON, OSV snapshot, and
+case manifest are included; direction, acyclicity, and all seven
+advisory-origin identities have been checked. The W8 checkpoint will
+confirm the selected inputs and scenario eligibility before protocol freezing.
+Controlled initial probabilities of 0.5 or 1 will test the real topology;
+advisory severity is not calibrated as activation probability. The 12
+stochastic benchmark scenarios have not been executed, and this case is
+not independent incident validation.
 
 ## Locations and work status
 

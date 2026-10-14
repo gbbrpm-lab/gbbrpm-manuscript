@@ -135,15 +135,18 @@ preserved.
   the 12-node trace gives risk sum approximately 1.186082.
 - Inventory arithmetic checked: 560 branch scenarios; 3600 generated scenarios,
   including 720 development and 2880 evaluation scenarios; 48 precision audits.
-  The additional 12 Express scenarios remain conditional on a verified snapshot.
+  The additional 12 Express scenarios remain planned; the original snapshot
+  has since been included and verified (see `INPUT_PROVENANCE_UPDATE.md`).
 - All cited keys resolve. Four references not cited in the compiled proposal
   were removed from its current reference list; the previous full list is
   preserved in archive/references_before_full_pass.tex.
 - This was a citation-key and manuscript-consistency audit, not a fresh
   independent verification of every primary publication or bibliography field.
 - Historical results and worked numerical values were not changed. Restricted
-  raw electrical data, lost original inputs, and the missing Express snapshot
-  cannot be authenticated by a manuscript-only review.
+  raw electrical data and the earlier N1--N5 fixture files were not authenticated
+  by this manuscript review. The original Express snapshot was subsequently
+  supplied and verified against the historical CSV hashes; see
+  `INPUT_PROVENANCE_UPDATE.md` for the additional input checks.
 
 The complete PDF was inspected through a layout overview; affected preliminary,
 prototype, timeline, reference, and appendix pages were also checked at readable

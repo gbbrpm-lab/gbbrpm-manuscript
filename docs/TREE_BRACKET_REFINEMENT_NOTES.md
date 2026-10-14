@@ -47,10 +47,11 @@ validation issue and pending browser check. Those checks are proposals or
 team reports, not new independent test results. Animation polish is secondary
 to reference simulation, matched mechanism comparisons, and error analysis.
 
-The prospective Express snapshot is targeted for acquisition and provenance
-checking before the week-8 freeze. A newly acquired snapshot must be
-distinguished from the missing historical raw data. If eligibility, source
-identity, or DAG checks are incomplete, the conditional Express cases will be
-omitted from the frozen main inventory and recorded as a limitation. The
-generated graph benchmark will proceed. Preliminary pages still omit the
+The original Express snapshot has since been supplied and included, with
+both CSV hashes verified against the historical manifest. Direction,
+acyclicity, and the seven advisory-origin identities have been checked.
+The week-8 checkpoint will confirm input selection and scenario eligibility;
+the 12 benchmark scenarios remain planned. See `INPUT_PROVENANCE_UPDATE.md`.
+The following preliminary-page statement records this earlier revision stage:
+Preliminary pages still omit the
 approval sheet and acknowledgments and retain an abstract placeholder.
