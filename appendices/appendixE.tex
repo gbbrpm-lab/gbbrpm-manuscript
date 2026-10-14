@@ -46,12 +46,7 @@ order, concurrent branches, input non-mutation, and settled-value agreement
 across display modes. Frontend build and edit/run checks will be complemented
 by automated and manual browser inspection.
 
-The team reports that positive infinity in $L$ or $C$ can reach HTTP 500.
-The fix will require finite-number validation and regression cases for NaN
-and both infinity signs in both fields: each invalid request should return a
-documented client validation error, never HTTP 500. This functional check
-will precede a prototype demonstration; replay polish will not delay the
-reference experiments. Manual browser inspection remains reported as pending. The supplied
+Manual browser inspection remains reported as pending. The supplied
 revision \texttt{eafec4d} and test claims have not been independently reproduced
 from matching application source/logs in this manuscript package. Functional
 checks will not establish operational utility or deployment readiness.
