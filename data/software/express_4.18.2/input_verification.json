@@ -1,0 +1,28 @@
+{
+  "advisory_origin_count": 7,
+  "advisory_origins": [
+    "npm:body-parser@1.20.1",
+    "npm:cookie@0.5.0",
+    "npm:express@4.18.2",
+    "npm:path-to-regexp@0.1.7",
+    "npm:qs@6.11.0",
+    "npm:send@0.18.0",
+    "npm:serve-static@1.15.0"
+  ],
+  "case_id": "software_npm_express_4.18.2",
+  "dag": true,
+  "edge_count": 128,
+  "edge_direction": "dependency_to_dependent",
+  "historical_csv_hashes_match": true,
+  "independent_incident_validation": false,
+  "node_count": 71,
+  "sha256": {
+    "deps_dev_dependencies.json": "3f3ad8f5882a27aba2abac9da0daae998fb106615ac58117880e27381a0375af",
+    "edges.csv": "11dfe4c2b82b30e836eda0bb31b8690edceb316134ee16fa8a6ffe22cd7cfab0",
+    "nodes.csv": "854ddc4f2a4b803d983cb713145524589fdf6425d91e70867d90bd8aa182f31b",
+    "osv_snapshot.json": "5c210c3f63440e57eb4f5790a591aa7931f261442d023a341c970f054c0bcf08"
+  },
+  "source_snapshot_hashes_match": true,
+  "stochastic_benchmark_executed": false,
+  "verification_scope": "Input identity, graph integrity, and advisory-origin consistency only."
+}

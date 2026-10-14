@@ -65,7 +65,7 @@ They are mechanism-isolation inputs, not representations of one physical drainag
 
 ## Provenance of the historical configuration
 
-The exact lost original edge-by-edge table was not recovered. The study uses historical reconstructed node and edge inputs that were computationally verified against preserved baseline and comparator behavior. They are labeled **historical reconstructed validation inputs**, not original field data and not newly invented fixtures.
+The earlier N1--N5 fixture inputs are unavailable for direct file comparison. The current reconstructed node and edge inputs were checked against preserved baseline and comparator behavior and will be versioned for reviewed reruns. They are labeled **historical reconstructed validation inputs**. Agreement with historical outputs does not establish file identity with the earlier fixtures.
 
 ## The 136-run architecture protocol
 

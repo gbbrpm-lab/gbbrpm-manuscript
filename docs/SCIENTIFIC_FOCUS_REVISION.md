@@ -59,8 +59,10 @@ four sizes, 25 graph seeds, six weight settings, and two initial-activation
 settings. Seeds 41--45 are development cases; 1001--1020 supply 20 evaluation
 graphs per family/size after freezing. The 100,000-trial references have explicit
 sampling uncertainty; 48 preselected low-weight cases receive separate
-1,000,000-trial precision audits. Another 12 Express scenarios require verified
-raw topology inputs, which are absent from this package. See
+1,000,000-trial precision audits. Another 12 Express scenarios will use the
+original 71-node, 128-edge topology, now included in this package with both
+CSV hashes verified against the historical manifest. Benchmark execution
+remains planned. See
 `BOUND_AND_PROTOCOL_REVISION.md` for the bound, comparator, and inventory update.
 
 Methods are local-only, recursive maximum, recursive clipped sum, ordinary

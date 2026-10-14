@@ -13,9 +13,9 @@ references and Appendices A–E. **main.pdf** is the compiled proposal.
 The preliminary pages, updated prototype passages, and provisional timeline
 chart have been merged into the latest research draft. See
 **docs/MEMBER_INTEGRATION_REVIEW.md** for corrections and evidence boundaries.
-The compiled proposal omits the approval sheet, acknowledgement, and abstract
-at the adviser’s request. Their source files remain in `preliminary/` but are
-not included in the manuscript.
+The current proposal includes a pending approval-sheet layout and an
+acknowledgement placeholder, with the abstract still pending final results.
+The approval page does not assert acceptance or supply invented signatures.
 Prototype revision reports were supplied
 by the team, not independently executed during this manuscript pass; the reported
 positive-infinity validation defect and manual browser inspection remain open.
@@ -46,9 +46,11 @@ separately beyond the core period.
 
 The preliminary pages use compact contents/list spacing based on the supplied
 proposal examples. The full chapter heading hierarchy remains visible; no body
-sections were deleted to shorten the contents. A small gap separates contents
-entries. Appendix labels in the contents are shortened; full titles remain in
-the appendices.
+sections were deleted to shorten the contents. The earlier preliminary
+adjustment replaced the abstract with a placeholder and added a small gap
+between contents entries. The approval sheet and acknowledgement have since
+been restored; see **docs/PRELIM_RESTORATION_NOTES.md**. Appendix labels in
+the contents are shortened; full titles remain in the appendices.
 Chapter III retains a concise prototype description and verification summary;
 implementation-level replay details appear in Appendix E. The timeline uses the
 manuscript's navy/gray style and explicitly marks the W8 data review and protocol
@@ -116,6 +118,14 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
 The generated document is `main.pdf`. `main.tex` is the root file.
+
+### Preliminary PDF form and `pdflscape.sty`
+
+The current proposal includes a draft approval page and loads `pdfpages` so
+an official first-page PDF at `preliminary/FM-USTP-ACAD-11.pdf` can replace
+the draft layout. It does not load `pdflscape` or require landscape pages.
+Use only the updated approved institutional form once it is supplied; do
+not treat the draft layout as signed approval.
 
 After replacing an older merged source, clean its local build cache and rebuild:
 
@@ -238,11 +248,14 @@ synthetic benchmark assigns probabilistic meanings to the supplied numbers.
 
 The expanded protocol uses low weights, 20 evaluation graphs plus five development
 graphs per family/size, a restricted-tree comparator, and 48 preselected precision
-audits. Express raw topology files are absent from this manuscript package;
-their recovery or reacquisition is an explicit prerequisite for the conditional
-Express case, not an executed result. If the snapshot and provenance checks
-are incomplete at the week-8 freeze, that case leaves the frozen inventory
-without delaying the controlled graph benchmark.
+audits. The original Express topology files are included under
+`data/software/express_4.18.2/`; both CSVs match the historical manifest hashes.
+The dependency JSON, OSV snapshot, and case manifest are also included.
+Run `python3 scripts/verify_express_inputs.py` to check hashes, direction,
+acyclicity, and the seven advisory-origin identities. The 12 Express benchmark
+scenarios remain planned. The week-8 checkpoint will confirm input selection
+and scenario eligibility before the protocol freeze. This input verification
+is not execution of the stochastic benchmark or independent incident validation.
 See `docs/BOUND_AND_PROTOCOL_REVISION.md` for changes and current experiment counts.
 The full benchmark is still planned; only algebraic and small-graph proof checks
 were performed during authoring.

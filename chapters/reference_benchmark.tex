@@ -173,28 +173,27 @@ strength. Family comparisons will be descriptive, because depth and degree
 patterns differ even with equal node and edge counts. The fixed branch
 family will supply the controlled dependence manipulation.
 
-A further 12 scenarios will use the Express 4.18.2 topology, conditional
-on a verified snapshot. The acquisition plan will target a newly acquired
-resolved-dependency snapshot before the W8 data checkpoint; a recovered,
-hash-verified original may instead support the historical topology. The historical manifest records hashes for
-\texttt{nodes.csv} and \texttt{edges.csv}, but those raw inputs are absent
-from this manuscript package. Any recovered original files will be hash-checked. A newly acquired
-snapshot will be versioned,
-and explicitly distinguished from the historical 71-node, 128-edge case.
-Edges will run from dependency to dependent; acyclicity and the reported
-shared paths will be checked. Cycles will not be silently deleted.
+A further 12 scenarios will use the original Express 4.18.2 topology,
+containing 71 nodes and 128 edges. The original \texttt{nodes.csv} and
+\texttt{edges.csv} are available in the experiment repository under
+\texttt{data/software/express\_4.18.2/} and are included in this manuscript
+package. Both files match the SHA-256 hashes recorded in the historical
+paper-output manifest. The dependency JSON, OSV advisory snapshot, and
+case manifest are included alongside them. Input verification confirms
+valid endpoints, dependency-to-dependent edge direction, acyclicity,
+and the seven advisory-origin identities; it does not constitute execution
+of the proposed stochastic benchmark.
 
-For each of the six weights above, the seven historical advisory-origin
+For each of the six weights above, the seven verified advisory-origin
 identities will receive controlled initial probabilities of either $0.5$
-or $1$, with other local terms zero. Their identities will be verified from
-the source records; real advisory severity values will not be interpreted
-as calibrated probabilities. This will be a stochastic experiment on real
-topology, not incident validation. If required records cannot be recovered,
-the case will be reported unavailable rather than reconstructed from figures.
-Eligibility, advisory-origin records, and DAG verification will be reviewed
-at W8. If they are incomplete, the Express benchmark case will be omitted
-from the frozen main inventory and the limitation recorded; the controlled
-benchmark will proceed. It will remain separate from generated-graph averages.
+or $1$, with other local terms zero. Real advisory severity values will
+not be interpreted as calibrated probabilities. This will be a stochastic
+experiment on real topology, not incident validation. The W8 checkpoint
+will confirm the selected input hashes, source records, and scenario
+eligibility before protocol freezing. Any unresolved eligibility issue
+will be documented and may exclude the affected case without delaying
+the controlled benchmark. Express results will remain separate from
+generated-graph averages.
 
 At $N=100{,}000$ trials, small receiving probabilities may be unresolved.
 The study will therefore preselect 48 precision-audit scenarios: evaluation

@@ -1,17 +1,13 @@
-% Approval sheet (Section 3.3). Counted as page ii, number hidden (3.3.16, 8.1.3).
-% Requires pdfpages and hyperref. For submission, save the scanned, wet-signed
-% form over preliminary/FM-USTP-ACAD-11.pdf (3.3.17).
+% Reserve the official approval-sheet position without asserting approval.
 \IfFileExists{preliminary/FM-USTP-ACAD-11.pdf}{%
   \includepdf[pages=1,pagecommand={\thispagestyle{empty}\phantomsection\addcontentsline{toc}{section}{Approval Sheet}}]{preliminary/FM-USTP-ACAD-11.pdf}%
 }{%
-  % Placeholder only. Do not submit this in place of the official form.
-  \begingroup % keeps the settings below from leaking into later pages
   \thispagestyle{empty}
   \phantomsection
   \addcontentsline{toc}{section}{Approval Sheet}
   \prelimheading{Approval Sheet}
   \vspace{3\baselineskip}
-  \noindent
+  \noindent\small
   \hyphenpenalty=10000
   \exhyphenpenalty=10000
   This Thesis entitled: \textbf{\ThesisTitleInline}, prepared and submitted by
@@ -54,7 +50,7 @@
   \end{minipage}
 
   \vspace{1.25\baselineskip}
-  \noindent Approved and accepted in partial fulfillment of the requirements for the degree \textbf{\DegreeFull}.
+  \noindent\rule{0.18\textwidth}{0.4pt} and \rule{0.18\textwidth}{0.4pt} in partial fulfillment of the requirements for the degree \textbf{\DegreeFull}.
 
   \vspace{2\baselineskip}
   \noindent Approved:\\[0.75\baselineskip]
@@ -64,6 +60,4 @@
   \vspace{0.75\baselineskip}
   \noindent\rule{0.36\textwidth}{0.4pt}\\
   \noindent Date of Final Defense
-  \par
-  \endgroup
 }
