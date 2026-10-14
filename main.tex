@@ -15,8 +15,6 @@
 \setlength{\mathindent}{0pt}
 \usepackage{booktabs,longtable,array,calc,tabularx}
 \usepackage{graphicx,float}
-% Include the official approval-form scan when supplied later.
-\usepackage{pdfpages}
 \usepackage{chngcntr}
 \usepackage{xcolor}
 \usepackage{tikz}
@@ -72,17 +70,17 @@
 
 % CITC chapter and heading hierarchy.
 \titleformat{\section}[display]
-  {\normalfont\bfseries\fontsize{12}{14}\selectfont\centering}
+  {\normalfont\bfseries\fontsize{12}{12}\selectfont\centering}
   {\MakeUppercase{Chapter \Roman{section}}}{0.5\baselineskip}{\MakeUppercase}
 \titleformat{\subsection}
-  {\normalfont\bfseries\fontsize{12}{14}\selectfont}
-  {\thesubsection}{0.5em}{}
+  {\normalfont\bfseries\fontsize{12}{12}\selectfont}
+  {\thesubsection.}{0.5em}{}
 \titleformat{\subsubsection}
-  {\normalfont\itshape\fontsize{12}{14}\selectfont}
-  {\thesubsubsection}{0.5em}{}
-\titlespacing*{\section}{0pt}{0pt}{4\baselineskip}
-\titlespacing*{\subsection}{0pt}{2\baselineskip}{\baselineskip}
-\titlespacing*{\subsubsection}{0pt}{\baselineskip}{0.5\baselineskip}
+  {\normalfont\bfseries\fontsize{12}{12}\selectfont}
+  {\thesubsubsection.}{0.5em}{}
+\titlespacing{\section}{0pt}{0pt}{4\baselineskip}
+\titlespacing{\subsection}{0pt}{2\baselineskip}{\baselineskip}
+\titlespacing{\subsubsection}{0pt}{\baselineskip}{0.5\baselineskip}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -101,7 +99,7 @@
 
 \begin{document}
 
-% Title page through abstract, then switches to arabic numbering for the main body.
+% Preliminary pages, then switches to arabic numbering for the main body.
 \input{preliminary/preliminary}
 
 \input{chapters/chapter1}

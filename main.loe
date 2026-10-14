@@ -1,47 +1,47 @@
 \contentsline {equation}{\numberline {1-1}Generic relation-level contribution}{7}{eqtag.1-1}%
-\contentsline {equation}{\numberline {1-2}Generic receiving-state aggregation}{7}{eqtag.1-2}%
-\contentsline {equation}{\numberline {2-1}Established probabilistic-sum t-conorm}{16}{eqtag.2-1}%
-\contentsline {equation}{\numberline {2-2}Leaky noisy-OR conditional probability}{16}{eqtag.2-2}%
-\contentsline {equation}{\numberline {2-3}RIPA propagation and additive aggregation}{17}{eqtag.2-3}%
-\contentsline {equation}{\numberline {3-1}Directed acyclic graph representation}{28}{eqtag.3-1}%
-\contentsline {equation}{\numberline {3-2}GBBRPM relation-level contribution}{29}{eqtag.3-2}%
-\contentsline {equation}{\numberline {3-3}Receiving-state complement}{29}{eqtag.3-3}%
-\contentsline {equation}{\numberline {3-4}GBBRPM receiving-state update}{29}{eqtag.3-4}%
-\contentsline {equation}{\numberline {3-5}Predecessor-free node initialization}{30}{eqtag.3-5}%
-\contentsline {equation}{\numberline {3-6}Local monotonicity derivatives}{31}{eqtag.3-6}%
-\contentsline {equation}{\numberline {3-7}Load-to-capacity susceptibility adapter}{33}{eqtag.3-7}%
-\contentsline {equation}{\numberline {3-8}Mean snapshot apparent-power loading}{33}{eqtag.3-8}%
-\contentsline {equation}{\numberline {3-9}Matched bounded-aggregation operators}{35}{eqtag.3-9}%
-\contentsline {equation}{\numberline {3-10}Independent-primitive activation reference}{36}{eqtag.3-10}%
-\contentsline {equation}{\numberline {3-11}Per-scenario Monte Carlo concentration interval}{37}{eqtag.3-11}%
-\contentsline {equation}{\numberline {3-12}Recursive maximum and clipped-additive states}{37}{eqtag.3-12}%
-\contentsline {equation}{\numberline {3-13}Tree-refined conditional receiving-state bracket}{37}{eqtag.3-13}%
-\contentsline {equation}{\numberline {3-14}Positive-association upper-bound step}{38}{eqtag.3-14}%
-\contentsline {equation}{\numberline {3-15}Matched branch-family exact receiver probabilities}{39}{eqtag.3-15}%
-\contentsline {equation}{\numberline {3-16}Local-upstream recursion ablation}{41}{eqtag.3-16}%
-\contentsline {equation}{\numberline {3-17}Fixed-budget capture and selection regret}{43}{eqtag.3-17}%
-\contentsline {equation}{\numberline {3-18}Scalar propagation and ranking complexity}{45}{eqtag.3-18}%
-\contentsline {equation}{\numberline {A-1}Worked-example edge contribution rule}{53}{eqtag.A-1}%
-\contentsline {equation}{\numberline {A-2}Worked-example receiving-state rule}{53}{eqtag.A-2}%
-\contentsline {equation}{\numberline {A-3}Initialization of the two local origins}{54}{eqtag.A-3}%
-\contentsline {equation}{\numberline {A-4}Incoming contributions to the converging node}{54}{eqtag.A-4}%
-\contentsline {equation}{\numberline {A-5}Local-plus-incoming aggregation at node N2}{55}{eqtag.A-5}%
-\contentsline {equation}{\numberline {A-6}Current-state propagation from N2 to N3}{55}{eqtag.A-6}%
-\contentsline {equation}{\numberline {A-7}Terminal receiving state at N3}{55}{eqtag.A-7}%
-\contentsline {equation}{\numberline {B-1}Selected software local-origin states}{57}{eqtag.B-1}%
-\contentsline {equation}{\numberline {B-2}Contribution from qs to body-parser}{58}{eqtag.B-2}%
-\contentsline {equation}{\numberline {B-3}Accumulated body-parser state}{58}{eqtag.B-3}%
-\contentsline {equation}{\numberline {B-4}Contribution from send to serve-static}{58}{eqtag.B-4}%
-\contentsline {equation}{\numberline {B-5}Accumulated serve-static state}{58}{eqtag.B-5}%
-\contentsline {equation}{\numberline {B-6}Contribution from body-parser to Express}{59}{eqtag.B-6}%
-\contentsline {equation}{\numberline {B-7}Worked Express receiving-state aggregation}{59}{eqtag.B-7}%
-\contentsline {equation}{\numberline {C-1}Source-edge mean apparent-power loading}{60}{eqtag.C-1}%
-\contentsline {equation}{\numberline {C-2}Source-edge electrical susceptibility}{60}{eqtag.C-2}%
-\contentsline {equation}{\numberline {C-3}Line 408 susceptibility}{60}{eqtag.C-3}%
-\contentsline {equation}{\numberline {C-4}Component 2 root initialization}{61}{eqtag.C-4}%
-\contentsline {equation}{\numberline {C-5}First transformer contribution}{61}{eqtag.C-5}%
-\contentsline {equation}{\numberline {C-6}Receiving state at C2 N02}{61}{eqtag.C-6}%
-\contentsline {equation}{\numberline {C-7}Transfer and receiving state at C2 N03}{61}{eqtag.C-7}%
-\contentsline {equation}{\numberline {C-8}Transformer branch state at C2 N06}{62}{eqtag.C-8}%
-\contentsline {equation}{\numberline {C-9}Terminal branch states at C2 N11 and N12}{62}{eqtag.C-9}%
-\contentsline {equation}{\numberline {C-10}Component 2 total receiving-state sum}{62}{eqtag.C-10}%
+\contentsline {equation}{\numberline {1-2}Generic receiving-state aggregation}{8}{eqtag.1-2}%
+\contentsline {equation}{\numberline {2-1}Established probabilistic-sum t-conorm}{17}{eqtag.2-1}%
+\contentsline {equation}{\numberline {2-2}Leaky noisy-OR conditional probability}{17}{eqtag.2-2}%
+\contentsline {equation}{\numberline {2-3}RIPA propagation and additive aggregation}{18}{eqtag.2-3}%
+\contentsline {equation}{\numberline {3-1}Directed acyclic graph representation}{30}{eqtag.3-1}%
+\contentsline {equation}{\numberline {3-2}GBBRPM relation-level contribution}{31}{eqtag.3-2}%
+\contentsline {equation}{\numberline {3-3}Receiving-state complement}{31}{eqtag.3-3}%
+\contentsline {equation}{\numberline {3-4}GBBRPM receiving-state update}{32}{eqtag.3-4}%
+\contentsline {equation}{\numberline {3-5}Predecessor-free node initialization}{32}{eqtag.3-5}%
+\contentsline {equation}{\numberline {3-6}Local monotonicity derivatives}{33}{eqtag.3-6}%
+\contentsline {equation}{\numberline {3-7}Load-to-capacity susceptibility adapter}{35}{eqtag.3-7}%
+\contentsline {equation}{\numberline {3-8}Mean snapshot apparent-power loading}{36}{eqtag.3-8}%
+\contentsline {equation}{\numberline {3-9}Matched bounded-aggregation operators}{38}{eqtag.3-9}%
+\contentsline {equation}{\numberline {3-10}Independent-primitive activation reference}{39}{eqtag.3-10}%
+\contentsline {equation}{\numberline {3-11}Per-scenario Monte Carlo concentration interval}{40}{eqtag.3-11}%
+\contentsline {equation}{\numberline {3-12}Recursive maximum and clipped-additive states}{40}{eqtag.3-12}%
+\contentsline {equation}{\numberline {3-13}Tree-refined conditional receiving-state bracket}{40}{eqtag.3-13}%
+\contentsline {equation}{\numberline {3-14}Positive-association upper-bound step}{41}{eqtag.3-14}%
+\contentsline {equation}{\numberline {3-15}Matched branch-family exact receiver probabilities}{42}{eqtag.3-15}%
+\contentsline {equation}{\numberline {3-16}Local-upstream recursion ablation}{45}{eqtag.3-16}%
+\contentsline {equation}{\numberline {3-17}Fixed-budget capture and selection regret}{47}{eqtag.3-17}%
+\contentsline {equation}{\numberline {3-18}Scalar propagation and ranking complexity}{49}{eqtag.3-18}%
+\contentsline {equation}{\numberline {A-1}Worked-example edge contribution rule}{58}{eqtag.A-1}%
+\contentsline {equation}{\numberline {A-2}Worked-example receiving-state rule}{58}{eqtag.A-2}%
+\contentsline {equation}{\numberline {A-3}Initialization of the two local origins}{59}{eqtag.A-3}%
+\contentsline {equation}{\numberline {A-4}Incoming contributions to the converging node}{59}{eqtag.A-4}%
+\contentsline {equation}{\numberline {A-5}Local-plus-incoming aggregation at node N2}{60}{eqtag.A-5}%
+\contentsline {equation}{\numberline {A-6}Current-state propagation from N2 to N3}{60}{eqtag.A-6}%
+\contentsline {equation}{\numberline {A-7}Terminal receiving state at N3}{60}{eqtag.A-7}%
+\contentsline {equation}{\numberline {B-1}Selected software local-origin states}{64}{eqtag.B-1}%
+\contentsline {equation}{\numberline {B-2}Contribution from qs to body-parser}{64}{eqtag.B-2}%
+\contentsline {equation}{\numberline {B-3}Accumulated body-parser state}{64}{eqtag.B-3}%
+\contentsline {equation}{\numberline {B-4}Contribution from send to serve-static}{64}{eqtag.B-4}%
+\contentsline {equation}{\numberline {B-5}Accumulated serve-static state}{64}{eqtag.B-5}%
+\contentsline {equation}{\numberline {B-6}Contribution from body-parser to Express}{65}{eqtag.B-6}%
+\contentsline {equation}{\numberline {B-7}Worked Express receiving-state aggregation}{65}{eqtag.B-7}%
+\contentsline {equation}{\numberline {C-1}Source-edge mean apparent-power loading}{66}{eqtag.C-1}%
+\contentsline {equation}{\numberline {C-2}Source-edge electrical susceptibility}{66}{eqtag.C-2}%
+\contentsline {equation}{\numberline {C-3}Line 408 susceptibility}{67}{eqtag.C-3}%
+\contentsline {equation}{\numberline {C-4}Component 2 root initialization}{67}{eqtag.C-4}%
+\contentsline {equation}{\numberline {C-5}First transformer contribution}{67}{eqtag.C-5}%
+\contentsline {equation}{\numberline {C-6}Receiving state at C2 N02}{67}{eqtag.C-6}%
+\contentsline {equation}{\numberline {C-7}Transfer and receiving state at C2 N03}{68}{eqtag.C-7}%
+\contentsline {equation}{\numberline {C-8}Transformer branch state at C2 N06}{68}{eqtag.C-8}%
+\contentsline {equation}{\numberline {C-9}Terminal branch states at C2 N11 and N12}{68}{eqtag.C-9}%
+\contentsline {equation}{\numberline {C-10}Component 2 total receiving-state sum}{69}{eqtag.C-10}%

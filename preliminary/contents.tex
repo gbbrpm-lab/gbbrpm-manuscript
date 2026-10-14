@@ -2,9 +2,9 @@
 \thispagestyle{prelim}\pagestyle{prelimcont}
 \prelimheading{Table of Contents}
 \addcontentsline{toc}{section}{Table of Contents}
-\vspace{2\baselineskip}
+\vskip3\baselineskip   % "PAGE" 4 spaces below the title (3.5.3)
 \makeatletter
 \prelim@colrow{}
-\vspace{0.5\baselineskip}
+\vskip\baselineskip    % plus each entry's own gap = 2 blank lines (3.5.4)
 \@starttoc{toc}
 \makeatother
