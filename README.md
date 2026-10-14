@@ -13,9 +13,9 @@ references and Appendices A–E. **main.pdf** is the compiled proposal.
 The preliminary pages, updated prototype passages, and provisional timeline
 chart have been merged into the latest research draft. See
 **docs/MEMBER_INTEGRATION_REVIEW.md** for corrections and evidence boundaries.
-The current proposal includes a pending approval-sheet layout and an
-acknowledgement placeholder, with the abstract still pending final results.
-The approval page does not assert acceptance or supply invented signatures.
+The compiled proposal omits the approval sheet, acknowledgement, and abstract
+at the adviser’s request. Their source files remain in `preliminary/` but are
+not included in the manuscript.
 Prototype revision reports were supplied
 by the team, not independently executed during this manuscript pass; the reported
 positive-infinity validation defect and manual browser inspection remain open.
@@ -46,11 +46,9 @@ separately beyond the core period.
 
 The preliminary pages use compact contents/list spacing based on the supplied
 proposal examples. The full chapter heading hierarchy remains visible; no body
-sections were deleted to shorten the contents. The earlier preliminary
-adjustment replaced the abstract with a placeholder and added a small gap
-between contents entries. The approval sheet and acknowledgement have since
-been restored; see **docs/PRELIM_RESTORATION_NOTES.md**. Appendix labels in
-the contents are shortened; full titles remain in the appendices.
+sections were deleted to shorten the contents. A small gap separates contents
+entries. Appendix labels in the contents are shortened; full titles remain in
+the appendices.
 Chapter III retains a concise prototype description and verification summary;
 implementation-level replay details appear in Appendix E. The timeline uses the
 manuscript's navy/gray style and explicitly marks the W8 data review and protocol
@@ -118,14 +116,6 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
 The generated document is `main.pdf`. `main.tex` is the root file.
-
-### Preliminary PDF form and `pdflscape.sty`
-
-The current proposal includes a draft approval page and loads `pdfpages` so
-an official first-page PDF at `preliminary/FM-USTP-ACAD-11.pdf` can replace
-the draft layout. It does not load `pdflscape` or require landscape pages.
-Use only the updated approved institutional form once it is supplied; do
-not treat the draft layout as signed approval.
 
 After replacing an older merged source, clean its local build cache and rebuild:
 
