@@ -28,6 +28,15 @@
 \prelim@defcont{prelimcontE}{Equation}
 \newcommand{\prelimnext}{\clearpage\pagestyle{prelim}}
 
+% Main body: page number in the upper right, 2.5 cm from the right edge and
+% 1.25 cm from the top (Section 8.2.b). Defined as its own style so it does not
+% inherit the bottom-center footer of the preliminary pages.
+\fancypagestyle{bodystyle}{%
+  \fancyhf{}%
+  \fancyhead[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}}
+
 % ---------- Page title and column heading helpers ----------
 \newcommand{\prelimheading}[1]{{\centering\bfseries\MakeUppercase{#1}\par}}
 \newcommand{\prelimcolhead}[1]{\underline{\MakeUppercase{#1}}}
