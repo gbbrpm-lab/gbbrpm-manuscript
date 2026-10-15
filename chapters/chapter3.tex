@@ -129,8 +129,8 @@ For a directed edge, the model will use
 Q_{ij}=S_{ij}\tau_{ij}R_i.
 \eqtag{3-2}
 \]
-This specified rule makes the contribution zero when the upstream state
-or either modifier is zero and ensures that the contribution cannot exceed
+This specified rule will make the contribution zero when the upstream state
+or either modifier is zero and will ensure that the contribution cannot exceed
 the current upstream state. It is a bounded response construction, not
 a physical law of transported load or energy. Branching will allow the same
 upstream state to influence several receivers without interpreting it as a
@@ -377,7 +377,7 @@ supply electrical susceptibility.
 
 The source and terminal-meter assignments, synchronization tolerance,
 unusable meters, neighboring-feeder exclusion, and unallocated residual
-power will be recorded. The preliminary calculation uses 24 normal-operation
+power will be recorded. The preliminary calculation used 24 normal-operation
 snapshots. Declared disturbances will be injected for controlled scenarios;
 they will not be relabeled as observed faults. Mains-register unit
 inconsistencies will be documented, with phasor-derived loading retained
@@ -645,7 +645,7 @@ disturbance is an input, not an independent incident label. A high root
 state may include shared-path influence, whose contribution is not
 quantified merely by stable ranking.
 
-The observable electrical case will propose reruns of the preliminary
+The observable electrical case will include reruns of the preliminary
 43-scenario configuration: one zero-disturbance reference; four root
 severity levels; disturbance at each of 12 nodes; five load scales; five
 transmission levels; 15 pairs of internal sources; and one all-internal
