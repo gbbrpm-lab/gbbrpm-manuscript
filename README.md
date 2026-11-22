@@ -1,303 +1,129 @@
 # GBBRPM Three-Chapter Research Proposal
 
-This project incorporates the October 12, 2026 consultation and the additional
-request to distinguish the **GBBRPM evaluation engine** from the mathematical
-model. The title retains cross-domain emphasis and explicitly limits the proposed
-core to **directed acyclic graphs**.
+This uploaded manuscript is the authoritative proposal version. **Chapters I–III define the proposed study; the benchmark experiments are planned, not completed.** Updated documentation: 15 October 2026.
 
-Build **main.tex**. Its main chapter sequence is Chapters I–III, followed by
-references and Appendices A–E. **main.pdf** is the compiled proposal.
+**Current title:** Design and Evaluation of GBBRPM: A Graph-Based Bounded Risk Propagation Model for Comparative Prioritization on Directed Acyclic Graphs Across Network Domains.
 
-## Integrated member additions
+GBBRPM currently expands to **Graph-Based Bounded Risk Propagation Model**. The model, its executable **GBBRPM evaluation engine**, and its supporting interactive prototype have distinct roles.
 
-The preliminary pages, updated prototype passages, and provisional timeline
-chart have been merged into the latest research draft. See
-**docs/MEMBER_INTEGRATION_REVIEW.md** for corrections and evidence boundaries.
-The current proposal includes a pending approval-sheet layout and an
-acknowledgement placeholder, with the abstract still pending final results.
-The approval page does not assert acceptance or supply invented signatures.
-Prototype revision reports were supplied
-by the team, not independently executed during this manuscript pass; the reported
-positive-infinity validation defect and manual browser inspection remain open.
-The 24-week core calendar is provisional, with conditional dissemination shown
-separately beyond the core period.
+## Start here
 
-## Current structure
+- [Current scope, evidence status, and source map](docs/CURRENT_PROPOSAL_STATUS.md)
+- [Proposal briefing pack](briefings/00_MASTER_INDEX.md)
+- [Proposal adviser briefing](ADVISER_BRIEFING_PROPOSAL.md)
+- [Next-work checklist](docs/NEXT_STEPS.md)
+- [Documentation index and historical notes](docs/README.md)
+- [Documentation changes and verification scope](docs/DOCUMENTATION_ALIGNMENT_2026-10-15.md)
 
-- Chapter I: model identity, problem and questions, aligned objectives,
-  theoretical/practical significance, separate scope and limitations, framework,
-  and operational definitions.
-- Chapter II: source-based literature regrouped into a connected argument about
-  local/structural assessment, state semantics, propagation mechanisms, ranking,
-  computational/input tradeoffs, reusable formulations, and the research gap.
-- Chapter III: design requirements and detailed formulation; evaluation-engine
-  and prototype specification; domain data and mappings; controlled comparisons;
-  property, sensitivity, robustness, dependence, and cost protocols; separate
-  domain evaluation; verification, analysis, reproducibility, and timeline.
-- Appendix A: generic worked example.
-- Appendix B: preliminary software worked calculation.
-- Appendix C: preliminary electrical worked calculation.
-- Appendix D: selected preliminary evidence, including unfavorable hydraulic
-  agreement and known dependence limitations.
-- Appendix E: supporting prototype trace/replay contract and planned functional
-  verification, separate from completed preliminary evidence.
+## Scientific focus
 
-## Latest full-paper review
+The planned controlled study asks when complement-product recursion gives useful **receiving-state** rankings under an explicitly specified stochastic reference, how shared origins affect agreement, and what accuracy–cost tradeoffs alternative mechanisms provide. Receiving-state priority differs from source influence and intervention benefit.
 
-The preliminary pages use compact contents/list spacing based on the supplied
-proposal examples. The full chapter heading hierarchy remains visible; no body
-sections were deleted to shorten the contents. The earlier preliminary
-adjustment replaced the abstract with a placeholder and added a small gap
-between contents entries. The approval sheet and acknowledgement have since
-been restored; see **docs/PRELIM_RESTORATION_NOTES.md**. Appendix labels in
-the contents are shortened; full titles remain in the appendices.
-Chapter III retains a concise prototype description and verification summary;
-implementation-level replay details appear in Appendix E. The timeline uses the
-manuscript's navy/gray style and explicitly marks the W8 data review and protocol
-freeze. See **docs/FULL_PAPER_PASS_NOTES.md** for the review scope and changes.
+The domain core is a bounded comparative index:
 
-## Completed work versus planned work
+```text
+w_ij = S_ij * tau_ij
+Q_ij = w_ij * R_i
+R_j = 1 - (1 - B_j) * product_i(1 - Q_ij)
+```
 
-The core mathematical equations and retained preliminary numerical results are
-unchanged. The prior-art pass explicitly credits the established
-probabilistic-sum t-conorm and compares close leaky noisy-OR and RIPA
-precedents. The revised proposal adds planned bounded-aggregation and structural comparison, separated
-runtime and memory measurement, explicit cutoff-tie reporting, and reviewed
-input-validation conventions. These additions are proposed methods, not newly
-executed tests. See **docs/PROPOSAL_REVISION_NOTES.md** for decisions and
-remaining confirmations. See **docs/PRIOR_ART_REVISION_NOTES.md** for
-the narrowed research question, verified sources, and planned aggregator
-comparison. The new aggregation variants have not been executed by this pass.
+It uses current accumulated upstream R, not original B. A predecessor-free node has R=B. Domain outputs are not calibrated event probabilities. Only the separately defined benchmark gives B and w Bernoulli-probability meanings; its conditional edge probability is w, not Q.
 
-The schedule is provisional. W1 is anchored to October 12, 2026; official
-proposal/final defense, submission, data-access, and dissemination dates remain
-to be confirmed. Independent outcome evaluation remains conditional on suitable
-agency or event-aligned records.
+Under that benchmark's independent primitive events on a finite DAG, Chapter 3 states:
 
-## Historical research record
+```text
+recursive maximum M <= restricted-tree T <= exact marginal pi
+                    <= GBBRPM R <= recursive clipped sum H
+```
 
-**archive/full-study/main_preconsultation.pdf** and the original six chapter
-sources preserve the previous full-study manuscript. Archived chapter sources
-are reference copies, not the main compilation target. Prior study briefings and
-old revision notes are historical context, not the current proposal plan.
-Existing experiment scripts and generated tables preserve earlier reproducibility
-assets; running them does not execute the newly proposed protocols automatically.
+The specified unthresholded target-specific tree gives `0 <= R-pi <= R-T <= R-M`. These are conditional mathematical guarantees grounded in existing bounding arguments, not domain calibration or a verified first-ever theorem. Actual tightness, rankings, selection quality, and costs require the planned experiments.
 
-## Evidence boundaries
+## Prospective benchmark inventory
 
-GBBRPM is a bounded, non-probabilistic comparative index. Cross-domain
-instantiation does not make domain scores equivalent, establish a calibrated
-failure probability, or validate hydraulic, exploitation, or electrical-event
-prediction. The real software topology and measured electrical loading remain
-real inputs; the associated experiments are preliminary and partly controlled.
+| Block | Planned quantity | Status |
+|---|---:|---|
+| Matched shared/independent branch family | 560 scenarios | Exact closed-form receiver references specified |
+| Uniform generated DAGs | 300 topologies; 3,600 scenarios | 720 development; 2,880 evaluation |
+| Secondary heterogeneous subset | 144 additional scenarios on existing topologies | 24 development; 120 evaluation; separate summaries |
+| Verified Express topology | 12 scenarios | Original inputs included; new benchmark not executed |
+| Precision audits | 48 additional million-trial solves | Revisit preselected scenarios; not new scenarios |
 
-## Requirements
+The four scenario blocks total 4,316 before any pre-evaluation feasibility amendment. Counts do not imply execution or pooled inference. Generated references use N=100,000 with per-solve simultaneous node uncertainty intervals; audit solves use a separate N=1,000,000 estimate. A development-only compute pilot will determine feasibility before held-out outcomes.
 
-### Windows
+Comparators include local-only, recursive maximum, clipped addition, GBBRPM, the local-upstream recursion ablation, restricted in-arborescences, the published Abbe et al. (2020) DAG lower recursion, and a specified ancestry-grouping diagnostic. Each recursive method computes its own states. The published full upper algorithm is discussed, not required as a full-grid implementation.
 
-- [MiKTeX](https://miktex.org/download)
-- [Strawberry Perl](https://strawberryperl.com/) for `latexmk`
-- [VS Code](https://code.visualstudio.com/)
-- [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop)
-- Python 3 with `matplotlib` and `pandas` only when regenerating historical plots
+Fixed-budget selection uses exactly k candidates at 10%, 20%, and 30%, excluding positive-B nodes and retaining unreachable zero-B nodes. Capture, regret, rank association, resolved reversals, bracket tightness, runtime, and memory will be reported. Expanded cutoff-tie Jaccard is a separate descriptive measure.
 
-After installation, restart VS Code and verify the toolchain in PowerShell:
+## Build target and evidence structure
+
+Build **main.tex**; its main body is Chapters I–III, references, and Appendices A–E. `main.pdf` is supplied from the uploaded package; this documentation-only update does not rebuild or replace it.
+
+| Location | Role |
+|---|---|
+| `chapters/chapter1.tex` | Problem, six questions/objectives, scope, framework, definitions |
+| `chapters/chapter2.tex` and `chapters/cascade_prior_art.tex` | Literature and close approximation/bounding precedents |
+| `chapters/chapter3.tex` | Formulation, implementation, evaluation, cases, reporting, schedule |
+| `chapters/reference_benchmark.tex` | Planned process, inventory, controls, methods, uncertainty, metrics |
+| `chapters/benchmark_bound.tex` | Conditional bracket, proof, certificates, and interpretation |
+| `appendices/appendixA.tex` | Generic worked calculation |
+| `appendices/appendixB.tex`, `appendixC.tex` | Preliminary software/electrical worked calculations |
+| `appendices/appendixD.tex` | Selected completed exploratory evidence and limitations |
+| `appendices/appendixE.tex` | Supporting prototype contract and planned verification |
+| `briefings/` | Updated proposal study notes and Q&A |
+| `docs/` | Current status/tasks plus labeled historical revision records |
+| `archive/` and uncompiled Chapters IV–VI | Historical full-study context, not current proposal results |
+
+## Historical evidence and domain boundaries
+
+The 136-run N1–N5 and 43-scenario electrical configurations are historical exploratory suites, proposed for reviewed reruns. They are separate from the new benchmark. Earlier N1–N5 fixture files are unavailable for direct comparison; reconstructed inputs must retain their provenance. Agreement with historical outputs does not establish input-file identity.
+
+Drainage, software dependencies, and electrical networks are supporting instantiations. Historical unfavorable SWMM agreement does not validate hydraulic ranking or maintenance utility. Real software topology/advisory inputs do not supply independent incident labels. Electrical topology and measured normal-operation loading plus injected disturbances do not validate event prediction. Independent domain outcomes are required for practical claims, and domain scores are not pooled on a common physical scale.
+
+Original Express 4.18.2 files are included in `data/software/express_4.18.2/`. Verify hashes, direction, acyclicity, and advisory origins with:
+
+```bash
+python3 scripts/verify_express_inputs.py
+```
+
+Input verification does not run the stochastic benchmark. The manuscript package does not contain the full new benchmark runner. Existing plotting scripts do not implement the proposed protocol automatically. Restricted electrical measurements and credentials are not included.
+
+Prototype revision eafec4d and prior tests are team-reported; matching application source/logs were not reproduced here. Manual browser inspection and reported non-finite loading/capacity handling remain evidence tasks. The scalar DAG core is O(V+E), sorting adds O(V log V), and adapter, tree, diagnostic, reference, and display costs are separate.
+
+## Actual preliminary-page configuration
+
+The active `preliminary/preliminary.tex` includes the title, contents, table/figure/equation lists, and acronyms, then resets body numbering to Arabic 1. It currently **does not include approval, acknowledgement, or abstract pages**, although their source files remain present. Earlier restoration/integration notes describe previous configurations. Confirm the intended submission configuration with the authors; this update changes documentation only.
+
+`main.tex` currently loads `pdfpages` unconditionally. An earlier repair note describes a conditional-loading revision, which is not the uploaded active preamble. If the installed TeX distribution requests missing `pdflscape.sty` through `pdfpages`, install the dependency through the distribution or review the preamble deliberately. No LaTeX repair is claimed in this pass.
+
+## Provisional schedule
+
+W1 is anchored to 12 October 2026; W8 starts 30 November 2026; W24 ends 28 March 2027. These remain planning placeholders, not confirmed defense/submission deadlines. The W8 checkpoint reviews data, mappings, and scenario eligibility. Compute/protocol amendments must be frozen before held-out outcomes. Missing operational records narrow domain claims rather than prevent the controlled study.
+
+## Build locally or in Overleaf
+
+Windows requirements: MiKTeX, Strawberry Perl for latexmk, VS Code with LaTeX Workshop. Restart VS Code after installation and check:
 
 ```powershell
 perl --version
 pdflatex --version
 latexmk --version
-```
-
-## Build the manuscript
-
-Open the project directory in VS Code and build `main.tex` with LaTeX Workshop, or run:
-
-```powershell
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The generated document is `main.pdf`. `main.tex` is the root file.
+For stale build-cache problems, run `latexmk -c main.tex` and rebuild. In Overleaf, upload the full source ZIP, select `main.tex`, and compile with pdfLaTeX. Build from the project directory. Do not merge another machine's auxiliary files.
 
-### Preliminary PDF form and `pdflscape.sty`
+The source uses natbib author–date citations, an alphabetically presented APA-style bibliography, A4/CITC body settings, and Palatino as the available Book Antiqua substitute. Confirm final institutional font, metadata, front matter, and dates before submission; documentation alignment is not institutional approval.
 
-The current proposal includes a draft approval page and loads `pdfpages` so
-an official first-page PDF at `preliminary/FM-USTP-ACAD-11.pdf` can replace
-the draft layout. It does not load `pdflscape` or require landscape pages.
-Use only the updated approved institutional form once it is supplied; do
-not treat the draft layout as signed approval.
-
-After replacing an older merged source, clean its local build cache and rebuild:
-
-```powershell
-latexmk -c main.tex
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-```
-
-Build from the extracted project folder. Do not merge generated `.aux`, `.fls`,
-`.fdb_latexmk`, or `.log` files from someone else's machine into the source.
-
-Clean auxiliary build files with:
-
-```powershell
-latexmk -c
-```
-
-To verify reproducibility, clone the repository into a new directory and build it again without copying files from the original working directory.
-
-## Project layout
-
-```text
-.
-├── main.tex
-├── ADVISER_BRIEFING_COMPONENT2.md  # Component 2 defense rationale and Q&A
-├── archive/                  # Prior full-study PDF, chapter sources, and briefings
-├── references.tex
-├── chapters/                 # Proposal Chapters I–III
-├── appendices/               # Worked calculations and preliminary evidence
-├── figures/                  # Manuscript figures
-│   └── paper/                # Cross-domain generated figures
-├── tables/                   # Literature and manuscript tables
-│   └── paper/                # Presentation-adjusted cross-domain tables
-├── data/                     # Inputs used by included plotting scripts
-├── results/
-│   └── paper/                # Preserved generator outputs and manifest
-├── scripts/                  # Included figure-regeneration scripts
-└── REVISION_NOTES.md         # Revision scope and remaining limitations
-```
-
-## Regenerate historical figures
-
-Install the plotting dependencies:
+## Regenerate historical plots only
 
 ```powershell
 python -m pip install matplotlib pandas
-```
-
-Regenerate the former Figures 4.2–4.5 from `data/core_scenarios.csv`:
-
-```powershell
 python scripts/generate_chapter4_figures.py
-```
-
-Regenerate the scalability figure:
-
-```powershell
 python scripts/generate_figure4_8.py
 ```
 
-The cross-domain files under `figures/paper`, `tables/paper`, and `results/paper` are preserved outputs from separate reproducibility workflows. The Component 2 manuscript figures are derived from an authorized dataset extract; raw measurements and credentials are intentionally not included. Do not claim these files are regenerated by this manuscript package unless the corresponding authorized source datasets and generators are available.
+These consume included historical summary CSVs. They do not recover earlier edge-level fixture identity or execute the new reference study. Cross-domain figures/tables/results preserve separate experiment outputs and require their corresponding generators and authorized sources for regeneration.
 
-## References and formatting
+## Version-control practice
 
-- In-text sources use LaTeX author–date citation commands through `natbib`.
-- The reference list is organized alphabetically in APA-style presentation.
-- `main.tex` applies the available CITC body requirements, including A4 paper, the binding margin, paragraph indentation, single spacing, chapter headings, caption placement, equation labels, and page-number positioning.
-- Palatino is used as the closest installed TeX-compatible substitute for Book Antiqua. Confirm whether the exact proprietary font is required for final submission.
-- Preliminary pages are intentionally incomplete because their official template and required approval information were not provided with the body-formatting guideline.
-
-## Use with Overleaf
-
-1. Download or create a ZIP containing the complete project directory.
-2. In Overleaf, choose **New Project → Upload Project**.
-3. Upload the ZIP.
-4. Confirm that `main.tex` is selected as the main document.
-5. Compile with pdfLaTeX.
-
-Overleaf is optional; the Git repository remains the reproducible source of truth.
-
-## Git guidance
-
-Commit manuscript sources, scripts, input data required for regeneration, and final approved figures or tables. Do not commit LaTeX auxiliary files such as `.aux`, `.log`, `.fls`, `.fdb_latexmk`, `.out`, or `.synctex.gz`.
-
-Before pushing a manuscript revision:
-
-```powershell
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-git status
-git add .
-git commit -m "Update thesis manuscript"
-git push
-```
-
-This workflow keeps equations native to LaTeX, makes chapter and section numbering automatic, preserves traceable cross-references and citations, and allows each manuscript revision to be reproduced from version-controlled sources.
-
-## Focused reference-evaluation revision
-
-The proposal now makes receiving-state reference accuracy, shared-origin dependence,
-and accuracy--cost tradeoffs the primary controlled research questions. The new
-`chapters/reference_benchmark.tex` specifies exact and Monte Carlo reference solvers,
-560 matched branch scenarios, 3600 generated-DAG scenarios across three families,
-and 12 prospective Express-topology scenarios, task-matched aggregation
-and recursion comparisons, a prospective ancestry-aware diagnostic, and exactly-k
-selection metrics. All are planned work; the full benchmark and diagnostic have not
-been implemented or executed in this revision. See
-`docs/SCIENTIFIC_FOCUS_REVISION.md` for the contribution argument and execution order.
-Core equations, preliminary results, and the timeline are preserved.
-
-## Benchmark bound and expanded protocol
-
-`chapters/benchmark_bound.tex` proves the conditional nodewise bracket
-recursive maximum <= restricted-tree reference <= cascade marginal <= GBBRPM
-<= recursive clipped sum.
-It is grounded in established positive association and aggregation arguments,
-not claimed as a first result. `chapters/cascade_prior_art.tex` distinguishes
-Abbe--Kulkarni--Lee bounds, MIA, LDAG, and the ancestry-overlap diagnostic.
-The model remains a domain comparative index; only the separately specified
-synthetic benchmark assigns probabilistic meanings to the supplied numbers.
-
-The expanded protocol uses low weights, 20 evaluation graphs plus five development
-graphs per family/size, a restricted-tree comparator, and 48 preselected precision
-audits. The original Express topology files are included under
-`data/software/express_4.18.2/`; both CSVs match the historical manifest hashes.
-The dependency JSON, OSV snapshot, and case manifest are also included.
-Run `python3 scripts/verify_express_inputs.py` to check hashes, direction,
-acyclicity, and the seven advisory-origin identities. The 12 Express benchmark
-scenarios remain planned. The week-8 checkpoint will confirm input selection
-and scenario eligibility before the protocol freeze. This input verification
-is not execution of the stochastic benchmark or independent incident validation.
-See `docs/BOUND_AND_PROTOCOL_REVISION.md` for changes and current experiment counts.
-The full benchmark is still planned; only algebraic and small-graph proof checks
-were performed during authoring.
-
-## Tree bracket and prototype focus refinement
-
-The restricted tree preserves a maximum-weight path from every positive-path
-ancestor without thresholding. This gives the tighter conditional certificate
-`0 <= R - pi <= R - T <= R - M` when the target-specific tree is computed;
-constructing those trees incurs extra cost. Planned ranking analysis now
-reports strict reversals, Monte Carlo interval-resolved reversals and the
-number of unresolved pairs. Clipped addition remains a measured comparator:
-a looser score bound does not determine ranking quality. Section 3.4.2 and
-Appendix E have been shortened to keep replay and animation supporting the
-scientific benchmark. See `docs/TREE_BRACKET_REFINEMENT_NOTES.md`. These are
-proposal refinements; no new benchmark outcomes or prototype tests are claimed.
-
-## Computational and literature follow-up
-
-The prospective protocol now specifies a development-only compute pilot and
-records 75.6 billion potential edge-trial checks for the 3600 generated-DAG
-references under direct edge-by-edge execution, plus 10.08 billion for the
-48 extra precision solves. It adds a separate 144-scenario heterogeneous
-weight subset paired with existing uniform-0.20 graphs. This subset adds
-3.024 billion potential checks and has 24 development and 120 evaluation
-scenarios. No measured runtime or new study outcome is claimed. The 2020
-JMLR extension by Abbe, Kulkarni, and Lee is now cited and compared at the
-nodewise-equation and DAG lower-bound levels. Its published DAG lower
-recursion is also specified as a planned matched comparator after an
-auxiliary-source transformation; uniqueness of the bracket is not claimed.
-Appendix E prioritizes finite-number validation and a
-demonstration check ahead of replay polish. See
-`docs/REVIEW_PROTOCOL_FOLLOWUP.md` for exact conditions and work status.
-
-## Chapter 1 opening and alignment revision
-
-Chapter 1 now starts with general network-state assessment, mechanism choices,
-and shared ancestry. It introduces GBBRPM and its controlled evaluation before
-placing drainage as the original motivation and a supporting instantiation.
-The problem statement leads directly with the mechanism-selection question,
-and practical significance describes the three cases without making drainage
-the main research subject. Research questions, objectives, equations, title,
-Chapter 3 protocols, historical evidence, and the provisional timeline are retained.
-Chapter 2 has a short bridge explaining its existing domain-first review order.
-See `docs/CHAPTER1_REFOCUS_NOTES.md`.
+Review the diff and stage the intended sources/docs explicitly. Preserve existing uncommitted work. Exclude build caches and restricted data; record input hashes and engine revisions with experiment outputs. A manuscript source build and a completed benchmark are separate checks.

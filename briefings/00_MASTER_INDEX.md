@@ -1,56 +1,47 @@
-# GBBRPM Defense Briefing Pack
+# GBBRPM Proposal Briefing Pack
 
-This pack follows the thesis from motivation to recommendations. Each file can be reviewed independently, but the numbering gives the recommended study order.
+Updated 15 October 2026 against the uploaded proposal source. Chapters I–III are authoritative; the benchmark experiments are **planned, not completed**. These briefings replace the earlier six-chapter defense narrative. Filenames are retained so existing links continue to work; files 05 and 09 now concern evaluation plans and expected outputs.
 
-## Current manuscript status
+## Study in one sentence
 
-This briefing pack is aligned with the verified 86-page A4 consultation manuscript containing Chapters 1--6, the research-prototype sections, and Worked Appendices A--C. Operational drainage integration remains pending a provenance-complete real dataset.
+GBBRPM is a bounded receiving-state index on DAGs whose proposed evaluation will examine ranking quality, shared-origin dependence, and accuracy–cost tradeoffs against an explicitly defined stochastic reference, with three separate supporting domain instantiations.
 
-## Recommended order
+The current expansion is **Graph-Based Bounded Risk Propagation Model**. “Blockage” describes the project's earlier drainage framing, not the current model name.
 
-1. [Study Overview and Problem](01_STUDY_OVERVIEW_AND_PROBLEM.md)
-2. [Literature Gap and Contribution](02_LITERATURE_GAP_AND_CONTRIBUTION.md)
-3. [Model Formulation and Equations](03_MODEL_FORMULATION_AND_EQUATIONS.md)
-4. [Methodology and Experiment Design](04_METHODOLOGY_AND_EXPERIMENT_DESIGN.md)
-5. [Architecture Results, Robustness, and Scalability](05_ARCHITECTURE_RESULTS_AND_ROBUSTNESS.md)
-6. [Drainage and SWMM Case](06_DRAINAGE_AND_SWMM_CASE.md)
-7. [Software-Dependency Case](07_SOFTWARE_DEPENDENCY_CASE.md)
-8. [Electrical-Network Case](08_ELECTRICAL_NETWORK_CASE.md)
-9. [Research Prototype](08A_RESEARCH_PROTOTYPE.md)
-10. [Conclusions, Limitations, and Recommendations](09_CONCLUSIONS_LIMITATIONS_RECOMMENDATIONS.md)
-11. [Rapid-Fire Examiner Questions](10_RAPID_FIRE_EXAMINER_QA.md)
-12. [Suggested Defense Presentation Flow](11_PRESENTATION_FLOW.md)
+## Read in this order
 
-The detailed Component 2 briefing remains available at [ADVISER_BRIEFING_COMPONENT2.md](../ADVISER_BRIEFING_COMPONENT2.md).
+1. [Study overview and problem](01_STUDY_OVERVIEW_AND_PROBLEM.md)
+2. [Literature, gap, and contribution](02_LITERATURE_GAP_AND_CONTRIBUTION.md)
+3. [Model and conditional benchmark bracket](03_MODEL_FORMULATION_AND_EQUATIONS.md)
+4. [Methods and prospective inventory](04_METHODOLOGY_AND_EXPERIMENT_DESIGN.md)
+5. [Planned accuracy, robustness, and cost evaluation](05_ARCHITECTURE_RESULTS_AND_ROBUSTNESS.md)
+6. [Drainage and SWMM boundaries](06_DRAINAGE_AND_SWMM_CASE.md)
+7. [Software inputs and planned topology benchmark](07_SOFTWARE_DEPENDENCY_CASE.md)
+8. [Electrical instantiation](08_ELECTRICAL_NETWORK_CASE.md)
+9. [Supporting engine and prototype](08A_RESEARCH_PROTOTYPE.md)
+10. [Expected outputs, limitations, and next work](09_CONCLUSIONS_LIMITATIONS_RECOMMENDATIONS.md)
+11. [Proposal examiner Q&A](10_RAPID_FIRE_EXAMINER_QA.md)
+12. [Proposal presentation flow](11_PRESENTATION_FLOW.md)
 
-## Thesis in one sentence
+For consultation use [the proposal adviser briefing](../ADVISER_BRIEFING_PROPOSAL.md). For electrical detail use [the Component 2 briefing](../ADVISER_BRIEFING_COMPONENT2.md).
 
-GBBRPM is a deterministic, bounded, non-probabilistic recursive architecture that combines local disturbance with directed network context to produce traceable comparative node-risk rankings on DAGs.
+## Evidence and status map
 
-## Evidence map
-
-| Evidence block | Main question answered | Strongest defensible claim |
+| Material | Current status | Permitted interpretation |
 |---|---|---|
-| N1--N5 architecture suite | Does the formulation behave as designed? | Bounded, monotone, topology-sensitive behavior under controlled conditions |
-| Robustness and scalability | Is prioritization stable and computationally tractable? | Broad ranking stability under modest perturbation and one-pass sparse-DAG scaling |
-| SWMM comparison | Does graph risk reproduce hydraulic consequences? | No; disagreement defines a clear hydraulic scope boundary |
-| Software case | Can the frozen roles map to a different real topology? | Structural instantiability and controlled transmission sensitivity |
-| Electrical full-network import | Can real topology and baseline channels be processed? | Topology and baseline data-pipeline verification |
-| Component 2 | Can measured loading parameterize a controlled electrical instantiation? | Real-topology, measured-loading mechanism and sensitivity evidence |
-| Research prototype | Can the frozen evaluator support a validated interactive workflow? | Implementation feasibility, graph safeguards, and traceable outputs |
+| Core formulation and conditional bracket | Specified in Chapters 1 and 3 | Mathematical statements under their declared assumptions |
+| Appendix A | Generic worked calculation | Explanation of the recursion |
+| Appendices B–C | Preliminary software/electrical calculations | Traceable case calculations, not independent outcome validation |
+| Appendix D | Selected completed exploratory evidence | Feasibility and limitations; not results of the planned benchmark |
+| Express original files | Included; verification procedure supplied | Input identity/integrity, not benchmark execution |
+| Branch, generated-DAG, heterogeneous, and Express benchmarks | Planned | No empirical performance findings yet |
+| Appendix E | Prototype contract and planned verification | Team-reported prior work and outstanding checks distinguished |
 
-## Worked-appendix map
+## Source priority
 
-| Appendix | Purpose | Result to remember |
-|---|---|---|
-| Appendix A | Generic core calculation | Source initialization, current-state recursion, bounded aggregation, ranking, and ties |
-| Appendix B | Software-dependency calculation | Express reaches `R = 0.9118` at the controlled `tau = 0.50` setting |
-| Appendix C | Electrical Component 2 calculation | Phasor-derived susceptibility and complete trace reproduce risk sum `1.186` |
+1. Current `main.tex` inclusion tree and Chapters I–III, including their input files.
+2. Current appendices, source snapshots, and manifests for their specific evidence roles.
+3. These briefings and [current status](../docs/CURRENT_PROPOSAL_STATUS.md), as navigation aids.
+4. Earlier revision notes, archived chapters, and earlier chats as history.
 
-The operational drainage calculation is intentionally not fabricated; it will be added only when defensible real drainage inputs are available.
-
-## Three statements to repeat consistently
-
-1. The output is a comparative risk index, not a calibrated probability.
-2. Cross-domain instantiability does not mean universal predictive validity.
-3. Controlled sensitivity evidence does not equal independent event validation.
+A supporting doc must be corrected when it conflicts with the source. Historical 136-run and 43-scenario suites do not stand in for the new benchmark. Domain-index values are not probabilities; receiving-state priority is not intervention benefit; coherent domain mappings do not establish predictive utility.

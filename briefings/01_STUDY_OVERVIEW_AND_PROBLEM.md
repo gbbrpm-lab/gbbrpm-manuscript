@@ -1,87 +1,44 @@
-# Briefing 01: Study Overview and Problem
+# Briefing 01: Current Study and Problem
 
-## Official study focus
+**Status: proposal; primary benchmark experiments are planned.**
 
-The study designs and evaluates the **Graph-Based Bounded Risk Propagation Model (GBBRPM)** for comparative node-risk prioritization across directed-network domains.
+## Current title and identity
 
-The formulation was motivated by drainage, but the final thesis focuses on the model rather than claiming a drainage-only solution.
+Design and Evaluation of GBBRPM: A Graph-Based Bounded Risk Propagation Model for Comparative Prioritization on Directed Acyclic Graphs Across Network Domains.
 
-## Thirty-second explanation
+GBBRPM names the mathematical model. The **GBBRPM evaluation engine** implements its versioned equations. The interactive prototype exposes validated inputs, traces, and rankings. The current name uses **Bounded**, rather than the earlier **Blockage** expansion.
 
-Local monitoring tells us how disturbed a component is at its location, while structural graph measures tell us where a component is important in the network. Neither alone directly answers how local disturbance and recursively accumulated network context should be combined into a bounded, traceable node-risk state. GBBRPM addresses that architectural problem using directed reachability, relation-specific susceptibility, optional transmission, current upstream risk, local disturbance, and bounded multi-source aggregation.
+## Central question
 
-## The core problem
+When does complement-product recursion give useful receiving-state rankings under a declared reference process, how does shared ancestry limit agreement, and what computational tradeoffs accompany alternative mechanisms?
 
-The thesis is not simply asking, “Which component is blocked?” It is asking:
+A receiving state combines a node's local disturbance and inherited influence. It differs from structural importance, the spread caused by selecting a node as a source, and the benefit of intervening at that node. The study will evaluate the receiving-state task explicitly.
 
-> How should connected components be comparatively prioritized when current local disturbance, upstream accumulated risk, directed connectivity, and heterogeneous edge conditions all matter?
+## Six aligned research objectives
 
-Two nodes with equal local disturbance may receive different final risk because:
+| Objective | Planned output |
+|---|---|
+| Formulate | DAG representation, bounded states, modifiers, recursion, assumptions, and properties |
+| Implement | Versioned deterministic engine and traceable research prototype |
+| Compare | Exact or uncertainty-qualified receiving-state references, matched methods, and fixed-budget selection |
+| Assess dependence | Matched origin controls, conditional bracket, diagnostic gains/failures, sensitivity and robustness |
+| Characterize cost | Complexity, measured runtime/memory, preprocessing, and required inputs |
+| Instantiate | Separate drainage, software, and electrical mappings with explicit evidence limits |
 
-- they occupy different network positions;
-- their incoming edges have different susceptibility;
-- their upstream nodes have different current accumulated states;
-- they have different downstream reach; or
-- several contributions converge at one receiver.
+These summarize the authoritative lists in Chapter 1; they do not replace their wording.
 
-## Why local scores are insufficient
+## Why this question is researchable
 
-A local score answers: **How disturbed is this component here?**
+Boundedness and different rankings alone do not establish accurate prioritization. The separate stochastic benchmark supplies a known process against which score slack and selection can be assessed. Matched shared/independent origins isolate a dependence mechanism; generated DAGs test broader regimes; timed comparators expose the cost of alternatives.
 
-GBBRPM answers: **Given the same network and parameterization, what is this node's current comparative risk after local and propagated context are combined?**
+The adopted aggregation operator and related cascade bounds already exist. The contribution will depend on the controlled evidence and comparison with prior work, rather than the acronym, prototype, or a claim that no similar formula exists.
 
-The second question includes the first but is not equivalent to it.
+## Role of the three domains
 
-## Research questions
+Drainage supplied the original motivation. Drainage, software dependencies, and electrical networks now support separate instantiation studies. The primary scientific evaluation is the controlled reference benchmark. Practical utility requires independent task-relevant outcomes; it is not established by using three domains.
 
-1. How can the model integrate local disturbance, current upstream risk, susceptibility, optional transmission, reachability, and bounded multi-source aggregation?
-2. Does it preserve boundedness, monotonicity, and expected ranking behavior?
-3. How sensitive, robust, and scalable is it under controlled changes?
-4. Can the frozen rule be instantiated coherently in drainage, software, and electrical networks?
-5. Can the validated workflow be implemented in an interactive, traceable research prototype?
-6. What evidence and limitations does each domain and the prototype provide?
+## Proposal boundary
 
-## Objectives in plain language
+`main.tex` compiles Chapters I–III, references, and Appendices A–E. Uncompiled Chapters IV–VI and archived full-study sources are historical. Appendix D retains earlier exploratory evidence, including unfavorable hydraulic agreement. The new benchmark, comparator implementations, and proposed regressions must not be described as completed.
 
-1. Identify the recurring mechanisms and limitations in prior approaches.
-2. Formulate the bounded recursive architecture.
-3. Test its mathematical and computational behavior.
-4. Instantiate it in three domains without changing the core rule.
-5. Develop and functionally verify an interactive research prototype.
-6. Compare the strength and limits of the evidence across domains and the prototype.
-
-## Primary contribution
-
-The contribution is **architectural and integrative**, not the invention of graph propagation, susceptibility, recursion, or bounded aggregation individually.
-
-GBBRPM contributes one explicit comparative-risk semantics that keeps these roles separate:
-
-- topology or reachability;
-- transmission or influence;
-- susceptibility;
-- local disturbance;
-- current propagated state;
-- aggregation; and
-- dependence limitations.
-
-## What the title does and does not claim
-
-The title emphasizes design and evaluation of a bounded risk-propagation architecture across directed-network domains. “Across domains” means the same computational roles were instantiated in the tested cases. It does not mean the model is universally valid or equally predictive in every domain.
-
-## Likely examiner questions
-
-### “Why is drainage still prominent if the model is generic?”
-
-Drainage supplied the original practical motivation and the richest behavioral case, including the SWMM boundary test. The formulation became generic only after separating domain-specific parameter meanings from the frozen graph update rule.
-
-### “What exact decision does the model support?”
-
-It supports comparative prioritization: identifying which nodes have higher modeled risk under the same graph, scenario, and parameterization. It does not prescribe a maintenance action automatically.
-
-### “Is risk the same as failure probability?”
-
-No. Risk is a normalized comparative index in `[0,1]`. A value of `0.70` does not mean a 70% probability of failure.
-
-### “What is the strongest overall claim?”
-
-The strongest claim is that GBBRPM is a coherent, bounded, traceable, and computationally tractable comparative-risk architecture on tested DAGs, with demonstrated instantiability—but unequal validation strength—across three domains.
+Source: `chapters/chapter1.tex`; `chapters/chapter3.tex`; `main.tex`.

@@ -1,126 +1,37 @@
-# Conditional benchmark bracket and expanded evaluation
+# Current Conditional Bracket and Benchmark Protocol
 
-## Meaning and contribution
+Synchronized 15 October 2026 to `chapters/benchmark_bound.tex` and `chapters/reference_benchmark.tex`. **Benchmark execution remains planned.** The earlier revision record is preserved in `../archive/documentation-before-2026-10-15/docs/BOUND_AND_PROTOCOL_REVISION.md`.
 
-GBBRPM remains a domain comparative index. Under the separately specified
-synthetic process with independent initial-activation and edge-transmission
-primitives, the same recursion is a nodewise upper bound on activation
-marginals. The conditional result is not a calibration of domain inputs.
-Deterministic evaluation itself does not distinguish probability from index
-semantics; the interpretation and assumptions do.
+## Guarantee and scope
 
-The added proof establishes
+For the finite DAG independent-primitive activation process, recursive maximum M, specified restricted-tree T, full-process marginal pi, ordinary recursion R, and recursive clipped addition H satisfy:
 
-    recursive maximum <= exact cascade marginal <= GBBRPM <= recursive clipped sum.
+`M<=T<=pi<=R<=H`, hence `0<=R-pi<=R-T<=R-M` when T is available.
 
-It uses established positive association and bounded aggregation. The statement
-is presented as a benchmark proposition with explicit assumptions, not as an
-unprecedented theorem. The nearest literature comparison now includes
-Abbe, Kulkarni, and Lee (2017), MIA (Chen, Wang, and Wang, 2010), and LDAG
-(Chen, Yuan, and Zhang, 2010). Their primary papers were inspected for the
-association argument, length-indexed bounds, restricted-tree recurrence,
-and Linear Threshold semantics, respectively.
+The tree retains consistent maximum-weight paths from every positive-path ancestor to each target, original B/weights, and no positive-path threshold. T is exact on that restricted process, not the full graph. Target construction has additional cost. Positive association and aggregation are established arguments. No domain probability calibration, arbitrary-pruning guarantee, diagnostic upper bound, or first-ever theorem claim follows.
 
-## What the bound changes
-
-- GBBRPM's benchmark slack is nonnegative. Its sign need not be inferred
-  from experiments, though numerical failures still need investigation.
-- Width R-M is a computable error certificate under the benchmark.
-- Clipped sum cannot be a tighter nodewise upper bound than GBBRPM under
-  these assumptions. It can still have different ranking quality.
-- A lower bound for node a exceeding the upper bound for node b certifies
-  that a has greater benchmark activation probability. Overlap is inconclusive.
-- The ancestry-overlap diagnostic does not inherit an upper-bound guarantee.
-
-Ranking and fixed-budget selection are the primary benchmark outcomes;
-score metrics describe tightness. The stochastic reference remains a proxy
-task. Agreement with it does not establish inspection or intervention utility.
+`T_a>R_b` (or the cheaper sufficient `M_a>R_b`) certifies reference order. Overlap is inconclusive. Tighter pointwise bounds do not imply better selection. Actual slack and ranking outcomes remain empirical questions.
 
 ## Current inventory
 
-| Experiment | Count | Status |
+| Block | Count | Status |
 |---|---:|---|
-| Matched shared/independent branch family | 560 scenarios | Planned; exact closed-form receiver reference |
-| Generated DAGs | 300 topologies, 3600 scenarios | Planned |
-| Generated development subset | 60 topologies, 720 scenarios | Seeds 41--45 |
-| Generated evaluation subset | 240 topologies, 2880 scenarios | Seeds 1001--1020 |
-| Express topology | 12 scenarios | Planned; original input CSVs included and hash-verified |
-| Low-weight precision audit | 48 additional reference solves | Preselected subset, not new scenarios |
+| Matched branches | 560 | Planned; exact receiver closed forms |
+| Uniform generated DAGs | 300 topologies; 3,600 scenarios | Planned; 720 development / 2,880 evaluation |
+| Heterogeneous subset | 144 additional scenarios | Planned; 24 development / 120 evaluation; existing topologies |
+| Express topology | 12 scenarios | Planned; original inputs included and verified |
+| Precision audits | 48 additional reference solves | Planned; existing scenarios, N=1,000,000 |
 
-Generated families are uniform forward-edge, adjacent-layer, and directed
-preferential attachment. Each has 2V edges at V in {20,50,100,250}.
-The preferential construction starts with ten edges among five nodes and
-adds two incoming edges for each subsequent node, giving 10+2(V-5)=2V.
-No scale-free law is claimed from the generator name.
+Generated families are forward-edge, adjacent-layer, and preferential attachment with 2V edges and V={20,50,100,250}. Development seeds are 41–45; evaluation seeds 1001–1020. Uniform weights are {0.05,0.10,0.20,0.25,0.50,0.75}; initial settings are B=0.5 or 1 on the first ceil(0.10V) nodes in recorded order. Branch controls additionally use weight 1 and their own source grid. The secondary subset uses seed 41 and 1001–1005, mean-preserving hashed weights {0.10,0.20,0.30}, and separate summaries.
 
-Generated weights are {0.05,0.10,0.20,0.25,0.50,0.75}; branch controls also
-include 1. Initial probabilities use the specified fixed source settings.
-Graphs are the replication unit, rather than treating repeated weight/source
-conditions as independent graph samples. Family and regime summaries remain
-separate. Near-zero and saturated cases are retained and reported.
+## References, methods, and metrics
 
-The default reference uses 100,000 trials. The 48 audit cases use a separate
-1,000,000-trial estimate selected before outcomes: seed 1001, every family and
-size, weights 0.05 and 0.10, and both initial settings. Each solve has its own
-sampling interval; no joint confidence guarantee across all experiments is
-claimed. Unresolved ranking differences remain unresolved.
+Use exact enumeration at at most 16 non-degenerate primitives and branch closed forms beyond that cap. General Monte Carlo uses N=100,000, fixed scenario seeds, batches, and simultaneous Hoeffding node intervals for one scenario only. Audit selection is seed 1001, each family/size, weights 0.05/0.10, both initial settings. Keep both estimates; unresolved values remain unresolved.
 
-Development timings and memory use will establish whether the inventory is
-feasible. Any budget amendment must be recorded before evaluation outcomes,
-including new counts. The 24-week schedule remains provisional and unchanged.
+Compare local-only, M, H, R, local-upstream ablation, T, the published 2020 DAG lower recurrence after the auxiliary-source transformation, and the specified lineage diagnostic. No ordering relative to M/T is assumed for the published lower comparator. Its full upper counterpart is discussed rather than required on the full grid.
 
-## Additional comparator
+Exclude positive-B nodes from the common ranking candidate set but retain unreachable nodes. Select exactly k at 10/20/30% budgets with 100 shared outcome-independent permutations and the anchored 1e-12 tie policy. Report capture/regret, association, strict and interval-resolved reversals, resolved fractions, bracket/slack metrics, saturation, and uncertainty. Expanded descriptive Jaccard cutoffs remain separate. Graph is the replication unit; repeated conditions are paired, not independent graphs.
 
-The new restricted-in-arborescence comparator retains consistent maximum
-weighted paths to each target and evaluates all retained local inputs on
-the resulting tree. This is an adaptation for fixed receiving queries, not
-the complete MIA seed-selection algorithm. It preserves multiple local
-origins, unlike globally retaining a single largest contribution. Its restricted
-process gives a lower bound by edge deletion, with construction cost included.
-LDAG is discussed as related literature under another cascade model.
+A development pilot must assess the 75.6-billion primary, 10.08-billion audit, and 3.024-billion heterogeneous potential edge-trial checks under literal execution, together with comparator/tree costs. These are not timing measurements. Freeze any feasibility reduction before evaluation outcomes and record revised counts and precision.
 
-## Express prerequisite
-
-The original software node and edge CSVs are now included under
-`data/software/express_4.18.2/`. Their SHA-256 hashes exactly match the
-historical paper-output manifest. The dependency JSON, OSV snapshot, and
-case manifest are included; direction, acyclicity, and all seven
-advisory-origin identities have been checked. The W8 checkpoint will
-confirm the selected inputs and scenario eligibility before protocol freezing.
-Controlled initial probabilities of 0.5 or 1 will test the real topology;
-advisory severity is not calibrated as activation probability. The 12
-stochastic benchmark scenarios have not been executed, and this case is
-not independent incident validation.
-
-## Locations and work status
-
-- `chapters/benchmark_bound.tex`: proposition, proof, interpretation, and limits.
-- `chapters/cascade_prior_art.tex`: closest additional literature distinctions.
-- `chapters/reference_benchmark.tex`: expanded inventory, comparators, metrics,
-  and reference-precision protocol.
-- Chapters 1--3, framework figure, references, README, and current focus notes
-  are aligned with the extension.
-
-The core equations and historical data, results, appendices, and timeline are
-preserved. The full benchmark, restricted-tree comparator, and diagnostic have
-not been implemented or executed here. Small exact calculations check the
-mathematical arguments; they are not the proposed full-study results.
-
-## Prior-art follow-up before stronger novelty claims
-
-Compare the DAG specialization and random-initialization construction with
-existing reliability, percolation, and cascade-approximation formulations.
-Do not infer novelty from new notation, a model name, or a successful proof.
-The contribution must identify what additional characterization or supported
-application result the proposed experiments establish beyond those precedents.
-
-## Authoring verification
-
-The revised 72-page proposal was compiled and its affected pages inspected.
-New citations and cross-references resolved without overfull or undefined errors.
-Exact enumeration on 80 four-node configurations checked the bracket and the
-restricted-tree comparator's exactness and lower-bound relation. Layer capacity
-and preferential edge-count arithmetic were checked for every proposed size.
-The 27 historical data/result/appendix files and the timeline matched the
-previous source package byte for byte. These checks do not replace execution
-of the planned experiment inventory.
+See [current status](CURRENT_PROPOSAL_STATUS.md), [review follow-up](REVIEW_PROTOCOL_FOLLOWUP.md), and [next work](NEXT_STEPS.md). Prior authoring checks and historical exploratory results do not establish completion of these protocols.

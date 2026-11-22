@@ -1,79 +1,43 @@
-# Briefing 02: Literature Gap and Contribution
+# Briefing 02: Literature, Gap, and Contribution
 
-## Literature progression
+**Status: literature-grounded proposal; contribution remains to be established by evidence.**
 
-The review moves through three evidence streams:
+## What is already established
 
-1. **Local condition assessment** — blockage, debris, vulnerability, or component-level evidence.
-2. **Graph-based prioritization** — centrality, critical paths, weakest links, capacity, and functional importance.
-3. **Propagation-model families** — influence diffusion, epidemics, cascading failure, attack graphs, cyber risk, and infrastructure contagion.
-
-These streams contain mechanisms relevant to GBBRPM, but they answer different questions and propagate different states.
-
-## Why existing model families are not direct substitutes
-
-| Family | Typical propagated meaning | Why it is not directly interchangeable with GBBRPM |
+| Precedent in Chapter 2 | Relevance | Distinction to preserve |
 |---|---|---|
-| Independent Cascade / Linear Threshold | Activation | Usually binary or threshold-based rather than a continuous comparative risk state |
-| SIR / SEIR | Epidemiological compartment | Includes domain-specific transition and recovery semantics |
-| Cascading failure | Load, overload, or failure | Often relies on redistribution, failure thresholds, or physical conservation |
-| Attack graphs | Reachable compromise or probability | Uses security-path and conditional-compromise semantics |
-| Centrality | Structural importance | Does not recursively update a current disturbance state |
-| Hydraulic simulation | Physical hydraulic state | Models backwater, surcharge, ponding, and redistribution beyond a downstream graph index |
+| Probabilistic-sum t-conorm; maximum and bounded sum | Adopted bounded operators and known properties | Their use is not a new aggregation theory |
+| Leaky noisy-OR | Background-plus-parent complement algebra | Related algebra does not calibrate domain-index inputs |
+| RIPA | Current-state propagation with multiplicative modifiers | Compare its semantics and additive aggregation explicitly |
+| Independent Cascade | Conditional edge transmission and live-edge interpretation | Reference probabilities concern the separately declared process |
+| MIA | Maximum-weight influence paths and restricted in-arborescences | Proposed target-specific comparator adapts the restriction; it is not the full greedy seed-selection algorithm |
+| LDAG | Local DAG computation under Linear Threshold | Its model and additive recurrence are not interchangeable with the IC reference |
+| Abbe, Kulkarni, and Lee (2017; 2020) | Association-based cascade bounds, nodewise messages, and DAG lower recursion | Nodewise bounds and efficient DAG lower methods already have precedents |
 
-The thesis therefore compares these models conceptually, not by treating their numerical outputs as equivalent labels.
+Use the citation keys and bibliography in the manuscript. This briefing summarizes its source comparisons; it is not a fresh exhaustive literature search.
 
-## The research gap
+## Defensible evaluation gap
 
-The gap is not that no propagation model exists. The gap is that, within the reviewed literature, no clearly established lightweight formulation combines all of the following under one explicit comparative-risk semantics:
+The question is when this specified scalar DAG recursion provides tight receiving-state estimates and useful fixed-budget selections under a declared process, how uncertain shared origins and attenuation affect it, and how alternatives trade accuracy against resources.
 
-- bounded continuous non-probabilistic node state;
-- current-state recursive propagation;
-- directed reachability;
-- explicit separation of susceptibility and optional transmission;
-- local disturbance at receiving nodes;
-- bounded aggregation of converging contributions; and
-- explicit recognition that shared paths create dependence limitations.
+The intended output is an evidence-based characterization of regimes, failures, and costs. A narrower bracket can improve a score certificate without improving rank order. An ancestry-aware variant can discard valid contributions. Either finding can be a meaningful outcome if supported by the frozen evaluation.
 
-## Novelty statement to use
+## Claims to avoid
 
-> The study does not claim that its individual mathematical mechanisms are independently novel. Its contribution is their explicit integration into a traceable bounded comparative-risk architecture, together with controlled evaluation and cross-domain evidence separation.
+- Invention of complement-product aggregation or its boundedness/monotonicity.
+- Novelty from the name, non-probabilistic label, DAG traversal, or prototype alone.
+- First-ever cascade bracket or tree restriction without a completed prior-art comparison.
+- A gap stated as the absence of every architecture combining local and inherited risk.
+- Operational superiority inferred from disagreement with local-only or centrality scores.
 
-## Why the multiplicative complement is appropriate
+## Planned comparison with published bounds
 
-The operator is suitable because it:
+The 2020 published DAG lower recurrence is a required matched comparator in the proposal. One always-active auxiliary source with independent edges of probabilities B reproduces the random-local-start process. That transformation prevents local-input terminology from becoming an unsupported novelty claim.
 
-- remains bounded in `[0,1]`;
-- is monotone in every genuine contribution;
-- allows local and incoming terms to coexist;
-- supports multiple simultaneous inputs; and
-- saturates instead of growing without limit.
+The journal's length-indexed upper construction is compared at equation level; its full implementation is not a required full-grid baseline. No ordering relative to the proposed maximum or restricted-tree lower values is assumed for the published lower method.
 
-Its algebra resembles noisy-OR, but the thesis does not assign probabilistic semantics because the inputs are normalized risk contributions rather than calibrated probabilities.
+## How Chapter 2 fits
 
-## “More interpretable than hydraulic simulation?”
+Its drainage-first literature order records the practical origin. Its synthesis returns to mechanism selection, receiving-state accuracy, dependence, and cost. The three cases assess coherent mappings; they do not establish universal applicability or a common physical risk scale.
 
-Avoid making this an absolute superiority claim. The defensible statement is:
-
-> GBBRPM is directly traceable at the level of its declared terms—local disturbance, upstream state, susceptibility, transmission, and aggregation—while hydraulic simulation represents richer physical behavior. The two models answer different questions.
-
-Hydraulic models may also be interpretable, but their state variables and mechanisms are more physically detailed. GBBRPM's advantage is lightweight traceability for comparative prioritization, not universal interpretability superiority.
-
-## Likely examiner questions
-
-### “Is this just noisy-OR?”
-
-The aggregation form is related algebraically, but the thesis contribution is the complete architecture and its non-probabilistic state semantics. The study also explicitly analyzes shared-origin dependence, which prevents treating the terms as independent probabilities.
-
-### “Why not just use centrality?”
-
-Centrality is structural and usually scenario-independent. GBBRPM combines structure with current local disturbance and heterogeneous relation conditions, so rankings may change between scenarios.
-
-### “Why not use a graph neural network?”
-
-A GNN would answer a learned prediction question and require labels, training data, and generalization assessment. GBBRPM targets a deterministic, transparent comparative index when such labeled data may be unavailable.
-
-### “What is genuinely new?”
-
-The explicit combination and separation of roles, bounded current-state recursion, controlled validation protocol, dependence diagnostic, and evidence-aware cross-domain instantiation—not the isolated invention of multiplication, graphs, or ranking.
-
+Sources: `chapters/chapter2.tex`; `chapters/cascade_prior_art.tex`; `tables/table_close_prior_art.tex`; `references.tex`.

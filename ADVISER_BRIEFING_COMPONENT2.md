@@ -1,4 +1,8 @@
-# Adviser Briefing: Caltech Component 2
+# Adviser Briefing: Component 2 as a Supporting Proposal Case
+
+**Updated 15 October 2026.** This note explains the preliminary electrical case retained in Appendices C–D. The primary controlled stochastic benchmark and reviewed electrical reruns in Chapter 3 remain planned. This case is supporting instantiation evidence, not the main scientific validation or a completed new benchmark.
+
+Use [the current proposal briefing](ADVISER_BRIEFING_PROPOSAL.md) for the overall study and [current status](docs/CURRENT_PROPOSAL_STATUS.md) for its evidence ledger. Numerical/meter policies below summarize the supplied preliminary record and were not rerun in this documentation pass.
 
 ## One-minute explanation
 
@@ -36,7 +40,7 @@ This improves evidentiary honesty at the cost of reduced topology coverage. The 
 
 The 24 aligned snapshots provide a short, internally synchronized normal-operation window for constructing a deterministic descriptive baseline. Their purpose is to estimate mean loading for this controlled instantiation—not to characterize seasonal behavior, train a forecasting model, or establish statistical generalizability.
 
-If challenged on sample size: **24 is adequate for the stated descriptive mechanism test, but insufficient for temporal or event-response validation.** The manuscript states that limitation explicitly.
+The 24-snapshot extract defines this descriptive operating point. Its size does not independently establish adequacy, representativeness, or temporal/event-response validity. Broader claims require additional periods and independent outcomes.
 
 ## Why use mean phasor-derived power?
 
@@ -71,7 +75,7 @@ The selected phasors describe normal operation and do not provide verified event
 
 `tau = 1` is the neutral baseline: it avoids inventing heterogeneous transmission coefficients. The uniform sweep over `0, 0.25, 0.50, 0.75, 1.00` is explicitly a sensitivity experiment showing how attenuation affects propagation. It is not calibration and does not claim that any swept value is the true electrical transmission coefficient.
 
-## Why exactly 43 scenarios?
+## Historical 43-scenario configuration proposed for reviewed reruns
 
 | Scenario family | Runs | Purpose |
 |---|---:|---|
@@ -84,15 +88,15 @@ The selected phasors describe normal operation and do not provide verified event
 | All internal sources | 1 | Test simultaneous disturbance at all six internal nodes |
 | **Total** | **43** | Separate Component 2 protocol |
 
-The count is separate from the 136-run generic architecture protocol because the two suites answer different questions.
+This historical exploratory count is separate from the 136-run N1–N5 configuration and the new planned stochastic-reference inventory. Chapter 3 proposes reviewed reruns; no such rerun is claimed here.
 
 ## Why use internal nodes for multi-source cases?
 
 Terminal-node disturbances have no downstream edges and would often produce only their local risk, making many multi-source combinations structurally trivial. Six non-root internal nodes were used so pairwise cases exercise local-plus-incoming bounded aggregation or concurrent branch coverage.
 
-Component 2 is an arborescence, so these scenarios do **not** test downstream reconvergence. Reconvergence and shared-origin double counting are evaluated separately in the N4 and N5 architecture cases.
+Component 2 is an arborescence, so these scenarios do **not** test downstream reconvergence. Historical N4/N5 counterfactuals motivated dependence testing. The primary planned dependence evaluation uses matched shared/independent branch controls and generated DAGs against the declared stochastic reference.
 
-## What does Component 2 establish?
+## What does the preliminary Component 2 record support?
 
 It supports the following claims:
 
@@ -130,7 +134,7 @@ Doing so would require an invented load or an unjustified zero. Excluding and re
 
 ### “Is 24 snapshots really enough?”
 
-Enough for a short descriptive operating-point instantiation and deterministic sensitivity study; not enough for temporal, seasonal, or event-response claims. Those stronger claims are explicitly withheld.
+It supplies the documented short operating-point extract for the preliminary controlled calculation. It does not establish statistical adequacy for temporal, seasonal, or event-response claims; those need broader independent evidence.
 
 ### “Why call this real-data evaluation if the disturbances are injected?”
 
@@ -142,7 +146,7 @@ No measurement identified where it belonged. Reporting it separately avoids addi
 
 ### “Does the tau sweep validate electrical transmission?”
 
-No. It validates the model's controlled attenuation response. Empirical transmission calibration would require independent electrical evidence.
+No. It illustrates the preliminary controlled attenuation response. Empirical transmission calibration would require independent electrical evidence.
 
 ### “Can you generalize the results to the full Caltech grid?”
 
@@ -151,3 +155,7 @@ No statistical generalization is claimed. Component 2 demonstrates coherent inst
 ## Safest final defense statement
 
 > Component 2 provides controlled mechanism and sensitivity evidence on real topology and measured normal-operation loading. It strengthens the cross-domain instantiation claim, but it does not convert GBBRPM into an electrical-event predictor.
+
+## Outstanding work under the current proposal
+
+Review the authorized mapping and 43-scenario configuration, record the engine/input revisions, perform the planned reruns, and seek event-aligned independent outcomes. If those outcomes remain unavailable, restrict the case to its declared instantiation and controlled-behavior evidence. Acyclic Component 2 does not establish compatibility with all electrical systems. Dates remain provisional; the primary controlled benchmark can proceed independently of operational data availability.

@@ -1,98 +1,34 @@
-# Briefing 06: Drainage and SWMM Case
+# Briefing 06: Drainage and SWMM
 
-## Role of the drainage case
+**Role: supporting instantiation; operational usefulness remains conditional.**
 
-Drainage provides the most complete behavioral case because it includes:
+Drainage supplied the original motivation. It is now one of three supporting cases rather than the primary scientific benchmark. Nodes/edges must define permitted downstream influence and form a defensible DAG. The domain adapter uses compatible nonnegative load L and positive capacity C:
 
-- the N1--N5 controlled networks;
-- drainage-motivated `L/C` susceptibility;
-- 136 controlled scenarios;
-- robustness and dependence diagnostics; and
-- a 12-scenario SWMM external-reference comparison.
+`S_ij=min(1,L_ij/C_ij)`.
 
-## Drainage parameter meaning
+B is a declared disturbance or documented condition mapping. Tau defaults to the neutral value only where justified. Clipping S bounds the adapter input; it neither produces a failure probability nor forces downstream R to one. Other edges can still change after one edge reaches S=1.
 
-- nodes: junctions or modeled locations;
-- edges: directed downstream relations;
-- `B`: local blockage or disturbance severity;
-- `L`: edge load;
-- `C`: effective capacity;
-- `S = min(1, L/C)`: operating susceptibility; and
-- `R`: bounded comparative node-risk index.
+## Preliminary hydraulic evidence
 
-These meanings instantiate the generic roles; they are not universal definitions for every domain.
+Appendix D retains an earlier 12-scenario SWMM comparison:
 
-## SWMM comparison protocol
-
-For blocked conduit area loss `a`, effective capacity becomes:
-
-`C'_ij = (1 - a) * C_ij`
-
-GBBRPM positive risk changes are compared with positive SWMM changes in:
-
-- node maximum depth; and
-- node flooding volume.
-
-Metrics:
-
-- mean scenario-level Spearman rank correlation;
-- top-20% Jaccard overlap; and
-- hydraulic worsening outside the target-and-descendant region modeled by downstream-only GBBRPM.
-
-## SWMM results
-
-| Hydraulic outcome | Mean Spearman | Top-20% Jaccard | Outside-scope share |
+| Simulated outcome | Mean Spearman | Top-20% Jaccard | Positive worsening outside downstream scope |
 |---|---:|---:|---:|
 | Maximum depth | -0.416 | 0.119 | 71.2% |
 | Flooding volume | -0.485 | 0.000 | 40.5% |
 
-## Interpretation
+These are historical exploratory findings, not new results from the proposal benchmark. They do not support hydraulic ranking equivalence or validate maintenance/inspection utility. The mismatch is consistent with omitted hydraulic behavior but does not isolate the causal mechanism in each scenario.
 
-The negative correlations and low overlap mean the nodes prioritized by GBBRPM generally differed from those with the largest SWMM hydraulic worsening.
+## Planned evaluation and eligibility
 
-This does not mean the experiment is useless. It establishes a crucial boundary:
+Align graph, intervention, entity mapping, and SWMM scenarios. Compare priority changes with maximum-depth and flooding changes; report association, priority-set overlap, and positive worsening outside the downstream region. Simulations remain distinct from field observations.
 
-- GBBRPM represents directed downstream comparative propagation;
-- SWMM represents hydraulic mechanisms such as backwater, surcharge, ponding, and flow redistribution.
+Operational evaluation requires provenance-complete topology and flow direction, specifications, loading/capacity, condition/maintenance records, and independent outcomes. An outcome used to construct inputs is not an independent validation label. Missing records cannot be replaced by invented observations. W8 is a data/mapping/eligibility review, not a promised date of successful field validation.
 
-Large outside-scope shares confirm that important hydraulic consequences can occur outside the strictly downstream region used by GBBRPM.
+The DAG core omits backwater, surcharge, ponding, redistribution, and feedback. Any quantitative SWMM speed comparison requires a separate paired protocol with explicit solver settings, scenarios, hardware, and timing boundaries. Existing scalar timings alone do not establish it.
 
-## The correct conclusion
+## Concise answer
 
-> GBBRPM should not be used as a substitute for hydraulic simulation. It is better positioned as a lightweight screening and prioritization layer that can indicate where further inspection or higher-fidelity analysis may be warranted.
+“We retain drainage to examine a documented mapping and its limits. Historical SWMM disagreement restricts the claims; the primary planned mechanism evaluation uses the separately specified stochastic reference.”
 
-## What drainage evidence supports
-
-- controlled mechanism behavior;
-- susceptibility and location sensitivity;
-- bounded multi-source response;
-- robustness and ranking analysis;
-- reconvergence limitation diagnosis; and
-- a documented boundary against hydraulic outcomes.
-
-## What it does not support
-
-- field-validated flood prediction;
-- calibrated hydraulic state estimation;
-- replacement of SWMM;
-- modeling of backwater or bidirectional effects; or
-- universal drainage parameter calibration.
-
-## Likely examiner questions
-
-### “Does negative correlation mean GBBRPM failed?”
-
-It failed only if the intended claim were hydraulic prediction, which the thesis explicitly rejects. The comparison successfully identifies the boundary between graph-based prioritization and hydraulic state reproduction.
-
-### “Why compare with SWMM if the outputs are different?”
-
-The comparison tests whether their prioritizations align and prevents unsupported hydraulic claims. It is a scope-validation exercise rather than numerical equivalence testing.
-
-### “Could GBBRPM still be useful in drainage?”
-
-Yes, as a lightweight downstream screening and comparative prioritization layer, especially when full hydraulic modeling is unavailable or reserved for shortlisted locations.
-
-### “What evidence is still missing?”
-
-Provenance-complete operational drainage observations and independent field outcomes are still needed.
-
+Sources: Chapter 3 drainage/domain/cost sections; Appendix D.

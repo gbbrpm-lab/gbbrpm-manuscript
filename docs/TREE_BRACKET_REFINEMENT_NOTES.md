@@ -1,57 +1,15 @@
-# Tree bracket and supporting-prototype refinement
+# Current Tree-Bracket and Prototype Boundaries
 
-This remains the same GBBRPM proposal. Its non-probabilistic domain index,
-separate independent-primitive stochastic benchmark, title, three supporting
-domain cases, research questions, equations, prospective experiment counts,
-preliminary evidence, and 24-week provisional timeline are retained. Nothing
-in this revision reports completed benchmark outcomes.
+Synchronized 15 October 2026. Benchmark and proposed verification remain planned. The earlier revision narrative is preserved in `../archive/documentation-before-2026-10-15/docs/TREE_BRACKET_REFINEMENT_NOTES.md`.
 
-## Mathematical certificate
+The target-specific restricted in-arborescence retains one consistently chosen maximum-weight next edge for every positive-path ancestor, original local inputs/weights, and no threshold. It preserves each ancestor's strongest path: M<=T. Edge deletion in the coupled reference gives T<=pi. Its disjoint incoming subtrees permit exact complement-product evaluation. Thus M<=T<=pi<=R<=H and R-T tightens the scalar R-M certificate when the tree is computed.
 
-For each target, the proposed restricted in-arborescence retains one
-consistently chosen maximum-weight next edge for every ancestor with a
-positive-weight path to the target. It retains the original local inputs and
-weights and applies no path threshold. The resulting tree probability `T`
-preserves every ancestor's best single path, so recursive maximum `M <= T`.
-Deleting edges from the original coupled independent cascade gives `T <= pi`.
-Together with the already established upper bound, the conditional bracket is
-`M <= T <= pi <= R <= H`. Thus `0 <= R - pi <= R - T <= R - M`.
+Tree construction and calculation per target are additional work; they are not a free single-pass correction. Arbitrary pruning and lineage-overlap grouping do not inherit this construction's guarantees. The latter remains a distinct diagnostic that may discard independent opportunities and worsen reference error.
 
-The tree probability is exact only for its restricted stochastic process.
-The proof does not make domain scores probabilities or make arbitrary pruning
-a lower bound tighter than `M`. Computing a restricted tree separately for
-each requested target takes additional work; reporting the tighter bracket
-reuses it only where the tree comparator has already been run. The manuscript
-credits related association bounds and MIA-inspired restrictions without
-claiming the whole bracket as a first theorem.
+Planned strict-reversal analysis distinguishes estimated association from interval-resolved opposite ordering. Nonempty intersections of sampling intervals with analytical brackets supply the stated per-solve resolution; empty intersections and unresolved pairs are reported, not repaired or discarded. Nodewise bound ordering alone does not establish a ranking winner.
 
-## Proposed ranking analysis
+Prototype scope remains validation, engine integration, and trace inspection. Replay uses stored results; assembly/display costs remain. Appendix E is a supporting verification plan. Team-reported revision/tests and pending browser checks are not newly reproduced application evidence. The reported infinity handling issue needs matching-source regression evidence before it can be called resolved.
 
-The benchmark will count strict pairs whose GBBRPM order is opposite the
-reference order. For sampled references, a reversal is called resolved only
-when the relevant confidence intervals, intersected with the analytical
-bracket when nonempty, establish the opposite order at the stated per-solve
-coverage. Counts, denominators, the resolved fraction, and unresolved pairs
-will accompany the rate. The analysis relates ranking changes to ancestry
-overlap and selection regret without presuming that overlap causes every
-discrepancy. Clipped-additive `H` stays as a baseline: being a looser nodewise
-upper bound does not imply worse rankings.
+The Express originals are included and verified; 12 controlled stochastic scenarios remain planned. W8 reviews input/mapping eligibility. The active preliminary inclusion file currently omits approval, acknowledgement, and abstract pages; their source files remain present. Earlier omission/restoration narratives are history, not the current source configuration.
 
-## Scope and schedule
-
-Section 3.4.2 now describes the engine-computed trace, optional replay, and
-the distinction between scalar evaluation and display costs briefly.
-Appendix E has been reduced to about 325 source words, preserving its
-verification contract and recording the unresolved positive-infinity
-validation issue and pending browser check. Those checks are proposals or
-team reports, not new independent test results. Animation polish is secondary
-to reference simulation, matched mechanism comparisons, and error analysis.
-
-The original Express snapshot has since been supplied and included, with
-both CSV hashes verified against the historical manifest. Direction,
-acyclicity, and the seven advisory-origin identities have been checked.
-The week-8 checkpoint will confirm input selection and scenario eligibility;
-the 12 benchmark scenarios remain planned. See `INPUT_PROVENANCE_UPDATE.md`.
-The following preliminary-page statement records this earlier revision stage:
-Preliminary pages still omit the
-approval sheet and acknowledgments and retain an abstract placeholder.
+See [current status](CURRENT_PROPOSAL_STATUS.md), [bound/protocol summary](BOUND_AND_PROTOCOL_REVISION.md), and [next steps](NEXT_STEPS.md).

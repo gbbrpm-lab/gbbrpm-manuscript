@@ -1,179 +1,115 @@
-# Briefing 10: Rapid-Fire Examiner Questions
+# Briefing 10: Proposal Examiner Q&A
 
-## Prototype questions
+**Answers follow Chapters I–III; benchmark experiments remain planned.**
 
-### Why build a prototype if the thesis contribution is the model?
+### What is GBBRPM now?
 
-The prototype tests implementation feasibility and makes the model's inputs, validation rules, parameter changes, graph state, and rankings inspectable. It supports the model contribution without replacing its computational evaluation.
+Graph-Based Bounded Risk Propagation Model: the proposed bounded receiving-state index on DAGs. The earlier blockage framing was its drainage origin.
 
-### Is the prototype production-ready?
+### What is the principal research question?
 
-No. Its core functions and production frontend build were verified, but it has not undergone formal usability, accessibility, security, concurrency, or deployment evaluation.
+When the recursion gives accurate receiving-state rankings under a declared reference, how shared origins affect that agreement, and what accuracy–cost tradeoffs alternatives provide.
 
-### Why is operational mode inactive?
+### What is complete?
 
-Because no provenance-complete agency dataset has been mapped and independently verified. The inactive state prevents controlled fixtures from being presented as operational evidence.
+The formulation, manuscript proposition, worked calculations, selected exploratory evidence, and verified Express input record exist. The proposed full benchmark and new comparator evaluation are not complete.
 
-## Model identity
+### Does the model produce probabilities?
 
-### What is GBBRPM?
+Domain outputs are indices. Only the separate benchmark assigns probabilistic meanings to B and w and evaluates R against pi under explicit assumptions.
 
-A deterministic bounded recursive architecture for comparative node-risk prioritization on directed acyclic graphs.
+### Why sample edges using w rather than Q?
 
-### Is `R` a probability?
+The trial already samples upstream activation. Conditional transmission is w=S*tau; multiplying by R again would count upstream activation twice.
 
-No. It is a normalized non-probabilistic comparative index.
+### What does the bracket say?
 
-### What does “bounded” mean?
+Under mutually independent local/edge primitives on a DAG, M<=T<=pi<=R<=H. R is an upper bound, T is a restricted-process lower bound, and R-T is a tighter certificate than R-M when the specified tree is computed.
 
-Every declared state and modifier lies in `[0,1]`, and the aggregation rule guarantees final node risk also lies in `[0,1]`.
+### Is that bracket a new theorem?
 
-### What is propagated?
+The manuscript presents a DAG specialization using established association and aggregation arguments, with explicit MIA and Abbe et al. precedents. A first-ever claim has not been established.
 
-The current accumulated upstream state `R_i`, modified by edge susceptibility and optional transmission.
+### Is the restricted tree just the strongest incoming edge?
 
-### Can a source have local disturbance?
+No. It retains consistent maximum-weight paths from every positive-path ancestor to one target, preserves local terms and weights, and uses no positive-path threshold. It aggregates retained independent subtrees exactly. It needs a tree per target.
 
-Yes. With no predecessors, the empty product equals one, so source risk equals its local disturbance.
+### Is it the same as MIA or LDAG?
 
-### What happens when risks tie?
+It adapts MIA's tree restriction for receiving queries, not the full seed-selection algorithm. LDAG uses Linear Threshold semantics and a different recurrence.
 
-They retain equal standing. No unsupported tie-breaker is applied.
+### Which published-bound implementation is required?
 
-## Design choices
+The Abbe et al. (2020) DAG lower recurrence after encoding local starts via an auxiliary certain seed. No ordering relative to M or T is assumed. Their full upper algorithm is discussed but not required on the full grid.
 
-### Why a DAG?
+### Does a tighter upper bound rank nodes better?
 
-It guarantees a deterministic topological order and one-pass computation. Cycles require a separately defined iterative or temporal mechanism.
+Not necessarily. Unequal slack can reverse ordering. Fixed-budget capture, regret, and resolved reversals will test the ordering effects.
 
-### Why multiplicative-complement aggregation?
+### Is shared ancestry always an error?
 
-It is bounded, monotone, saturating, and can combine local and multiple incoming terms without post-hoc clipping.
+No. In the matched family a certain common source can still produce exact complement-product results through independent branch edges. Source uncertainty and attenuation matter.
 
-### Is it noisy-OR?
+### Will ancestry grouping fix the model?
 
-It is algebraically related, but not interpreted probabilistically.
+That is unproven. It may discard valid edge opportunities or merge partially overlapping lineages. It will be evaluated as a diagnostic with its own states and measured cost.
 
-### Why separate susceptibility and transmission?
+### Why exclude positive-B nodes from benchmark ranking candidates?
 
-Susceptibility describes response under the evaluated condition; transmission describes how strongly influence transfers. Keeping them separate prevents conceptually different mechanisms from being hidden in one coefficient.
+To prevent supplied local disturbances from trivially dominating the receiving-state selection task. Unreachable zero-B nodes remain candidates.
 
-### Why is baseline tau equal to one?
+### How do ties work at a fixed budget?
 
-Neutral transmission avoids inventing unsupported heterogeneous coefficients. Non-neutral uniform sweeps are sensitivity tests, not calibration.
+Select exactly k and average over 100 shared outcome-independent seeded permutations. Expanded cutoff-tie sets are used only for separately labeled descriptive overlap.
 
-### Why `S = min(1, L/C)`?
+### What does a zero Monte Carlo count mean?
 
-It is bounded, monotone, parameter-light, and traceable. It is a domain instantiation, not a universal susceptibility law.
+No activation was observed in that sample, not proof of zero true probability. Report intervals and retain unresolved differences.
 
-## Experiment questions
+### How many planned scenarios are there?
 
-### Why five synthetic networks?
+560 branch controls, 3,600 uniform generated-DAG scenarios, 144 secondary heterogeneous scenarios, and 12 Express scenarios: 4,316 before feasibility amendments. The 48 extra precision solves revisit existing scenarios.
 
-They isolate linear propagation, branching, independent convergence, reconvergence, and mixed behavior.
+### Are the 136 and 43 counts included?
 
-### Why 136 scenarios?
+No. They describe separate historical exploratory configurations proposed for reviewed reruns, not the new reference inventory.
 
-That count comes from the declared architecture scenario families: 20 severity, 25 load stress, 36 location, 10 multi-source, and 45 intermediate-disturbance runs.
+### Why development and evaluation graphs?
 
-### Are there 179 total runs after Component 2?
+Development validates and refines implementation; held-out graphs assess the frozen protocol. A redesigned method requires unused cases for a confirmatory claim.
 
-Arithmetically, yes, but reporting one total would blur two protocols. The 136 runs test the generic architecture; the separate 43 runs test Component 2.
+### Has the full workload been shown feasible?
 
-### Why 600 trials?
+No. A staged development-only pilot will measure throughput and memory. The billion-scale edge-trial counts are estimates of work, not measured runtime. Amendments must be frozen before held-out outcomes.
 
-They provide repeated randomized checks under fixed-seed reproducibility. The study treats them as sampled computational evidence, not exhaustive proof.
+### Are the original Express inputs missing?
 
-### Why use Spearman and Jaccard?
+No. They are included and hash-verified. Earlier N1–N5 fixture inputs remain a separate reconstruction-provenance issue.
 
-Spearman measures overall rank agreement; Jaccard measures overlap among the highest-priority sets. They capture different stability questions.
+### Does real topology make the Express benchmark incident validation?
 
-### Why can Spearman stay high while Jaccard falls?
+No. It uses controlled B and w on real topology. Advisory severities are index inputs, not calibrated exploit probabilities or independent incident labels.
 
-Most of the ordering may remain similar even when a few nodes cross the cutoff defining the top-priority set.
+### What does Component 2 show?
 
-### Where can the complete step-by-step calculations be inspected?
+A preliminary controlled instantiation on real topology and measured normal-operation loading. Its arborescence does not test reconvergence and its injected disturbances do not validate event prediction.
 
-Appendix A traces the generic architecture, Appendix B reproduces the Express software result at `tau = 0.50`, and Appendix C derives Component 2 susceptibility and reproduces the electrical risk sum of `1.186`. An operational drainage calculation remains pending real, provenance-complete inputs.
+### What does the unfavorable SWMM comparison imply?
 
-## Interpretation questions
+It does not support hydraulic ranking equivalence in that exploratory protocol. It neither isolates every hydraulic cause nor validates maintenance utility.
 
-### Why does downstream risk still increase after some S values reach one?
+### Is GBBRPM lightweight?
 
-Clipping happens per edge. Other edges may remain below one and continue increasing, and their changed contributions propagate recursively downstream.
+Its prepared-input scalar DAG pass is O(V+E); full sorting adds O(V log V). Measure resource, adapter, tree/diagnostic, and reference costs separately before stronger efficiency claims.
 
-### Why can equal local disturbances produce different final risk?
+### Can the prototype be called fully verified?
 
-Topology, upstream state, edge susceptibility, downstream reach, and convergence differ by location.
+No. Earlier checks and revision eafec4d are preliminary/team-reported. Matching-source regressions and browser inspection remain required, including reported non-finite-input handling.
 
-### Does high risk identify the cause of failure?
+### What if operational domain data never arrive?
 
-Not necessarily. It identifies high comparative modeled risk under the scenario. Causal attribution requires additional evidence.
+Complete the independently specified controlled benchmark and supporting mappings, and limit practical claims accordingly. Missing observations cannot be replaced with invented field data.
 
-### Does cross-domain testing prove generalizability?
+### What would count as a useful final result?
 
-No. It demonstrates instantiability in three selected cases. Broader generalization requires additional datasets and independent outcomes.
-
-## Drainage questions
-
-### Why did GBBRPM disagree with SWMM?
-
-GBBRPM is downstream-only and does not model backwater, surcharge, ponding, or flow redistribution.
-
-### Does disagreement invalidate the model?
-
-It invalidates hydraulic-prediction interpretation, not the narrower comparative graph-risk role.
-
-### Can it replace SWMM?
-
-No.
-
-## Software questions
-
-### Does Express risk 0.9975 mean 99.75% exploit probability?
-
-No. It is a saturated comparative index created by local and dependency contributions.
-
-### Was tau calibrated from incidents?
-
-No. The sweep tests attenuation sensitivity.
-
-## Electrical questions
-
-### Why Component 2?
-
-It met pre-result feasibility criteria: authorized topology, synchronized source and terminal measurements, observable branches, useful structure, auditable exclusions, and DAG compatibility.
-
-### Why only 12 modeled nodes from 13?
-
-One branch lacked a supported downstream meter path. Excluding it was more honest than inventing loading or treating missing observation as zero.
-
-### Why only 24 snapshots?
-
-They support a short synchronized descriptive baseline, not temporal or event generalization.
-
-### Why not allocate the 9.129 kW residual?
-
-No evidence showed where it belonged. Allocation would add an unsupported spatial assumption.
-
-### Why B equals zero initially?
-
-The measurements represent normal operation without verified event labels. Controlled scenarios inject disturbance explicitly.
-
-### Does Component 2 validate event prediction?
-
-No. It validates controlled mechanism response on real topology and measured loading.
-
-## Contribution questions
-
-### What is novel?
-
-The explicit integrative architecture, state semantics, separation of roles, controlled validation, dependence diagnostic, and evidence-aware cross-domain instantiation.
-
-### What is not novel?
-
-Graphs, recursion, susceptibility, multiplication, bounded aggregation, and ranking individually.
-
-### What is the thesis's safest contribution statement?
-
-GBBRPM provides a traceable bounded comparative-risk architecture whose intended computational behavior is supported on controlled DAGs and whose core roles can be instantiated coherently in three tested domains within explicitly different evidence limits.
+A reproducible account of bound tightness, selection quality, dependence regimes, costs, and failures beyond what the prior methods already establish. A positive performance claim is not required for an honest result.

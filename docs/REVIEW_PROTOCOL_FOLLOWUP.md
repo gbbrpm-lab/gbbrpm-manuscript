@@ -1,65 +1,25 @@
-# Follow-up to the compute, prior-art, heterogeneity, and prototype review
+# Current Compute, Prior-Art, Heterogeneity, and Prototype Follow-up
 
-These are proposal specifications. The benchmark and the proposed prototype
-regressions were not executed by this manuscript edit.
+Synchronized 15 October 2026 to Chapter 3. These are planned protocols, not executed benchmark or regression results. The earlier review record is preserved in `../archive/documentation-before-2026-10-15/docs/REVIEW_PROTOCOL_FOLLOWUP.md`.
 
 ## Computational pilot
 
-The primary inventory remains 560 exact branch scenarios and 3600 generated
-DAG scenarios, with 48 additional million-trial reference solves. Since the
-generated graphs have `2|V|` edges, a literal edge-by-edge reference pass
-has `3 * 25 * 6 * 2 * 100000 * 2 * (20+50+100+250) = 75.6 billion`
-possible edge-trial checks. The audit adds `10.08 billion`. This is a scale
-estimate, not a forecast of running time. Chapter 3 specifies a
-development-only staged pilot across family, size, attenuation, local input,
-and heterogeneity; records throughput, memory, and solver/tree costs; and
-requires a revised grid and interval widths to be frozen before held-out
-results if the original compute allocation is insufficient. An optimized
-implementation must preserve the same independent-primitive semantics.
+The 3,600 generated scenarios at N=100,000 imply 75.6 billion potential edge-trial checks under literal execution; 48 extra million-trial audits add 10.08 billion and the heterogeneous subset adds 3.024 billion. This is workload arithmetic, not a runtime forecast.
 
-## Existing bounds and novelty
+Use development seed 41 at sizes 20/100/250 in every family, both local settings, weights 0.10/0.75 and the heterogeneous assignment, with staged 1,000/10,000 trials and at least one size-250 N=100,000 case if memory permits. Record generation, sampling, deterministic methods including the published lower comparator, target-tree work, storage, throughput, memory, hardware, and revisions. Try batching or validated equivalent implementation first; freeze any reduced allocation/count/precision before held-out outcomes.
 
-Abbe, Kulkarni, and Lee (2020), *JMLR* 21(31), 1--36, extends their 2017
-nonbacktracking bounds paper. Section 3.1 defines a nodewise upper bound
-from length-indexed, complement-product messages before summing it into
-expected influence. Section 4.1 defines a nodewise lower recursion on a
-directed acyclic subnetwork and states linear complexity for that lower
-algorithm. The manuscript now acknowledges both; describing the earlier
-work solely as aggregate influence would miss its nodewise constructions.
-The fixed-seed input can also represent independently random local starts
-via one always-active auxiliary source and independent edges. Different
-input terminology alone is not a novelty argument. No relative tightness
-or runtime ordering between the published bounds and the proposed bracket
-is asserted without a matched implementation and cost boundary. Chapter 3
-now plans to run the journal's directed-acyclic-subnetwork lower recurrence
-on that auxiliary-source graph as a published nodewise comparator. Its
-formula and subnetwork deletion are to be checked against exact fixtures,
-and its cost reported separately. The journal's length-indexed upper
-algorithm is discussed at equation level and is not a mandatory full-grid
-baseline for this proposal.
+## Published bounds
 
-Primary source: https://jmlr.org/papers/v21/18-112.html
+Chapter 2's `cascade_prior_art.tex` acknowledges both nodewise and aggregate roles of Abbe et al. (2017/2020). The planned matched published comparator is the 2020 DAG lower recurrence after adding one always-active auxiliary source with independent B-weight edges. It may delete original DAG edges and has no assumed ordering relative to M or T. Validate against exact fixtures and time its preparation and evaluation. The length-indexed upper construction is compared at equation level but is not a mandatory full-grid implementation. Independent local starts alone are not a novelty distinction.
 
-## Controlled heterogeneity
+This is a summary of the manuscript's cited comparisons, not a new independent source verification.
 
-The additional synthetic subset fixes the same graph and sources as paired
-uniform `w=0.20` conditions. It uses development seed 41 and five
-prespecified evaluation seeds per family/size, both local-source settings,
-and a mean-preserving edge allocation: one quarter 0.10, one half 0.20,
-one quarter 0.30. The assignment is defined before outcomes by a stable
-hash of graph and edge identifiers. Counts are `3 * 4 * 6 * 2 = 144`:
-24 development and 120 evaluation. At 100,000 trials, the added reference
-stage represents 3.024 billion possible edge-trial checks. Five evaluation
-graphs per family/size limit inference. This benchmark tests synthetic
-effective-weight heterogeneity; separate N1--N5 cases still address how
-domain information is constructed. Neither test identifies `S` and `tau`
-from outputs or calibrates domain probabilities.
+## Secondary heterogeneity
 
-## Prototype boundary
+Use the existing family/size graphs for development seed 41 and evaluation seeds 1001–1005, with both initial settings. The fixed hash ordering assigns a quarter w=0.10, a half 0.20, and a quarter 0.30, paired to existing uniform-0.20 cases. There are 144 additional scenarios: 24 development and 120 evaluation. Copy the exact hash construction from `reference_benchmark.tex`. Report separately; five evaluation graphs per family/size limit inference. This tests effective-weight heterogeneity and does not identify S/tau separately or calibrate domain probabilities.
 
-Appendix E retains the team-reported positive-infinity to HTTP-500 issue as
-unresolved until reproduced and corrected in matching application source.
-Finite-number checks for load and capacity, expected client validation
-responses, and regression fixtures for NaN and both infinity signs precede
-a demonstration. Additional replay effects have no role in the mechanism
-comparison. No new application fix or browser verification is claimed here.
+## Prototype evidence
+
+The active contract requires finite-number validation and controlled invalid-input responses. Earlier team records report positive infinity in L/C reaching HTTP 500. Reproduce/correct that issue in matching application source and retain NaN and both infinity regressions; do not claim a fix from manuscript edits. Complete recorded browser and numerical/trace checks. Replay polish remains secondary.
+
+See [current status](CURRENT_PROPOSAL_STATUS.md), [benchmark summary](BOUND_AND_PROTOCOL_REVISION.md), and [next work](NEXT_STEPS.md).

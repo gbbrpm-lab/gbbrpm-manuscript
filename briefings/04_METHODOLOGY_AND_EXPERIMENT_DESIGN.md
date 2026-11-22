@@ -1,145 +1,51 @@
-# Briefing 04: Methodology and Experiment Design
+# Briefing 04: Planned Methods and Experiment Inventory
 
-## Research design
+**All benchmark rows below are prospective. Historical exploratory runs are separate.**
 
-The thesis uses a quantitative model-design, computational-validation, cross-domain evaluation, and research-prototype development design.
+## Sequence
 
-## Two evidence layers
+Specify the model and reference; implement and validate solvers/comparators; pilot development costs; finalize and freeze the protocol before held-out evaluation; then analyze selection, bound tightness, resources, and separate domain cases. The final feasibility decision precedes evaluation outcomes. Any later redesign needs unused cases for a confirmatory claim.
 
-### Layer 1: Architecture validation
+## Planned reference inventory
 
-Question: Does the frozen formulation behave mathematically and computationally as intended?
-
-Evidence:
-
-- five controlled DAGs;
-- 136 controlled scenario runs;
-- diagnostic comparators;
-- robustness trials;
-- randomized property tests;
-- reconvergence diagnostics; and
-- scalability measurements.
-
-### Layer 2: Cross-domain evaluation
-
-Question: Can the same roles and update rule be instantiated coherently in different directed-network domains?
-
-Evidence:
-
-- drainage and SWMM;
-- Express software dependencies; and
-- full-network electrical preprocessing plus Component 2.
-
-These layers are not pooled as if they were equivalent predictive validation.
-
-### Prototype implementation layer
-
-Question: Can the validated workflow be exposed through a common input contract and an interactive, traceable interface without rewriting the model equation?
-
-Evidence:
-
-- React/Vite interface with Cytoscape network visualization;
-- FastAPI validation and evaluation service;
-- pinned `gbbrpm` v0.1.0 engine;
-- synthetic and validated imported-data modes;
-- inactive operational-data placeholder; and
-- service-level functional checks plus a production frontend build.
-
-This layer supports implementation feasibility, not production readiness or predictive validity.
-
-## Controlled network set
-
-| Network | Structure | Diagnostic role |
-|---|---|---|
-| N1 | Linear | Depth and attenuation |
-| N2 | Branching | Divergence and path differences |
-| N3 | Converging | Independent multi-source aggregation |
-| N4 | Diamond / reconverging | Shared-origin overlap and dependence stress |
-| N5 | Mixed | Multiple sources, branching, convergence, intermediate disturbance, heterogeneous susceptibility |
-
-## Why synthetic networks are necessary
-
-Synthetic graphs isolate mechanisms transparently. A real network combines many effects, making it difficult to determine whether a result came from depth, branching, convergence, local disturbance, or heterogeneous edges.
-
-They are mechanism-isolation inputs, not representations of one physical drainage system.
-
-## Provenance of the historical configuration
-
-The earlier N1--N5 fixture inputs are unavailable for direct file comparison. The current reconstructed node and edge inputs were checked against preserved baseline and comparator behavior and will be versioned for reviewed reruns. They are labeled **historical reconstructed validation inputs**. Agreement with historical outputs does not establish file identity with the earlier fixtures.
-
-## The 136-run architecture protocol
-
-| Family | Runs | Purpose |
+| Block | Inventory | Development/evaluation distinction |
 |---|---:|---|
-| Source severity | 20 | Four severity levels across N1--N5 |
-| `L/C` stress | 25 | Five load scales across N1--N5 |
-| Disturbance location | 36 | Fixed severity at selected locations |
-| Multi-source configuration | 10 | Source subsets in N3 and N5 |
-| Intermediate disturbance | 45 | Three nodes x three severities x five networks |
-| **Total** | **136** | Generic architecture protocol |
+| Matched shared/independent branch controls | 560 scenarios | Analytically specified mechanism controls with exact receiver reference |
+| Uniform-weight generated DAGs | 300 topologies; 3,600 scenarios | 720 development; 2,880 evaluation |
+| Secondary heterogeneous weights | 144 additional scenarios on 72 existing topologies | 24 development; 120 evaluation; summarize separately |
+| Express topology | 12 scenarios on the verified 71-node, 128-edge snapshot | Separate real-topology stochastic experiment |
+| Low-weight precision audits | 48 additional million-trial reference solves | Existing generated scenarios; not 48 new scenarios |
 
-The 43 Component 2 experiments form a separate domain-specific protocol.
+The four scenario blocks total **4,316 planned scenarios**, before any feasibility amendment. The 48 audit solves are additional precision work. This sum is a documentation convenience, not a pooled analysis or a completed-run count.
 
-## Diagnostic comparators
+## Branch family
 
-1. **Local only:** `R_j = B_j`
-2. **Uniform susceptibility:** recursive architecture with the same `S` on every edge
-3. **Heterogeneous GBBRPM:** relation-specific susceptibility
+Use branch counts {1,2,4,8}, path lengths {2,4}, edge probabilities {0.05,0.10,0.20,0.25,0.50,0.75,1}, source probabilities {0.10,0.25,0.50,0.75,1}, and both origin conditions: `4*2*7*5*2=560`. Match graph, edge weights, and branch-start marginals; change the joint origin construction. Closed forms supply exact receiver probabilities even beyond the enumeration cap.
 
-These are mechanism comparators, not ground truth.
+## Generated DAGs
 
-## Robustness protocol
+Use forward-edge, adjacent-layer, and preferential-attachment families at {20,50,100,250} nodes, each with exactly 2V unique edges. Check layer capacity; do not silently replace an infeasible generator. Preferential attachment starts with all ten forward edges among five nodes and adds two incoming edges per later node. A scale-free law is not presumed.
 
-- susceptibility perturbations: `+/-5%`, `+/-10%`, and `+/-20%`;
-- 600 trials at each perturbation level;
-- fixed seed: `41`;
-- metrics: Spearman rank correlation and top-set Jaccard overlap.
+For every family/size use seeds 41–45 for development and 1001–1020 for evaluation. Each topology receives six uniform weights {0.05,0.10,0.20,0.25,0.50,0.75} and two initial settings: the first ceil(0.10V) nodes in its ordering receive B=0.5 or B=1. Other B values are zero. Initial-origin nodes need not have in-degree zero.
 
-## Mathematical property tests
+The secondary subset uses development seed 41 and evaluation seeds 1001–1005, both initial settings, and a stable SHA-256 ordering of edges. One quarter receive w=0.10, one half 0.20, and one quarter 0.30, preserving mean 0.20. Pair with existing uniform-0.20 conditions. Use S=w, tau=1. Copy the exact hash-string construction from Chapter 3; do not improvise it.
 
-Six hundred randomized trials test:
+## Reference solvers
 
-- boundedness;
-- monotonicity in local disturbance;
-- `B = 1` implies `R = 1`; and
-- `S = 0` gates the edge contribution.
+Enumerate configurations with at most 16 non-degenerate primitive variables, fixing probability-zero/one variables. Check total mass and isolated, chain, independent-convergence, and diamond identities. Validate Monte Carlo against enumeration.
 
-## Reconvergence diagnostic
+General graphs use N=100,000 independent trials in memory-bounded batches and recorded per-scenario seeds. Per-solve simultaneous node intervals use `h=sqrt(log(2V/0.05)/(2N))`, clipped to [0,1]. This is Monte Carlo sampling uncertainty for one scenario, not a model error guarantee or joint coverage across all experiments.
 
-Ordinary GBBRPM is compared with an ancestry-aware path-pruned counterfactual. Incoming terms with overlapping ancestry are grouped, retaining only the largest contribution per group. The counterfactual is diagnostic—not a replacement model or ground truth.
+The 48 audits use evaluation seed 1001, all three families and four sizes, weights {0.05,0.10}, and both source settings. Add a separate N=1,000,000 solve and retain both estimates. Unobserved rare activations do not imply zero true probability.
 
-## Scalability protocol
+## Matched methods
 
-- sparse DAGs with approximately three edges per node;
-- sizes from 20 to 1000 nodes;
-- five warm-up evaluations;
-- 30 timed repetitions;
-- median and IQR are primary due to timing outliers.
+Local-only; recursive maximum M; recursive clipped sum H; ordinary GBBRPM R; local-upstream complement-product ablation using B_i instead of R_i; target-specific restricted-tree T; the published Abbe et al. (2020) DAG lower recurrence; and the specified ancestry-aware diagnostic. Every recursive variant computes its own states on the same primitive inputs.
 
-## Reproducibility safeguards
+The published lower comparator uses an auxiliary certainly active source with edges of probabilities B. It has no assumed ordering relative to M or T. The full published upper algorithm is not a required full-grid implementation. In-degree is descriptive; seed-spread and intervention measures are different tasks.
 
-- versioned input tables;
-- fixed seeds;
-- generated manifests and hashes;
-- explicit data-source selection;
-- scenario-level exports;
-- separate workflows for core cross-domain and Component 2 results; and
-- credentials and restricted raw data excluded from the manuscript package.
+## Historical suites
 
-## Likely examiner questions
+The N1–N5 136-run inventory and electrical 43-scenario suite are preliminary evidence, with reviewed reruns planned. They are not part of the new stochastic inventory. Original earlier N1–N5 inputs are unavailable for direct file comparison; reconstructed fixtures must retain that provenance. Express originals are included and verified, a separate fact.
 
-### “Why 136 runs?”
-
-The count follows the declared factorial scenario families. It is not an arbitrary performance target; each family isolates a different mechanism.
-
-### “Why not combine 136 and 43 as 179?”
-
-They can be arithmetically summed, but should not be reported as one protocol. The 136 runs validate the generic architecture, while the 43 runs evaluate one electrical instantiation using different inputs and claims.
-
-### “Why use reconstructed inputs?”
-
-They restore a historically used configuration and reproduce preserved behavior. Their provenance limitation is disclosed, and claims are restricted to computational validation rather than field representativeness.
-
-### “Why use a DAG?”
-
-It guarantees a deterministic one-pass order and prevents unresolved cyclic feedback. Cycles require an explicit iterative or temporal extension, which v1 does not silently assume.
+Sources: `chapters/chapter3.tex`; `chapters/reference_benchmark.tex`; Appendix D.

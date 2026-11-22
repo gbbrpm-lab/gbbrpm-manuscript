@@ -1,5 +1,9 @@
 # Proposal revision notes — October 13, 2026
 
+> Historical revision record. It describes the authoring pass below, not the current source configuration or newly reproduced tests. For current scope, evidence, inventory, and remaining work, use [CURRENT_PROPOSAL_STATUS.md](CURRENT_PROPOSAL_STATUS.md) and [NEXT_STEPS.md](NEXT_STEPS.md). Chapters I–III govern; the new benchmark remains planned. Earlier front-matter, page-count, compile, and test statements must not be read as current verification.
+
+> Source check on 15 October 2026: `preliminary/preliminary.tex` currently omits approval, acknowledgement, and abstract pages; `main.tex` includes Appendices A–E and loads `pdfpages` unconditionally. Existing page-source files and an earlier restoration/repair report do not override those active includes. No LaTeX change is made by this note.
+
 This source revision implements the October 12 consultation and the additional
 requests to name the software an **evaluation engine** and retain the
 cross-domain emphasis in the title.

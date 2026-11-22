@@ -1,126 +1,67 @@
-# Briefing 03: Model Formulation and Equations
+# Briefing 03: Formulation and Conditional Benchmark Bracket
 
-## Graph assumption
+**Status: specified mathematics; full empirical benchmark remains planned.**
 
-GBBRPM v1 operates on a directed acyclic graph:
+## Domain-index core
 
-`G = (V, E)`
+For a DAG `G=(V,E)`, let `P(j)` be the predecessors of j. All supplied B, S, and tau values are finite and in [0,1].
 
-- `V`: nodes or entities
-- `E`: directed relations
-- DAG restriction: allows one-pass topological evaluation
-- topological order: computational order, not physical time
+`w_ij = S_ij * tau_ij`
 
-## Edge contribution
+`Q_ij = w_ij * R_i`
 
-For edge `i -> j`:
+`R_j = 1 - (1 - B_j) * product[i in P(j)](1 - Q_ij)`
 
-`Q_ij = S_ij * tau_ij * R_i`
+B is local disturbance; S is relation-specific susceptibility; tau is optional transmission (neutral baseline 1 where permitted). R_i is the **current accumulated** upstream state. S and tau have different intended roles, but outputs identify only their product unless independent information distinguishes them.
 
-where:
+Evaluate once in topological order. This order expresses computational dependence, not physical time. R is a dimensionless comparative index in domain cases, not a calibrated probability. Branching does not conserve a physical quantity that must be divided among outgoing edges.
 
-- `R_i` is the **current accumulated upstream risk**, not merely the original disturbance;
-- `S_ij` is relation-specific susceptibility;
-- `tau_ij` is optional transmission or influence; and
-- `Q_ij` is the incoming contribution reaching node `j`.
+For a source or isolated node, the empty product is 1, hence `R_j=B_j`, not automatically 1. A node may have both local and incoming disturbance. Every Q and R remains in [0,1], and increasing an independent primitive input on a fixed graph cannot decrease node states. Rankings can nevertheless change.
 
-## Receiving-node update
+The update is the established probabilistic-sum t-conorm. Boundedness does not correct shared-origin dependence. `S=1` does not imply `R=1`; it only removes susceptibility attenuation on that edge.
 
-`R_j = 1 - (1 - B_j) * product over i in P(j) of (1 - Q_ij)`
+## Small core calculation
 
-where:
+With source states 0.60 and 0.30, susceptibilities 0.50 and 0.40, tau=1, and receiver local input 0.10:
 
-- `B_j` is local disturbance at `j`;
-- `P(j)` is the predecessor set; and
-- `R_j` becomes the current state used for later downstream propagation.
+`R_receiver = 1 - 0.90 * 0.70 * 0.88 = 0.4456`.
 
-## Source-node behavior
+A later edge with S=0.75, tau=1, and no receiver local input gives `R_next=0.3342`. Appendix A supplies the complete trace. These are worked arithmetic, not benchmark findings.
 
-For a source with no predecessors, the product over an empty set equals `1`:
+## Separate stochastic reference
 
-`R_j = 1 - (1 - B_j)(1) = B_j`
+Only in this benchmark, B specifies initial Bernoulli probabilities and w specifies conditional Bernoulli edge-transmission probabilities:
 
-Therefore, a source node can have local disturbance. It does not need a special propagation equation.
+`Z_j ~ Bernoulli(B_j)`; `E_ij ~ Bernoulli(w_ij)`.
 
-## Why risk stays bounded
+`X_j = Z_j OR any_i(X_i AND E_ij)`; `pi_j = Pr(X_j=1)`.
 
-If `B`, `S`, `tau`, and upstream `R` are all in `[0,1]`, then every `Q` lies in `[0,1]`. Every complement term also lies in `[0,1]`. Their product lies in `[0,1]`, so subtracting from one keeps `R_j` in `[0,1]`.
+All primitive Z and E draws are mutually independent. Derived node events may be dependent. Each primitive is drawn once per trial and reused through all of its consequences. Conditional transmission uses **w, not Q**; sampling X_i and then transmitting with w*R_i would count the upstream marginal twice.
 
-## Why it is monotone
+## Conditional bracket
 
-Increasing a valid local disturbance or incoming contribution cannot decrease final risk because the update reduces the remaining complement. However, the size of the increase may diminish near saturation.
+| Symbol | Meaning |
+|---|---|
+| M | Recursive maximum: `max(B_j, max_i(w_ij*M_i))` |
+| T | Exact target marginal on the specified restricted in-arborescence |
+| pi | Exact activation marginal in the full declared process |
+| R | Ordinary complement-product recursion |
+| H | Recursive clipped addition: `min(1, B_j + sum_i(w_ij*H_i))` |
 
-## Bounded multi-source aggregation
+Under the finite-DAG and independent-primitive assumptions:
 
-For two incoming contributions and no local disturbance:
+`M_j <= T_j <= pi_j <= R_j <= H_j`.
 
-`R = 1 - (1 - Q1)(1 - Q2)`
+The restricted tree must preserve one consistently chosen maximum-weight path from every positive-path ancestor, the original local terms and weights, and the target, with no positive-path threshold. Arbitrary pruning does not inherit `T>=M`. Edge deletion gives `T<=pi`; disjoint incoming primitive subtrees make tree evaluation exact. The R upper bound follows established positive association and topological induction.
 
-This is greater than either contribution alone but cannot exceed `1`.
+Consequently `0 <= R-pi <= R-T <= R-M` when T is computed. Target-specific trees have additional construction/evaluation cost. `T_a>R_b` certifies `pi_a>pi_b`; `M_a>R_b` is a cheaper sufficient certificate. Overlapping brackets are inconclusive. Pointwise bound ordering does not guarantee ranking superiority.
 
-It does not prove the contributions are probabilistically independent. Shared ancestry is diagnosed separately.
+These guarantees do not apply to domain probabilities, dependent primitives, cycles, arbitrary cascade mechanisms, or the ancestry-grouping diagnostic. The manuscript credits established bounding arguments rather than claiming a first theorem.
 
-## Worked miniature example
+## Shared-origin control
 
-Suppose:
+For m edge-disjoint branches, each with path product `u=p^ell`, shared source probability b gives `pi_shared=b*(1-(1-u)^m)`. Independent origins with matching branch-start marginals give `pi_independent=1-(1-b*u)^m`. GBBRPM gives the second expression in both cases.
 
-- source `N1`: `B1 = 0.60`, so `R1 = 0.60`;
-- source `N4`: `B4 = 0.30`, so `R4 = 0.30`;
-- `S_12 = 0.50`, giving `Q_12 = 0.30`;
-- `S_42 = 0.40`, giving `Q_42 = 0.12`;
-- receiving node `N2`: `B2 = 0.10`.
+For two branches the shared-origin slack is `b*(1-b)*u^2`. At b=0.5 and u=1, pi=0.5 and R=0.75. At b=1 and u=0.25, both equal 0.4375, whereas retaining one strongest branch gives 0.25. Shared ancestry alone therefore does not force positive slack, and pruning is not automatically a correction.
 
-Then:
-
-`R2 = 1 - (1 - 0.10)(1 - 0.30)(1 - 0.12)`
-
-`R2 = 1 - (0.90)(0.70)(0.88) = 0.4456`
-
-If `S_23 = 0.75`, `tau_23 = 1`, and `B3 = 0`:
-
-`Q_23 = 0.75 * 1 * 0.4456 = 0.3342`
-
-`R3 = 0.3342`
-
-This demonstrates current-state recursion: `N3` receives the accumulated `R2`, not only an original source score.
-
-For the manuscript's complete generic trace—including source behavior, convergence, local disturbance, downstream recursion, ranking, and ties—use **Appendix A** during consultation or examiner questioning.
-
-## Susceptibility mapping used in drainage and Component 2
-
-`S_ij = min(1, L_ij / C_ij)`
-
-This mapping is:
-
-- bounded;
-- monotone;
-- simple to audit; and
-- domain-specific rather than universal.
-
-Clipping at one prevents the bounded model input from exceeding its declared range. After an edge reaches `S = 1`, it is saturated, but other edges may still increase when a global load scale changes; therefore, downstream risk can continue to change.
-
-## Neutral transmission baseline
-
-The baseline uses `tau = 1` so unsupported heterogeneous transmission is not invented. Uniform non-neutral sweeps test sensitivity only and are not calibration.
-
-## Ranking and ties
-
-Nodes are ordered by descending final `R`. Equal values retain equal standing. The model does not introduce arbitrary tie-breaking unless an external decision rule is explicitly added.
-
-## Likely examiner questions
-
-### “Why multiply S, tau, and R?”
-
-The product makes each factor a gate on the incoming contribution. If susceptibility or transmission is zero, no contribution passes. If both are one, the full current upstream state passes.
-
-### “Can local disturbance and incoming risk coexist?”
-
-Yes. The local complement `(1 - B_j)` is multiplied with the incoming complements, so the node can contain both inherited and locally introduced risk.
-
-### “Why not add contributions?”
-
-Simple addition can exceed one and requires clipping after aggregation. The multiplicative complement is intrinsically bounded and saturating.
-
-### “Is R time-dependent?”
-
-Not in v1. “Current state” means the state already computed earlier in topological order for the evaluated scenario, not a time-series state.
+Sources: Chapter 3 formulation; `chapters/benchmark_bound.tex`; `chapters/reference_benchmark.tex`.
