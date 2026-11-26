@@ -51,8 +51,25 @@ h=\sqrt{\frac{\log(2|V|/0.05)}{2N}}.
 \]
 This conservative concentration bound applies to the sampling estimator
 across nodes in one scenario; it is not an error bound for GBBRPM or a
-simultaneous guarantee across every experiment. Monte Carlo will be checked
-against enumeration on the eligible fixtures. Validation discrepancies and
+simultaneous guarantee across every experiment. To make the full
+prospective scenario inventory computationally tractable without altering
+the stochastic model, batched Monte Carlo sampling of Equation~(3-10) will
+be implemented via a Numba-compiled, vectorized \texttt{uint64} bit-packed
+topological bitwise-propagation kernel over compressed sparse row (CSR)
+predecessor integer arrays. Each 64-bit register instruction advances 64
+independent i.i.d.\ Bernoulli trial trajectories in parallel across
+topological order in memory-bounded chunks of 10{,}000 trials under
+predeclared per-scenario seeds. Because bitwise register packing is an
+exact algebraic equivalent of scalar trial-by-trial Boolean evaluation, it
+preserves exact i.i.d.\ Bernoulli draws and full validity of the Hoeffding
+intervals in Equation~(3-11), while reducing execution time for the full
+benchmark workload (approximately $88.7\times10^9$ edge-trial checks) from
+days to minutes. Before production runs, the exact enumeration solver will be verified
+against Equation~(3-15) closed forms to $<10^{-12}$, and the vectorized
+bit-packed Monte Carlo kernel will be verified for exact parity ($<10^{-12}$)
+against a scalar trial-by-trial reference on shared primitive draws as well
+as coverage against exact enumeration ($\le16$ non-degenerate primitives)
+and Equation~(3-15) within the Hoeffding intervals of Equation~(3-11). Validation discrepancies and
 interval coverage will be recorded, not silently removed. Graphs sharing
 primitive draws will share the same reference for all deterministic methods.
 
@@ -86,6 +103,21 @@ agreement in this family. With $b=0.5$ and $u=1$, the reference is $0.5$
 and GBBRPM is $0.75$. With $b=1$ and $u=0.25$, both are $0.4375$;
 retaining only the strongest branch gives $0.25$. These algebraic controls
 will prevent strongest-path pruning from being assumed correct in advance.
+To examine shared-source dependence systematically across analytical,
+algorithmic, and physical settings, these 560 matched shared-versus-independent
+branch controls are paired directly with the prospective ancestry-label
+propagation and connected-component overlap diagnostic in
+Section~\ref{behavioral-evaluation} (restricted to positive-contribution
+edges $Q_{ij}>0$) and linked to concrete real-world reconvergence
+structures: the verified DPWH Bitan-ag--Kolambog urban drainage DAG in
+Section~\ref{domain-parameterization} \citep{dpwh2026foi,upplanades2016},
+which exhibits a physical shared-ancestry reconvergence diamond splitting at
+\texttt{J\_\allowbreak AGORA\_\allowbreak SPLIT} across the main channel
+(\texttt{BCI-1B\_\allowbreak POST} $\to$ \texttt{BCI-1A\_\allowbreak UP})
+and box-culvert diversion (\texttt{BDC-1}) before reconverging at the Agora
+confluence (\texttt{J\_\allowbreak AGORA\_\allowbreak CONF}, PCSWMM
+junction \texttt{J5}), alongside the shared \texttt{qs} and \texttt{send}
+dependency paths in the Express~4.18.2 software graph.
 
 \begin{table}[H]
 \centering
@@ -127,7 +159,14 @@ pairs consistent with a seeded random node ordering.
 $\lceil\sqrt{|V|}\rceil$ ordered layers, randomize order within each layer,
 and sample edges uniformly between adjacent layers. The available-pair
 count will be checked before sampling; no hidden generator fallback will
-replace an infeasible configuration.
+replace an infeasible configuration. Under front-loaded even layer
+allocation, all four planned sizes satisfy feasibility for $2|V|$
+adjacent-layer edges: $|V|=20$ (5 layers of 4) yields $64\ge40$ available
+pairs ($62.5\%$ adjacent-layer density); $|V|=50$ (8 layers of sizes
+$7,7,6,6,6,6,6,6$) yields $271\ge100$ pairs ($36.9\%$ density); $|V|=100$
+(10 layers of 10) yields $900\ge200$ pairs ($22.2\%$ density); and
+$|V|=250$ (16 layers: ten of 16 and six of 15) yields $3{,}669\ge500$ pairs
+($13.6\%$ density; exceeding $3{,}600$ under any balanced partition).
 \item A preferential-attachment DAG will start with all ten forward edges
 among five ordered nodes. Each later node will choose two distinct earlier
 predecessors without replacement, proportional to their current total degree
@@ -168,10 +207,21 @@ will not be merged with the primary uniform summaries.
 
 The record will include depth, degree distributions, reachability, source
 coverage, and the fraction of receivers with overlapping incoming local-origin
-lineages. Structural overlap will not be equated with statistical dependence
-strength. Family comparisons will be descriptive, because depth and degree
-patterns differ even with equal node and edge counts. The fixed branch
-family will supply the controlled dependence manipulation.
+lineages. In the layered family, reachability and source-layer coverage will
+be logged explicitly by graph size because the fixed $\lceil0.10|V|\rceil$
+initial-activation rule interacts with layer width: at $|V|=20$, activating
+2 of the 4 Layer-1 nodes leaves 2 Layer-1 nodes structurally unreachable
+despite the high $62.5\%$ adjacent-layer density (similarly, at $|V|=50$,
+5 of 7 Layer-1 nodes are active, leaving 2 Layer-1 nodes unreachable); at
+$|V|=100$, all 10 Layer-1 nodes are activated; and at $|V|=250$, activating
+25 nodes covers all 16 Layer-1 nodes plus 9 Layer-2 nodes alongside lower
+($13.6\%$) adjacent-layer density. Recording these structural-regime shifts
+explicitly prevents size-dependent source coverage from being conflated
+with pure scaling behavior. Structural overlap will not be equated with
+statistical dependence strength. Family comparisons will be descriptive,
+because depth and degree patterns differ even with equal node and edge
+counts. The fixed branch family will supply the controlled dependence
+manipulation.
 
 A further 12 scenarios will use the original Express 4.18.2 topology,
 containing 71 nodes and 128 edges. The original \texttt{nodes.csv} and
@@ -223,8 +273,12 @@ checks under straightforward edge-by-edge execution. The 48 additional
 million-trial audits add
 $10.08\times10^9$ such checks; the 144 heterogeneous scenarios add
 $3.024\times10^9$ at 100{,}000 trials. These counts are workload estimates,
-not measured runtimes; implementations may avoid many literal checks.
-Extrapolations will include the extra per-target tree costs and be compared
+not measured runtimes; the vectorized \texttt{uint64} bit-packed CSR kernel
+(Section~\ref{stochastic-reference}) evaluates 64 trials per bitwise
+register instruction in 10{,}000-trial chunks and avoids literal scalar
+edge-by-edge loops.
+Extrapolations will include the extra per-target tree costs and Two-Stage
+Certified Top-$k$ Screening timings, and will be compared
 with the compute allocation recorded before evaluation. If the plan is not
 feasible, batching or a validated equivalent implementation will be tried
 first. Any reduced scenario grid, trial count, or precision-audit inventory
@@ -371,8 +425,54 @@ without assuming that more reconvergence necessarily means more error.
 Associations across unmatched graph families will be descriptive; the matched
 branch family will provide the controlled dependence comparison.
 
+For the Two-Stage Deterministic Certified Top-$k$ Screening harness
+(Section~\ref{certified-screening}), evaluated on candidate set $C$
+($B_j=0$) across fixed budgets $k=\max(1,\lceil f|C|\rceil)$ for
+$f\in\{0.10,0.20,0.30\}$, four pre-registered metrics will be reported per
+graph family, size, weight regime, and source setting:
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item \textit{Stage~1 and Stage~2 deterministic resolution rate} with zero
+Monte Carlo trials, and the complementary \textit{boundary-band fraction}:
+\[
+\begin{aligned}
+\operatorname{Res}_k^{(s)}&=\frac{|I_k^{(s)}|+|O_k^{(s)}|}{|C|},\\
+\operatorname{Band}_k^{(s)}&=\frac{|U_k^{(s)}|}{|C|}=1-\operatorname{Res}_k^{(s)},
+\qquad s\in\{1,2\}.
+\end{aligned}
+\eqtag[Two-stage certified screening resolution and boundary-band metrics]{3-17a}
+\]
+\item \textit{Boundary-band reduction and exact full-certification rate}:
+the Stage~1 to Stage~2 reduction $|U_k^{(1)}|/|C|\to|U_k^{(2)}|/|C|$
+achieved by targeted $T_j$ evaluation on $U_k^{(1)}$ alone, together with
+the fraction of scenarios achieving complete deterministic certification
+($|U_k^{(s)}|=0$).
+\item \textit{Paired wall-clock speedup}: end-to-end runtime ratio of
+Two-Stage Certified Top-$k$ Screening relative to both full-graph
+per-target $T_j$ evaluation ($O(|V|(|V|+|E|))$) and $N=100{,}000$-trial
+vectorized bit-packed Monte Carlo on the same prepared CSR graphs.
+\item \textit{Zero-false-certification assertion}: automated verification
+against exact $\pi_j$ on all exact-solvable fixtures (and against
+Hoeffding-intersected intervals $[L'_j,U'_j]$ on Monte Carlo scenarios)
+asserting zero certified-IN nodes outside $\mathcal{T}_k^*$ and zero
+certified-OUT nodes inside $\mathcal{T}_k^*$; any violation will be treated
+as a fatal implementation defect.
+\end{enumerate}
+
+To evaluate the self-diagnosing bracket-width reliability indicator
+$W_j=R_j-M_j$ (Equation~(3-14c)), the study will test empirically across
+the matched-branch, synthetic-DAG, and real-topology scenarios whether
+zero-cost $W_j$ (nodewise and via scenario-level mean, maximum, and
+top-$k$-boundary summaries) reliably flags high-distortion ($R_j-\pi_j$),
+reversal-prone, and high-regret regimes without access to $\pi_j$.
+Spearman rank correlation between $W_j$ and actual upper slack, together
+with threshold-screening precision and recall for identifying scenarios
+with nonzero interval-resolved reversals or selection regret, will be
+reported to establish an empirical stop-or-refine guideline.
+
 The main comparisons will be paired by graph and scenario. They will ask
-when the analytic bounds are tight and whether complement-product recursion
+when the analytic bounds are tight, when Two-Stage Certified Top-$k$
+Screening and $W_j$-guided refinement provide actionable deterministic
+resolution and runtime savings, and whether complement-product recursion
 improves receiving-state selection over simpler rules or the restricted-tree
 comparator. Clipped sum will remain an inexpensive comparator and outer upper bound.
 Its saturation fraction will be measured rather than presumed to make it

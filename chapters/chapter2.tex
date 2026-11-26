@@ -47,7 +47,7 @@ problem. Inspection and maintenance resources are finite, so not every
 component can receive equal attention at the same time. Existing
 drainage studies explicitly frame critical-component identification as
 useful for targeted management, maintenance, monitoring, resilience, or
-dredging decisions \citep{simone2022}, \citep{simone2023}, \citep{dastgir2023,dastgir2024,meijer2023,zhang2025}. The practical
+dredging decisions \citep{simone2022,simone2023,dastgir2023,dastgir2024,meijer2023,zhang2025}. The practical
 decision problem is therefore not only to identify which components are
 locally impaired but also to determine which components deserve greater
 attention when the surrounding network is considered.
@@ -172,7 +172,7 @@ Cascading-failure models propagate physical load, capacity exceedance,
 or component failure \citep{buldyrev2010,he2019,shuang2017}. Attack graphs represent feasible
 attack paths and reachable compromise states, while Bayesian
 attack-graph approaches introduce probabilistic compromise semantics
-\citep{sheyner2002}, \citep{munoz2017}. Cyber-risk, finance, transportation, and
+\citep{sheyner2002,munoz2017}. Cyber-risk, finance, transportation, and
 infrastructure models introduce additional states such as accumulated
 risk, exposure, payment loss, systemic stress, or dynamic load
 \citep{kavallieratos2021,faraji2026,zhou2023,wu2026,petrone2018}.
@@ -331,9 +331,9 @@ has the form
 \eqtag{2-2}
 \]
 where $\ell$ accounts for a leak cause and $p_i$ are causal-effect
-parameters under the model's assumptions. Fallet-Fidry et al.
-develop evidential extensions for uncertainty in these structures
-\citep{fallet2012}. A bounded local input can occupy an analogous algebraic
+parameters under the model's assumptions. \citet{fallet2012}
+develop evidential extensions for uncertainty in these structures.
+A bounded local input can occupy an analogous algebraic
 position, but it need not mean an unmodeled probabilistic cause.
 A forward index recursion using scalar upstream states is not
 automatically equivalent to Bayesian inference over correlated parents.
@@ -352,18 +352,45 @@ R_{\mathrm{total}}(j)
 \]
 Here the factors represent resilience, linkage intensity, and receiver
 criticality \citep{faraji2026}. Current-state updating and multiplicative
-modifiers therefore already have direct risk-model precedents. The
-additive versus bounded aggregation choice is a comparison dimension,
-not evidence that all other architectural features are new.
+modifiers therefore already have direct risk-model precedents, as do
+dynamic causal weighting formulations in operational infrastructure
+domains \citep{wu2026}. Unlike additive RIPA, whose total risk can grow
+without upper bound under converging pathways, GBBRPM retains bounded
+complement-product aggregation while decoupling raw domain indicators
+from the core propagation equation.
+
+Equally important is the structural distinction between pathway risk
+propagation and direct-neighbor failure-redistribution models
+\citep{buldyrev2010,he2019,shuang2017}. In binary cascading-failure and
+load-redistribution models, failure of node~$i$ triggers a conserved load
+increment $\Delta L_{ij}$ transferred to direct neighbors, causing
+discrete collapse when updated load $L_j' = L_j + \Delta L_{ij}$ exceeds
+capacity $C_j$. By contrast, GBBRPM does not conserve or split physical
+load across outgoing branches and does not trigger binary failure
+thresholds. Instead, each outgoing edge independently applies
+non-conservative bounded influence scaling ($Q_{ij} = S_{ij}\tau_{ij}R_i$)
+and each receiver accumulates multi-hop pathway influences continuously in
+$[0,1]$ via an immediate-predecessor topological pass. At the domain end
+of the spectrum, drainage prioritization frameworks
+\citep{simone2023,dastgir2023,zhang2025} combine centrality, runoff paths,
+capacity, or siltation chains directly inside domain-coupled formulas,
+providing strong domain baselines without a reusable cross-domain
+stochastic bracket or deterministic top-$k$ certification rule.
+
+Table~\ref{tab:close-prior-art} consolidates these algebraic,
+stochastic-cascade, risk-pathway, direct-neighbor failure-redistribution,
+and domain-coupled precedents at the equation level alongside GBBRPM and
+its Two-Stage Deterministic Certified Top-$k$ Screening harness.
 
 \input{tables/table_close_prior_art}
 
-The comparison separates operator equivalence, architectural overlap,
-state interpretation, and study evidence. A different model name,
-DAG restriction, non-probabilistic label, prototype, or selected
-combination of cases will not by itself establish mathematical novelty.
-The review will need to consider equivalent formulations under other
-names; the selected comparisons are not an exhaustive database search.
+This equation-level comparison separates adopted operator algebra,
+architectural overlap, state interpretation, direct-neighbor versus
+pathway mechanics, and computational complexity. A different model name,
+DAG restriction, non-probabilistic label, or prototype alone does not
+establish mathematical novelty; the contribution must instead be judged
+by the modular adapter-to-core design, the receiving-state bracket
+operationalization, and the falsifiable comparative evidence produced.
 
 \input{chapters/cascade_prior_art}
 
@@ -466,8 +493,8 @@ zhang2024}.
 \citet{dastgir2023} explicitly compare a graph-based critical-pipe
 method with hydrodynamic modeling and report substantially lower data
 and computational requirements for the graph approach, while also
-documenting accuracy loss as complexity and stress increase. Simone et
-al. \citep{simone2022} likewise position tailored complex-network metrics as
+documenting accuracy loss as complexity and stress increase. \citet{simone2022}
+likewise position tailored complex-network metrics as
 complementary preliminary tools when full hydraulic simulation is more
 complex, data demanding, or computationally expensive.
 
@@ -500,12 +527,12 @@ meijer2023,zhang2024,zhang2025}.
 
 Drainage approaches already illustrate this diversity. Standard
 centrality may use only graph structure, whereas tailored centrality can
-incorporate intrinsic node relevance and flow direction \citep{simone2022},
-\citep{simone2023}. \citet{dastgir2023} combine runoff-related path
+incorporate intrinsic node relevance and flow direction
+\citep{simone2022,simone2023}. \citet{dastgir2023} combine runoff-related path
 information with capacity-related information for critical-pipe
 analysis. \citet{meijer2023} focus on subsystem storage and
-discharge capacities together with graph-based flow paths. Zhang et al.
-\citep{zhang2025} combine pipeline risk factors, multiple centrality measures,
+discharge capacities together with graph-based flow paths. \citet{zhang2025}
+combine pipeline risk factors, multiple centrality measures,
 edge vulnerability, and propagation-path information. Hydraulic and
 learned-surrogate approaches use substantially larger sets of rainfall,
 boundary, geometric, control, and hydraulic-state variables \citep{zhang2024}.
@@ -609,70 +636,89 @@ one node receives a higher comparative risk state than another
 \subsubsection{Unresolved Design and Evaluation Question}
 \label{architectural-and-integrative-research-gap}
 
-The operator-level problem is not the absence of bounded aggregation.
-Probabilistic sum already supplies it; leaky noisy-OR combines a background
-term and parent influences; and related risk models propagate current
-states through modifiers \citep{klement2004,fallet2012,faraji2026}.
-The study will not claim invention of these components or infer that
-their particular packaging proves a first-of-its-kind architecture.
+The reviewed literature clarifies that the unresolved gap is not the
+absence of bounded aggregation. Probabilistic-sum t-conorms already
+supply repeated complement-product aggregation, Leaky Noisy-OR combines a
+background term with parent influences on a DAG, and RIPA propagates
+current risk through multiplicative relation and context factors
+\citep{klement2004,fallet2012,faraji2026}. Association-based cascade
+bounds and restricted-tree influence approximations likewise have clear
+precedents \citep{abbe2017,abbe2020,chen2010mia,chen2010ldag}, while
+Independent Cascade supplies a conditional-transmission and live-edge
+reference \citep{kempe2003}. Rather than claiming invention of these
+established primitives, this study accounts for its contribution across
+three explicit lineage layers summarized in
+Table~\ref{tab:model-lineage-delta}.
 
-The unresolved question for the intended static comparative-index task is
-when the selected recursion gives accurate receiving-state rankings under
-a declared reference process, how shared origins and uncertain local inputs
-limit that agreement, and what computational and data costs accompany
-alternative aggregation and dependence treatments. Relation heterogeneity
-and saturation will remain separate behavior questions.
-The established algebra and the related models do not themselves
-determine which aggregator is appropriate for this declared interpretation.
-The study will examine maximum, probabilistic-sum, and bounded-sum
-conditions while preserving input and recursion controls. Association-based
-cascade bounds and restricted-tree approximation already exist
-\citep{abbe2017,abbe2020,chen2010mia}; the proposed benchmark will investigate
-bracket tightness and ranking quality, not claim that bounding cascade
-marginals or pruning influence paths is newly introduced. Independent Cascade
-provides a conditional-transmission process and live-edge reference
-\citep{kempe2003}; it does not supply calibration for the domain index.
-A controlled stochastic benchmark can expose dependence effects that agreement
-with GBBRPM itself cannot measure. The ancestry-overlap diagnostic will remain a
-candidate whose reference accuracy must be tested, distinct from MIA's
-restricted-tree calculation and LDAG's Linear Threshold computation.
+First, at the algebraic layer, GBBRPM builds directly upon the smaller
+baseline of complement-product / Leaky Noisy-OR DAG recursion, declared
+explicitly as a bounded non-probabilistic comparative index rather than
+calibrated Bayesian posteriors. Second, at the architectural layer, the
+study adds a modular adapter-to-core formulation that decouples domain
+data extraction from three normalized core roles ($B_i, S_{ij}, \tau_{ij}
+\in [0,1]$) under fail-closed DAG and finiteness contracts across urban
+drainage, software dependency, and electrical distribution domains.
+Third, at the algorithmic and evaluative layer, the study specializes
+receiving-state cascade bounding into the ordered bracket
+$M_j \le T_j \le \pi_j \le R_j \le H_j$, introduces \emph{Two-Stage
+Deterministic Certified Top-$k$ Screening} (pruning provable IN and OUT
+sets via a global $O(|V|+|E|)$ pass of $[M_j,R_j]$ before computing
+target-specific $T_j$ solely on the uncertified boundary band
+$U_k^{(1)}$), introduces the zero-cost \emph{self-diagnosing bracket
+width} $W_j = R_j - M_j$, and builds an empirical shared-ancestry and
+accuracy--cost benchmark.
 
-This is an evaluative research opportunity whose contribution will depend
-on the specification, controlled comparisons, and interpretation of
-evidence. It is not a verified absence claim about all earlier risk models.
-The literature search and equation-level comparison will be extended
-before any stronger novelty statement is made.
+This lineage also resolves two substantive comparative questions raised
+by prior work. First, GBBRPM differs sharply from direct-neighbor
+failure-redistribution cascades \citep{buldyrev2010,he2019,shuang2017}:
+rather than conserving and splitting physical load across immediate
+neighbors to trigger binary overload collapse, GBBRPM applies
+non-conservative continuous bounded scaling independently along every
+outgoing edge and accumulates multi-hop pathway influences in topological
+order. Because its scalar pass reads only immediate predecessors' states,
+shared upstream ancestry is not hidden inside the operator; instead, it
+is isolated explicitly through controlled branch experiments and
+ancestry-overlap diagnostics. Second, comparative advantage is evaluated
+empirically without overclaiming universal superiority over hydrodynamic
+simulators, learned surrogates, or exact probabilistic solvers
+\citep{dastgir2023,zhang2024}. Advantage is tested through paired bracket
+tightness ($R_j - T_j$ and $R_j - M_j$), fixed-budget top-$k$ capture and
+selection regret against matched comparators, Stage~1 and Stage~2
+deterministic zero-Monte-Carlo certification rates, and runtime/memory
+cost---while retaining and reporting unfavorable high-reconvergence,
+strong-shared-origin, and high-saturation regimes transparently.
 
-A separate question concerns whether domain mappings support the same
-index interpretation without changing the core. Comparable variable roles
-do not create a common empirical risk scale, and coherent instantiation
-does not establish outcome usefulness. Physical or operational benefit
-will require independent reference evidence. Computational efficiency,
-rank changes, or disagreement with a higher-fidelity simulator will not
-substitute for that evidence.
+\input{tables/table_model_lineage_delta}
 
+A separate evaluation boundary concerns cross-domain instantiation.
+Comparable variable roles ($B_i, S_{ij}, \tau_{ij}$) do not create a
+common empirical risk scale across domains, and coherent structural
+instantiation (Gate~A) does not establish operational outcome usefulness
+(Gate~B). Physical or operational benefit requires independent reference
+evidence; computational efficiency, rank changes, or disagreement with a
+higher-fidelity simulator do not substitute for that evidence.
 Figure~\ref{fig:literature-gap} connects these precedents to the
-specific evaluation question rather than suggesting that bounded
-aggregation has no prior art.
+specific design and evaluation question addressed in Chapter~3.
 
 \input{figures/fig_literature_gap}
 
 \subsubsection{Chapter Synthesis}\label{chapter-synthesis}
 
-The literature connects local condition assessment, structural
-prioritization, and domain-rich physical simulation with established
-propagation mechanisms. It also supplies bounded non-probabilistic
-aggregation and close risk architectures
-\citep{klement2004,fallet2012,faraji2026}. These precedents require an
-explicit account of adopted mathematics rather than a novelty argument
-based on a new acronym or output label.
+The reviewed literature links local condition assessment, structural
+prioritization, direct-neighbor failure cascades, and domain-rich
+simulation with established bounded aggregation and cascade-bounding
+precedents \citep{klement2004,fallet2012,faraji2026,abbe2020,chen2010mia}.
+Consolidating these precedents at the equation level
+(Table~\ref{tab:close-prior-art}) and into a three-layer lineage
+accounting (Table~\ref{tab:model-lineage-delta}) separates adopted
+algebraic primitives from the proponent-designed modular adapter-to-core
+framework, Two-Stage Deterministic Certified Top-$k$ Screening harness,
+and self-diagnosing bracket-width reliability analysis.
 
-The study's methodological response will specify the intended index and
-investigate receiving-state reference accuracy, matched aggregation and
-recursion alternatives, shared-origin dependence, and computational cost.
-A separate stochastic benchmark will make those comparisons falsifiable
-without changing the domain index semantics. Relation heterogeneity and
-robustness will supply complementary behavior evidence. Domain instantiation will be reported separately
-from physical-outcome validation. Chapter 3 will describe that
-specification and evaluation plan; the contribution will be assessed
-through the evidence produced rather than presumed from the model name.
+Chapter~3 translates this synthesis into a formal mathematical contract
+and falsifiable benchmark protocol. It specifies the core recursion,
+parameter-determination adapters, receiving-state bracket, Two-Stage
+Certified Top-$k$ Screening procedure, matched aggregation and recursion
+comparators, shared-origin dependence diagnostics, and computational-cost
+audits, while keeping cross-domain instantiation strictly separated from
+independent physical-outcome validation.
