@@ -31,7 +31,7 @@ related background-plus-parent algebra in a probabilistic setting
 receiver modifiers with additive aggregation \citep{faraji2026}. MIA restricts
 cascade calculations to local influence trees, and association-based cascade
 bounds provide another precedent for analyzing approximation
-\citep{chen2010mia,abbe2017}. The research value of selecting these mechanisms
+\citep{chen2010mia,abbe2017,abbe2020}. The research value of selecting these mechanisms
 will therefore depend on a justified formulation and comparative evidence.
 Boundedness alone establishes neither correct receiving-state rankings nor
 practical usefulness.
@@ -42,70 +42,94 @@ or from one origin whose influence splits and reconverges. Separate
 aggregation of those terms can produce different results depending on the
 assumed process and dependence structure. Restricted-tree methods and
 cascade bounds explicitly address related approximation questions
-\citep{chen2010mia,abbe2017}. The present study will examine how source
+\citep{chen2010mia,abbe2017,abbe2020}. The present study will examine how source
 uncertainty, attenuation, and graph structure affect the selected recursion's
 reference agreement and priority ordering, including regimes where simpler
 rules or dependence treatments perform equally well or better.
 
-\begin{samepage}
-The study will specify and evaluate the \textbf{Graph-Based Bounded Risk
-Propagation Model (GBBRPM)}, the name assigned here to a particular
-architecture within graph-based risk propagation. Its core will combine local
-disturbance with modified current upstream states using the established
-complement-product operator on \textbf{directed acyclic graphs (DAGs)}.
-In domain applications, its output will be a dimensionless receiving-state
-index in $[0,1]$. The core equations will be shared, while the meanings and
-construction of local disturbance, susceptibility, and transmission will
-remain specific to each domain. A \textbf{GBBRPM evaluation engine} will
-implement the versioned equations and expose their input and contribution
-traces through a research prototype.\par
-\end{samepage}
+To address these architectural and evaluative questions systematically, the
+proponents designed the \textbf{Graph-Based Bounded Risk Propagation Model
+(GBBRPM)} as a modular adapter-to-core framework on \textbf{directed acyclic
+graphs (DAGs)}, together with a \textbf{Two-Stage Deterministic Certified
+Top-$k$ Screening} harness and a traceable \textbf{GBBRPM evaluation engine}.
+Rather than claiming a newly invented algebraic operator, the proponents
+constructed this framework by integrating the established complement-product
+aggregation primitive \citep{klement2004} with decoupled domain adapters,
+fail-closed input and acyclicity validation, and a stochastic-bracket
+evaluation harness. Its core combines local disturbance with modified current
+upstream states to produce a dimensionless receiving-state index in $[0,1]$.
+The core equations remain shared across domains, while the meanings and
+construction of local disturbance, susceptibility, and transmission remain
+explicitly separated inside each domain adapter. The proponent-designed
+evaluation engine implements the versioned contract and exposes input,
+contribution, and ranking traces through an interactive research prototype.
 
 The primary controlled evaluation will use a separately defined stochastic
 activation process with independent initial and conditional edge events.
 This construction will supply exact or uncertainty-qualified reference
 activation probabilities for matched comparisons. Under those assumptions,
 the GBBRPM recursion has a conditional nodewise upper-bound interpretation;
-Chapter 3 will state its bracket, proof, and relation to established bounding
-arguments. Experiments will evaluate bound tightness, fixed-budget receiving-
-node selection, and computational cost. This benchmark will characterize the
-mechanism under its specified process. Domain-index inputs will retain their
-own meanings, and practical usefulness will require independent outcomes
-appropriate to the selected domain task.
+Chapter~3 states its receiving-state bracket, formal assumptions, proof, and
+relation to established bounding arguments. Built directly on that bracket
+without altering the core equations, Two-Stage Deterministic Certified
+Top-$k$ Screening and the zero-cost scalar bracket width $W_j = R_j - M_j$
+will be evaluated alongside matched comparators for bound tightness,
+fixed-budget receiving-node selection, deterministic certification rate, and
+computational cost. This benchmark characterizes the mechanism under its
+specified process; domain-index inputs retain their own meanings, and
+practical usefulness requires independent outcomes appropriate to each domain
+task.
 
 Urban drainage supplied the original practical motivation. Camera-based
 blockage assessment provides local condition information, while graph-based
 critical-pipe and weakest-link analyses evaluate connected-system behavior
 \citep{vandaele2024,dastgir2023,meijer2023}. These approaches illustrate why
 local condition and network-context assessment deserve separate attention.
-The proposal will retain drainage alongside software-dependency and electrical-
-network cases as supporting instantiations of the common core. Their purpose
-will be to examine defensible mappings, DAG eligibility, and evidence limits.
-Three instantiations will not establish universal applicability, and their
-scores will not be pooled as a common physical risk scale. Preliminary
-worked calculations and exploratory findings will be retained in the
-appendices; the proposed evaluation protocols will be specified in Chapter 3.
+Through an official Department of Public Works and Highways (DPWH) Freedom of
+Information (FOI) release (\texttt{FOI-REQ-2026-7383};
+\citealp{dpwh2026foi,upplanades2016}), the study verified an eligible
+real-world Cagayan de Oro urban drainage reach DAG
+(\texttt{drainage\_\allowbreak dpwh\_\allowbreak cdo\_\allowbreak bitanag\_\allowbreak kolambog\_\allowbreak v1}: 11 nodes, 11 directed
+edges, engineering susceptibilities $S_{ij} \in [0.4639, 0.8471]$, Manning
+conveyance checks within $1\%$, and real shared-ancestry reconvergence at the
+Agora confluence \texttt{J\_AGORA\_CONF} / PCSWMM \texttt{J5}), which passes
+structural instantiation eligibility (Gate~A) using Tier-2 controlled
+blockage injections while retaining agency flood-hotspot reports as
+exploratory context only (Gate~B fail). The proposal examines this drainage
+reach alongside software-dependency (\texttt{Express 4.18.2}) and
+electrical-network (\texttt{Caltech SoCal 28-Bus} Component~2;
+\citealp{xie2025}) instantiations of the common core to evaluate defensible
+mappings, DAG eligibility, and evidence limits. Three instantiations do not
+establish universal applicability, and their scores are never pooled onto a
+common physical risk scale. Preliminary worked calculations and exploratory
+findings are retained in the appendices; the evaluation protocols are
+specified in Chapter~3.
 
 \subsection{Statement of the Problem}\label{statement-of-the-problem}
 
 The central problem is to determine when GBBRPM's complement-product
 recursion gives useful receiving-state rankings under a declared reference
-process, how shared ancestry limits that agreement, and what computational
-tradeoffs accompany alternative mechanisms. Existing aggregation,
-restricted-tree approximation, and cascade-bounding methods establish
-relevant precedents \citep{klement2004,chen2010mia,abbe2017}. The proposed
-study will therefore assess the specified architecture against matched
+process, how shared ancestry limits that agreement, to what extent its
+analytic bracket enables deterministic top-$k$ certification and self-diagnosed
+reliability, and what computational tradeoffs accompany alternative mechanisms.
+Existing aggregation, restricted-tree approximation, and cascade-bounding
+methods establish relevant precedents
+\citep{klement2004,chen2010mia,abbe2017,abbe2020}. The proposed study will
+therefore assess the proponent-designed architecture against matched
 comparators rather than infer its contribution from a new name, a bounded
 formula, or different scores alone.
 
 The controlled comparison will hold graph and primitive inputs fixed across
 methods while varying predeclared source, attenuation, and topology conditions.
 Maximum and clipped-additive aggregation, local-only scoring, a recursion
-ablation, a restricted-tree comparator, and the ancestry-aware diagnostic will
-provide distinct comparison conditions. The analytic benchmark bracket will
-establish nodewise score bounds under independent primitive events; the
-experiments will determine their tightness and the resulting selection quality.
-A tighter score bound will not automatically imply a better ordering.
+ablation, a restricted-tree comparator, the published DAG lower bound of
+\citet{abbe2020}, and the ancestry-aware diagnostic will provide distinct
+comparison conditions. The analytic benchmark bracket will establish nodewise
+score bounds under independent primitive events and support Two-Stage
+Deterministic Certified Top-$k$ Screening; the experiments will determine
+bound tightness, certification coverage, bracket-width reliability, and the
+resulting selection quality. A tighter score bound will not automatically
+imply a better ordering.
 
 This evaluation will address a receiving-state task: accumulated local and
 inherited influence at candidate nodes. Its stochastic reference will define
@@ -125,21 +149,24 @@ It will address the following research questions:
 
 \begin{enumerate}[label=\arabic*.,leftmargin=*]
 \item How can local disturbance, current upstream state, relation-specific
-modifiers, and bounded aggregation be formulated into GBBRPM for
-comparative node-risk prioritization on DAGs?
+modifiers, and bounded aggregation be designed and formally specified into
+GBBRPM for comparative node-risk prioritization on DAGs?
 \item How can the proposed formulation be implemented reproducibly in a
 GBBRPM evaluation engine and presented in a prototype that preserves
-input validation and computational traceability?
+fail-closed input validation and computational traceability?
 \item Under an explicitly specified stochastic cascade reference, how do
 GBBRPM, maximum aggregation, clipped additive aggregation, local-only
-scoring, a local-upstream recursion ablation, and a restricted-tree
-comparator differ in bound tightness and fixed-budget node selection?
+scoring, a local-upstream recursion ablation, a restricted-tree
+comparator, and Two-Stage Deterministic Certified Top-$k$ Screening differ in
+bound tightness, certification coverage, and fixed-budget node selection?
 \item How do shared ancestry, source uncertainty, and attenuation affect
-the receiving-state bracket's tightness and ranking quality; when does an ancestry-aware diagnostic
-improve or worsen them; and what mathematical and robustness properties
-characterize the frozen core?
+the receiving-state bracket's tightness, scalar width reliability
+($W_j = R_j - M_j$), and ranking quality; when does an ancestry-aware
+diagnostic improve or worsen them; and what mathematical and robustness
+properties characterize the frozen core?
 \item What runtime, memory, and input requirements accompany GBBRPM,
-the matched comparators, and the reference solvers at stated precision?
+Two-Stage Certified Top-$k$ Screening, the matched comparators, and the
+reference solvers at stated precision?
 \item Can the same core be instantiated coherently in drainage,
 software-dependency, and electrical-network cases, and what applicability
 limits follow from each case's data and evaluation?
@@ -149,38 +176,48 @@ limits follow from each case's data and evaluation?
 
 \subsubsection{General Objective}\label{general-objective}
 
-The general objective is to specify, implement, and evaluate GBBRPM for
-bounded receiving-state prioritization on directed acyclic graphs, determine
-its reference accuracy and computational tradeoffs under controlled
-aggregation and dependence conditions, and establish the evidence limits
-of its drainage, software-dependency, and electrical-network instantiations.
+The general objective is to design, specify, implement, and evaluate GBBRPM
+for bounded receiving-state prioritization on directed acyclic graphs,
+determine its reference accuracy, deterministic screening effectiveness, and
+computational tradeoffs under controlled aggregation and dependence
+conditions, and establish the evidence limits of its drainage,
+software-dependency, and electrical-network instantiations. Within this
+objective, \emph{design} refers to the proponent-constructed modular
+adapter-to-core architecture, Two-Stage Deterministic Certified Top-$k$
+Screening harness, and traceable software workflow, whereas \emph{specify}
+refers to the formal mathematical contract governing graph admissibility,
+bounded parameter semantics, recursive equations, analytical assumptions, and
+the stochastic-bracket evaluation protocol.
 
 \subsubsection{Specific Objectives}\label{specific-objectives}
 
 Specifically, the study aims to:
 \begin{enumerate}[label=\arabic*.,leftmargin=*]
-\item formulate GBBRPM by specifying its DAG representation, bounded state
-semantics, local disturbance, relation-specific modifiers, recursive update
-rule, aggregation mechanism, assumptions, and expected mathematical
+\item design and formally specify GBBRPM by defining its modular
+adapter-to-core architecture, DAG representation, bounded state semantics,
+local disturbance, relation-specific modifiers, recursive update rule,
+aggregation mechanism, formal assumptions, and expected mathematical
 properties;
 \item implement a reproducible deterministic evaluation engine and an
-interactive research prototype that will validate inputs, execute the same
-versioned core, and expose traceable node states, edge contributions, and
-rankings;
-\item evaluate receiving-state error and fixed-budget node selection against
-exact or uncertainty-qualified stochastic references using matched aggregation
-comparators, a recursion ablation, and a restricted-tree comparator,
-while separately characterizing
+interactive research prototype that will enforce fail-closed input validation,
+execute the same versioned core, and expose traceable node states, edge
+contributions, bracket widths, and rankings;
+\item evaluate receiving-state error, fixed-budget node selection, and
+Two-Stage Deterministic Certified Top-$k$ Screening against exact or
+uncertainty-qualified stochastic references using matched aggregation
+comparators, a recursion ablation, a restricted-tree comparator, and a
+published DAG lower bound, while separately characterizing
 heterogeneous-input effects and saturation;
 \item characterize shared-origin dependence under controlled source and
-attenuation changes, evaluate an ancestry-aware diagnostic against the same
-reference, derive the benchmark bracket with its assumptions, and establish
-the frozen core's analytical properties, boundary
-behavior, sensitivity, and perturbation robustness;
-\item characterize the evaluation engine's computational and input
-requirements through complexity analysis, runtime and memory measurements,
-and a documented comparison of required information and modeled mechanisms;
-and
+attenuation changes, evaluate both the zero-cost bracket-width reliability
+indicator ($W_j = R_j - M_j$) and an ancestry-aware diagnostic against the
+same reference, formalize the benchmark bracket with its assumptions, and
+establish the frozen core's analytical properties, boundary behavior,
+sensitivity, and perturbation robustness;
+\item characterize the evaluation engine's and certified screening harness's
+computational and input requirements through complexity analysis, runtime and
+memory measurements, and a documented comparison of required information and
+modeled mechanisms; and
 \item assess whether the same core formulation can be instantiated
 coherently in the three selected domains through documented DAG
 construction, parameter mappings, within-domain experiments, and explicit
@@ -188,143 +225,404 @@ evidence and applicability limits.
 \end{enumerate}
 
 Literature synthesis will inform the design requirements and interpretation
-of these objectives. The principal research outputs will be the specified
-architecture, comparative evaluation evidence, and an account of accuracy,
-cost, and applicability conditions. The evaluation engine and prototype
-will support reproducibility and inspection of those outputs.
+of these objectives. The principal research outputs will be the designed and
+specified architecture, comparative evaluation evidence, certified screening
+results, and an explicit account of accuracy, cost, and applicability
+conditions. The evaluation engine and prototype will support reproducibility
+and inspection of those outputs.
+
+\subsubsection{Research Hypotheses and Measurable Evaluation Criteria}
+\label{research-hypotheses}
+
+To maintain a clear boundary between mathematical deduction and empirical
+testing, the study strictly separates \emph{proven mathematical invariants}
+from \emph{falsifiable empirical hypotheses}. Under the formal contract and
+Assumptions~A1--A5 detailed in Chapter~3, boundedness ($R_j \in [0,1]$), local
+and global monotonicity with respect to independently increased $B$, $S$, or
+$\tau$ on a fixed DAG, and the conditional independent-primitive
+receiving-state bracket $M_j \le T_j \le \pi_j \le R_j \le H_j$ follow
+analytically by topological induction and Harris--FKG positive association.
+These invariants are therefore enforced as zero-tolerance formal verification
+checks in automated tests rather than framed as uncertain experimental
+hypotheses; any discrepancy against an exact solver signals an implementation
+or assumption violation.
+
+By contrast, the empirical benchmark tests five falsifiable research
+hypotheses ($H_1$--$H_5$) across the predeclared controlled scenario suite,
+retaining null, equivalent, and unfavorable regimes honestly:
+
+\begin{enumerate}[label=\textbf{H\arabic*.},leftmargin=*]
+\item \textbf{Bracket Tightness and Dependence Scaling.} Under the
+independent-primitive stochastic reference, the one-sided GBBRPM upper slack
+$R_j - \pi_j$ and tree-refined bracket width $R_j - T_j$ will remain small in
+low-reconvergence or high-attenuation regimes, but will increase
+systematically with overlapping shared-origin ancestry, intermediate source
+uncertainty ($0 < b < 1$), and higher effective edge weights $w_{ij}$. In the
+matched branch controls, $R_j - \pi_j$ will be strictly larger under uncertain
+shared origins ($0 < b < 1$) than under matched independent origins (where
+$R_j = \pi_j$), while collapsing to zero when the shared source is certain
+($b = 1$).
+\item \textbf{Fixed-Budget Top-$k$ Selection Regret vs.\ Comparators.} Over
+the candidate set $C = \{j \in V : B_j = 0\}$ at fixed budgets
+$f \in \{0.10, 0.20, 0.30\}$, GBBRPM will achieve lower or comparable
+fixed-budget selection regret ($\operatorname{Regret}_k$) and higher or
+comparable captured activation mass ($\operatorname{Capture}(\mathcal{T}_k)$)
+relative to local-only scoring, the local-upstream recursion ablation
+($R_j^{\mathrm{local\text{-}upstream}}$), and recursive clipped-additive
+aggregation ($H_j$, especially under multi-source saturation), while exposing
+measurable accuracy--distortion tradeoffs against recursive maximum ($M_j$),
+the target-specific restricted in-arborescence ($T_j$), the DAG lower bound
+of \citet{abbe2020}, and the ancestry-aware diagnostic---including
+high-overlap regimes where unequal upper slack produces interval-resolved
+pairwise rank reversals.
+\item \textbf{Two-Stage Deterministic Certified Top-$k$ Resolution and
+Speedup.} Exploiting $M_j \le T_j \le \pi_j \le R_j$, Two-Stage Deterministic
+Certified Top-$k$ Screening (Stage~1 scalar $[M_j, R_j]$ filtering in
+$O(|V|+|E|)$ followed by Stage~2 targeted $T_j$ refinement restricted to the
+uncertified boundary band $U_k^{(1)}$) will deterministically resolve a
+substantial fraction of candidate top-$k$ memberships
+$(|I_k^{(2)}| + |O_k^{(2)}|)/|C|$ with zero Monte Carlo trials and zero false
+certifications against exact $\pi_j$, shrink the uncertified boundary band
+($|U_k^{(2)}| \le |U_k^{(1)}|$), and deliver substantial wall-clock speedup
+relative to both full-graph $T_j$ computation and $N = 100{,}000$-trial Monte
+Carlo estimation.
+\item \textbf{Self-Diagnosing Bracket-Width Reliability ($W_j = R_j - M_j$).}
+Across synthetic DAG families, weights, and source regimes, the zero-cost
+scalar bracket width $W_j = R_j - M_j$---computable in a single $O(|V|+|E|)$
+pass without oracle knowledge of $\pi_j$---will exhibit strong positive
+association with both actual nodewise slack $R_j - \pi_j$ and regime-level
+interval-resolved reversal incidence, thereby serving as a computable
+reliability indicator for flagging high-distortion cases that warrant Stage~2
+or Monte Carlo escalation.
+\item \textbf{Near-Linear Computational Scaling.} On prepared sparse DAGs
+($|V| \in \{20, 50, 100, 250, 500, 1000\}$, $|E| \approx 3|V|$) and denser
+stress DAGs ($|V| \le 250$, $|E| = \lfloor 0.25|V|(|V|-1)/2\rfloor$),
+single-scenario GBBRPM validation and propagation will scale near-linearly in
+$|V|+|E|$ with $O(|V|+|E|)$ memory and orders-of-magnitude lower runtime than
+$N=100{,}000$-trial Monte Carlo estimation and full-graph $T_j$ construction,
+with complete ranking contributing only the expected $O(|V|\log|V|)$ sorting
+overhead.
+\end{enumerate}
+
+Table~\ref{tab:evaluation-criteria} consolidates the formal verification
+gates, empirical hypothesis metrics, and domain eligibility criteria that
+govern study assessment.
+
+\begin{table}[htbp]
+\centering
+\caption{Measurable verification gates, empirical hypothesis criteria ($H_1$--$H_5$), and domain eligibility standards.}
+\label{tab:evaluation-criteria}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.65cm} L L@{}}
+\toprule
+Target & Quantitative Metric / Protocol & Pass / Evaluation Standard \\
+\midrule
+\textbf{Formal Gates} \newline (Contract \& Invariants) &
+Fail-closed schema/DAG tests; exact enumeration ($\le 16$ vars); bracket check $M_j \le T_j \le \pi_j \le R_j \le H_j$; certified screening soundness &
+\textbf{Zero tolerance:} $100\%$ rejection of cycles, non-finite inputs, dual $S{+}L/C$; exact parity $<10^{-12}$ vs.\ Eq.~(3-15); $0$ bracket violations; $0$ false top-$k$ certifications \\
+\addlinespace
+\textbf{$H_1$: Tightness \& Dependence} &
+Nodewise slack $R_j-\pi_j$, widths $R_j-M_j$ \& $R_j-T_j$, and shared- vs.\ independent-origin discrepancy across 560 branch + 3,600 uniform + 144 hetero scenarios &
+Graph-weighted median/IQR across 20 held-out seeds (1001--1020); strict excess slack for $0<b<1$ shared origins, zero discrepancy at $b=1$; Hoeffding $h$ bounds unresolved gaps \\
+\addlinespace
+\textbf{$H_2$: Fixed-Budget Selection} &
+$\operatorname{Capture}(\mathcal{T}_k)$, $\operatorname{Regret}_k$ at $f\in\{0.10,0.20,0.30\}$ ($B_j=0$ candidates, 100 shared tie permutations, seed 140), Spearman $\rho$, interval-resolved reversals &
+Paired graph-level differences vs.\ local-only, $M_j$, $H_j$, $R^{\mathrm{local\text{-}upstream}}$, $T_j$, \citet{abbe2020}, and ancestry diagnostic; differences below Hoeffding margin $h|\Delta\mathcal{T}_k|$ reported unresolved \\
+\addlinespace
+\textbf{$H_3$: Certified Top-$k$ Screening} &
+Stage~1 \& Stage~2 resolution $(|I_k|+|O_k|)/|C|$, residual band $|U_k^{(2)}|/|C|$, full-certification rate ($|U_k|=0$), and wall-clock speedup &
+Non-increasing boundary band $|U_k^{(2)}|\le |U_k^{(1)}|$, $0$ false certifications, and quantified speedup over full-graph $T_j$ and $N=100{,}000$-trial MC across held-out grids \\
+\addlinespace
+\textbf{$H_4$: Width Reliability ($W_j$)} &
+Spearman/Kendall rank association and high-distortion stratification between oracle-free $W_j=R_j-M_j$ and true slack $R_j-\pi_j$ / reversal rate &
+Consistent positive association across graph families and weight regimes; explicitly report regimes where wide $W_j$ still preserves rank order or narrow $W_j$ leaves ties unresolved \\
+\addlinespace
+\textbf{$H_5$: Scaling \& Compute Cost} &
+Validation, propagation, ranking, screening, and reference runtimes (5 warm-up, 30 measured runs; median \& IQR) and peak memory on sparse ($|V|\le 1000$) and dense DAGs &
+Empirical slope consistent with $O(|V|+|E|)$ propagation / $O(|V|\log|V|)$ sorting and $O(|V|+|E|)$ memory; paired runtime ratios against comparators and $N=100{,}000$ MC \\
+\addlinespace
+\textbf{Domain Gates} \newline (Obj.~6) &
+Gate~A: valid DAG, documented raw-to-$[0,1]$ mapping, \texttt{record\_origin} tags, physics/sanity check; Gate~B: aligned independent outcome &
+Gate~A PASS verified for DPWH Bitan-ag--Kolambog, Express 4.18.2, and Caltech Comp.~2; Gate~B reported honestly as PASS or FAIL without relabeling exploratory context as validation \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \subsection{Significance of the Study}\label{significance-of-the-study}
 
 \subsubsection{Theoretical Significance}
 
-The study will specify an architecture for combining
+The study designs and formally specifies an architecture for combining
 local disturbance with recursively propagated network context on DAGs.
-The proposed methodological significance will lie in a reference-based
+The proposed methodological significance lies in a reference-based
 account of when the adopted recursion gives accurate receiving-state estimates
-under stated stochastic assumptions, how shared origins affect that agreement,
-and what computational tradeoffs accompany alternative rules. Basic operator
+under stated stochastic assumptions, when its analytic bracket enables
+zero-Monte-Carlo deterministic top-$k$ certification and self-diagnosed
+reliability, how shared origins affect reference agreement, and what
+computational tradeoffs accompany alternative rules. Basic operator
 properties and the architecture's name will not stand as the original result.
-The declared index semantics will remain separate from benchmark probabilities.
+The declared index semantics remain separate from benchmark probabilities.
 Under the synthetic independent-primitive process, the same GBBRPM recursion
-will be a nodewise upper bound; that conditional mathematical interpretation
-will not calibrate domain inputs. Existing association-based cascade bounds
-will be compared before any novelty claim \citep{abbe2017}.
-The study will distinguish properties established by the formulation from
-claims that require computational or domain evidence, including the
-difference between bounded aggregation and correction for shared-origin
+serves as a nodewise upper bound; that conditional mathematical interpretation
+does not calibrate domain inputs. Existing association-based cascade bounds
+are explicitly compared before any novelty claim \citep{abbe2017,abbe2020}.
+The study distinguishes properties established analytically by the formulation
+from empirical claims that require computational or domain evidence, including
+the difference between bounded aggregation and correction for shared-origin
 dependence.
 
 Existing propagation and risk literature supplies relevant mechanisms
 \citep{kempe2003,buldyrev2010,sheyner2002,munoz2017,petrone2018}. The proposed
-contribution will be assessed through the specification and evaluation
+contribution will be assessed through the design, specification, and evaluation
 of the selected comparative-state task. The adopted t-conorm and its
-basic properties will be credited as established mathematics
-\citep{klement2004}; their use or rederivation will not be claimed as
-a new aggregation theory. A common interface for domain-specific inputs will allow architectural
-reuse to be examined without assuming common physical semantics or
-universal applicability. Susceptibility and transmission will retain
+basic properties are credited as established mathematics
+\citep{klement2004}; their use or rederivation is not claimed as
+a new aggregation theory. A common interface for domain-specific inputs allows
+architectural reuse to be examined without assuming common physical semantics
+or universal applicability. Susceptibility and transmission retain
 distinct conceptual roles, while their separate empirical identification
-will not be inferred from outputs that depend on their product.
+is not inferred from outputs that depend on their product.
 
 \subsubsection{Practical Significance}
 
 The evaluation engine and prototype will provide an inspectable workflow for
-examining local inputs, inherited contributions, and resulting receiving-state
-rankings. The comparison will characterize how the simple scalar recursion and
-alternative mechanisms differ in benchmark agreement and selected priorities. Runtime, memory, and
-input requirements will make the cost of those choices explicit.
+examining local inputs, inherited contributions, scalar reliability widths,
+and resulting receiving-state rankings. The comparison will characterize how
+the simple scalar recursion, Two-Stage Deterministic Certified Top-$k$
+Screening, and alternative mechanisms differ in benchmark agreement,
+deterministic certification coverage, and selected priorities. Runtime,
+memory, and input requirements will make the cost of those choices explicit.
 
 The drainage, software-dependency, and electrical-network cases will document
 how the common architecture can be instantiated and where the available
 information restricts its interpretation. Potential screening or inspection
 uses will depend on defensible parameter construction and independent
 outcome evidence within each domain. Lower cost, plausible ordering, and
-coherent mappings will not alone establish maintenance benefit, exploitation
-prediction, or fault prediction. Operational decision claims will be limited
-to the tasks and outcomes actually evaluated.
+coherent mappings do not alone establish maintenance benefit, exploitation
+prediction, or fault prediction. Operational decision claims remain strictly
+limited to the tasks and outcomes actually evaluated.
+
+\subsubsection{Expected Contributions}\label{expected-contributions}
+
+To prevent ambiguity between established mathematical primitives and original
+work, the study delineates its expected contributions across three distinct
+layers:
+
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item \textbf{Credited Mathematical Primitives (Established Prior Art).}
+The complement-product update rule is the associative probabilistic-sum
+t-conorm \citep{klement2004} sharing algebraic form with Leaky Noisy-OR
+\citep{fallet2012}, and the conditional upper-bound step under independent
+Bernoulli primitives applies the established Harris--FKG positive-association
+principle also used in cascade-bounding literature \citep{abbe2017,abbe2020}.
+These components are explicitly credited to prior literature and are not
+claimed as newly invented operators or inequalities.
+\item \textbf{Proponent-Designed Modular Adapter-to-Core Formulation and
+Traceable Engine.} The proponents contribute a clean, domain-decoupled
+single-pass DAG architecture that separates raw domain adapters (mapping
+physical, advisory, or metering tables into bounded $[0,1]$ disturbance
+$B_i$, susceptibility $S_{ij}$, and transmission $\tau_{ij}$) from a
+fail-closed deterministic core engine and interactive inspection prototype.
+Unlike unbounded additive pathway frameworks such as RIPA \citep{faraji2026}
+or domain-coupled hydraulic and grid heuristics \citep{dastgir2023,zhang2025},
+the design enforces explicit non-probabilistic index semantics, fail-closed
+acyclicity and finiteness rejection, provenance tagging, and edge-level
+contribution traceability.
+\item \textbf{Algorithmic, Analytical-Evaluation, and Cross-Domain Empirical
+Contributions.} Building strictly on the frozen core without modifying its
+equations, the study contributes:
+\begin{enumerate}[label=(\alph*),leftmargin=*]
+\item \emph{Receiving-State Bracket Characterization:} an operational
+characterization of the conditional bracket
+$M_j \le T_j \le \pi_j \le R_j \le H_j$ for receiving-state prioritization
+(distinct from seed-set spread maximization in
+\citealp{kempe2003,chen2010mia,abbe2020}), quantifying slack, saturation, and
+fixed-budget selection regret across more than 4,316 controlled scenarios;
+\item \emph{Two-Stage Deterministic Certified Top-$k$ Screening:} a
+proponent-designed two-stage screening algorithm combining $O(|V|+|E|)$
+Stage~1 $[M_j, R_j]$ certification with Stage~2 targeted $T_j$ refinement
+restricted solely to the uncertified boundary band $U_k^{(1)}$, achieving
+provably sound deterministic top-$k$ membership decisions with zero Monte
+Carlo trials;
+\item \emph{Self-Diagnosing Bracket-Width Reliability ($W_j = R_j - M_j$):}
+an empirical evaluation of the zero-cost scalar width $W_j$ as an oracle-free
+diagnostic for flagging high-distortion and reversal-prone regimes;
+\item \emph{Controlled Shared-Ancestry Distortion Analysis:} exact paired
+isolation of shared- vs.\ independent-origin distortion (560 matched branch
+controls plus prospective connected-component ancestry diagnostics) mapping
+both where scalar updates remain tight and where they fail; and
+\item \emph{Cross-Domain Real-Data Instantiations and Reproducible Artifacts:}
+provenance-verified Gate~A instantiations across urban drainage (the official
+DPWH Cagayan de Oro Bitan-ag--Kolambog DAG from \texttt{FOI-REQ-2026-7383};
+\citealp{dpwh2026foi,upplanades2016}), software dependencies
+(\texttt{Express 4.18.2}), and electrical distribution
+(\texttt{Caltech SoCal 28-Bus} Component~2; \citealp{xie2025}), delivered
+alongside a frozen Git release, automated verification tests, SHA-256 output
+manifests, and dual thesis/journal reporting pipelines.
+\end{enumerate}
+\end{enumerate}
 
 \subsection{Scope and Limitations}\label{scope-and-limitations}
 
 \subsubsection{Scope of the Study}
 
-The study will cover the formulation and implementation of GBBRPM for
-static comparative node-risk assessment on DAGs. It will specify bounded
-local disturbance, susceptibility, optional transmission, edge
-contributions, node-state aggregation, topological evaluation, and
-tie-aware ranking. Controlled networks will support investigation of
-mathematical behavior, mechanism effects, robustness, shared-origin
-reconvergence, and computational cost. A separately specified stochastic
-cascade benchmark will provide exact small-graph references and Monte Carlo
-estimates with explicit sampling uncertainty. Matched shared- and independent-
-origin scenarios will be the main controlled dependence experiment; larger
-DAGs will support receiving-state and fixed-budget ranking comparisons.
-These planned experiments will be additional to the historical 136 runs.
-The bound and its proof will be conditional on the benchmark assumptions;
-probabilistic score bounds will not be asserted for domain-index outputs.
+The study covers the design, formal specification, implementation, and
+evaluation of GBBRPM for static comparative node-risk assessment on DAGs. It
+specifies bounded local disturbance, susceptibility, optional transmission,
+edge contributions, node-state aggregation, topological evaluation, scalar
+bracket-width diagnostics ($W_j = R_j - M_j$), Two-Stage Deterministic
+Certified Top-$k$ Screening, and tie-aware ranking.
 
-Three domain instantiations will be examined separately using documented
-topology and parameter mappings: drainage, software dependency, and
-electrical networks. The same core equations will be retained. The common
-object of investigation will be coherent instantiation of the architectural
-roles, rather than equality of physical outcomes or comparability of
-numerical scores across domains. Operational drainage or event-aligned
-electrical evaluation will proceed only if suitable data become available.
+The restriction to directed acyclic graphs is a deliberate, principled design
+boundary justified on three grounds:
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item \textbf{Finite Deterministic Termination without Cyclic
+Double-Counting:} Acyclicity guarantees single-pass evaluation in topological
+order with strict $O(|V|+|E|)$ time and memory complexity, terminating
+finitely without fixed-point iteration, arbitrary damping factors, or
+self-reinforcing cyclic amplification of a node's own disturbance.
+\item \textbf{Structural Alignment with Targeted Infrastructure and Software
+Subsystems:} Gravity-fed branched urban drainage reaches (such as the
+verified DPWH Bitan-ag--Kolambog catchment DAG), acyclic software package
+dependency trees (\texttt{Express 4.18.2}), and radial electrical
+distribution feeders (\texttt{Caltech SoCal 28-Bus} Component~2) naturally
+exhibit directed acyclic flow or dependency structure. Crucially, converging
+junctions receiving two or more upstream branches (in-degree $\ge 2$, such as
+the Agora confluence \texttt{J\_AGORA\_CONF} / PCSWMM \texttt{J5}) are valid
+DAG structures rather than cycles.
+\item \textbf{Validity of Topological Induction for the Receiving-State
+Bracket:} The conditional Harris--FKG upper-bound proof and the full bracket
+$M_j \le T_j \le \pi_j \le R_j \le H_j$ rely on topological induction and
+acyclic independence between an upstream node's activation $X_i$ and its
+outgoing edge transmission primitive $E_{ij}$; cycles break this inductive
+structure.
+\end{enumerate}
+
+Controlled networks will support investigation of mathematical behavior,
+mechanism effects, robustness, shared-origin reconvergence, certified
+screening coverage, and computational cost. A separately specified stochastic
+cascade benchmark will provide exact small-graph references and vectorized
+Monte Carlo estimates with explicit Hoeffding sampling uncertainty
+\citep{hoeffding1963}. Matched shared- and independent-origin branch
+scenarios (560 controls) will form the primary controlled dependence
+experiment; 3,600 uniform-weight generated DAGs, 144 heterogeneous-weight
+DAGs, and 12 \texttt{Express 4.18.2} stochastic scenarios will support
+receiving-state tightness, certified screening, and fixed-budget ranking
+comparisons. These planned experiments are additional to the historical 136
+exploratory runs. The analytic bracket and its proof are strictly conditional
+on the benchmark assumptions; probabilistic score bounds are never asserted
+for domain-index outputs.
+
+Three real-data domain instantiations will be examined separately using
+documented topology and parameter mappings: urban drainage via the official
+DPWH FOI release (\texttt{FOI-REQ-2026-7383}, \citealp{dpwh2026foi,upplanades2016};
+Gate~A pass for \texttt{drainage\_\allowbreak dpwh\_\allowbreak cdo\_\allowbreak bitanag\_\allowbreak kolambog\_\allowbreak v1} with 11
+nodes, 11 edges, $S_{ij} \in [0.4639, 0.8471]$, real shared-ancestry
+reconvergence at \texttt{J\_AGORA\_CONF}, and Tier-2 controlled blockage
+injections, while Gate~B field flood hotspots remain exploratory context
+only), software dependency (\texttt{Express 4.18.2}), and electrical
+distribution (\texttt{Caltech SoCal 28-Bus} Component~2; \citealp{xie2025}).
+The same core equations are retained across all three cases. The common
+object of investigation is coherent instantiation of the architectural roles,
+rather than equality of physical outcomes or comparability of numerical
+scores across domains. Confirmatory operational validation (Gate~B) proceeds
+only where aligned independent outcome records become available.
 
 The research prototype will support validated synthetic and user-imported
 DAG inputs, controlled parameter editing, execution of the versioned
-evaluation engine, and traceable graph and ranking outputs. Functional
-verification will assess numerical consistency, input handling, and
-presentation of the computation.
+evaluation engine, and traceable graph, contribution, and ranking outputs.
+Functional verification will assess numerical consistency, fail-closed input
+handling, and presentation of the computation.
 
 \subsubsection{Limitations of the Study}
 
-The core will be restricted to DAGs and one-pass evaluation. It will not
-represent cycles, bidirectional feedback, physical-time evolution, or full
-hydraulic or electrical dynamics. A topological order is a computational
-dependency order, not a physical propagation timeline. The index will not
-be a calibrated probability, and the local aggregator will not correct
-shared-origin dependence. Susceptibility and transmission will not be identifiable separately 
-from output states alone. The stochastic benchmark will
-quantify agreement only with its declared independent primitive process.
-It will not establish that advisory severity, hydraulic loading, or electrical
-conditions are calibrated event probabilities. The ancestry-aware diagnostic
-may discard legitimate cumulative effects and will not be presumed superior.
+\textbf{Cycle Non-Applicability and Fail-Closed Policy.} The GBBRPM v1 core
+is restricted strictly to finite DAGs and single-pass topological evaluation.
+It does not represent directed cycles, bidirectional hydraulic or electrical
+feedback, physical-time evolution, or full hydrodynamic or power-flow
+dynamics. A topological order is a computational dependency order, not a
+physical propagation timeline. Consistent with a fail-closed contract, any
+supplied graph containing a directed cycle, self-loop, or bidirectional loop
+is rejected with a reasoned validation error; the engine \emph{never}
+performs silent edge deletion, heuristic cycle breaking, or hidden strongly
+connected component (SCC) condensation. Consequently, looped urban stormwater
+grids, surcharged backwater or reverse-flow regimes, meshed power networks,
+and cyclic software dependency rings are explicitly out of scope for
+GBBRPM~v1. Applying GBBRPM~v1 to an acyclic subsystem within a larger looped
+network requires an explicit, external, documented acyclic sub-catchment or
+radial-feeder extraction with every excluded edge and interpretation boundary
+logged, whereas native feedback modeling requires a separately formulated
+iterative or SCC-based extension in future work.
 
-Interpretation will depend on the provenance, coverage, and defensibility
-of domain inputs. Synthetic networks and simulated hydraulic outputs will
-not be treated as field observations. Advisory-based software mappings
-will not establish exploitation probabilities. Controlled disturbances
-applied to measured electrical loading will not establish event-response
-prediction. The currently available electrical baseline is not aligned
-with independent outcomes for the documented switching windows.
-Inadequate field records or event-aligned outcomes may restrict evaluation
-to structural instantiation and controlled behavior.
+\textbf{Direct-Neighbor (Local-State) Assumption and Shared-Ancestry
+Collapse.} By architectural design, the scalar GBBRPM core obeys a
+\emph{direct-neighbor (local-state) assumption}: computing the receiving
+state $R_j$ at node $j$ reads only the scalar states $R_i$ of its immediate
+predecessors $i \in P(j)$ without retaining upstream path history or
+origin-lineage identifiers. While this local-state restriction enables
+$O(|V|+|E|)$ evaluation, it is the direct structural cause of shared-ancestry
+collapse: whenever disturbance from an uncertain common upstream origin
+splits across parallel paths and reconverges at a downstream junction (such
+as \texttt{J\_AGORA\_CONF} in the Bitan-ag--Kolambog drainage reach or
+synthetic diamond graphs), the scalar complement-product rule aggregates
+incoming contributions as though they arose from separate origins. Under the
+stochastic reference, this produces one-sided overestimation ($R_j \ge \pi_j$)
+and can induce pairwise rank reversals if upper slack is unequal across
+candidates. The study does not conceal this limitation; instead, it
+quantifies the distortion explicitly through matched branch controls, the
+scalar width $W_j = R_j - M_j$, and the separate ancestry-aware diagnostic in
+Chapter~3 (which itself may discard legitimate cumulative effects and is not
+presumed superior).
 
-Higher-fidelity formulations may be required for feedback, shared
-dependencies, and physical state interactions
+\textbf{Semantic, Identifiability, and Domain-Evidence Boundaries.} The
+GBBRPM index is not a calibrated probability, and susceptibility $S_{ij}$ and
+transmission $\tau_{ij}$ cannot be identified separately from output states
+alone because outputs depend on their product $w_{ij} = S_{ij}\tau_{ij}$. The
+stochastic benchmark quantifies agreement only with its declared
+independent-primitive process; it does not establish that advisory severity,
+hydraulic loading ratios, or electrical loading ratios are calibrated event
+probabilities. Interpretation depends on the provenance, coverage, and
+defensibility of domain inputs. Synthetic networks, Tier-2 controlled
+blockage injections on the DPWH Bitan-ag--Kolambog reach, and simulated SWMM
+hydraulic outputs are not field failure observations, and the June~10, 2025
+DPWH flood-hotspot records remain exploratory context rather than Gate~B
+confirmatory ground truth because they reflect existing-channel conditions
+rather than the 2016 proposed Master Plan diversion topology and lack
+non-flooded controls and pre-event blockage measurements. Likewise,
+advisory-based software mappings do not establish exploitation probabilities,
+and controlled disturbances applied to measured electrical loading do not
+establish event-response prediction because the available baseline is not
+aligned with independent switching-window outcomes.
+
+Higher-fidelity formulations may be required for cyclic feedback, correlated
+external shocks, shared dependencies, and physical state interactions
 \citep{buldyrev2010,shuang2017,petrone2018,wu2026,dastgir2024,zhang2024}.
-The study will report these omissions as tradeoffs rather than presume
-that reduced computational cost preserves predictive fidelity. Prototype
-checks will establish consistency in the tested configuration, not
-production security, multi-user readiness, usability, or operational
-utility.
+The study reports these omissions as explicit accuracy--cost tradeoffs rather
+than presuming that reduced computational cost preserves predictive fidelity.
+Prototype checks establish functional consistency in the tested
+configuration, not production security, multi-user readiness, usability, or
+operational utility.
 
 \subsection{Conceptual Framework}\label{conceptual-framework}
 
-The conceptual framework of the study begins with local disturbance and
-directed acyclic network context. The current risk state at an upstream node is
-transformed into a relation-specific contribution according to
-susceptibility and, where justified, optional transmission. Multiple
-incoming contributions are then combined with any local disturbance at
-the receiving node using a bounded aggregation rule, producing an
-updated comparative risk state. That updated state can in turn influence
-later downstream relations, allowing the modeled risk state to evolve
-recursively through the network. The resulting node states provide the
-basis for comparative prioritization.
+The conceptual framework of the study was designed by the proponents to
+separate domain-specific input construction from a reusable, bounded,
+single-pass propagation core and a rigorous comparative evaluation harness.
+At the mathematical level, the framework begins with local disturbance and
+directed acyclic network context. The current risk state at an upstream node
+is transformed into a relation-specific contribution according to
+susceptibility and, where justified, optional transmission. Multiple incoming
+contributions are then combined with any local disturbance at the receiving
+node using the established complement-product aggregation rule
+\citep{klement2004}, producing an updated comparative risk state. That
+updated state can in turn influence later downstream relations, allowing the
+modeled risk state to evolve recursively through the DAG. The resulting node
+states provide the basis for comparative prioritization.
 
-Figure~\ref{fig:conceptual-framework} distinguishes the domain-supplied
-inputs, the generic bounded propagation core, and the comparative
-decision-support output.
+Figure~\ref{fig:conceptual-framework} illustrates the equation-level data
+flow within the propagation core, distinguishing domain-supplied inputs, the
+generic bounded propagation core, and the comparative decision-support output.
 
 \input{figures/fig_conceptual_framework}
 
@@ -344,19 +642,38 @@ where $B_j$ is the local disturbance and $P(j)$ is the set of predecessors of
 node $j$. This is the established probabilistic-sum t-conorm extended
 to the local and incoming inputs \citep{klement2004}. Its adoption supplies
 bounded saturating aggregation, not a newly invented operator. Despite
-the related noisy-OR algebra, this index is not interpreted as a
-probabilistic union because its inputs are not calibrated probabilities.
+the related noisy-OR algebra \citep{fallet2012}, this index is not
+interpreted as a probabilistic union because its inputs are not calibrated
+probabilities.
 
 The resulting $R_j$ is the node's current modeled receiving state, including
 local and inherited disturbance. It is not an estimate of the benefit from
-mitigating that node. It can serve as the upstream state for later relations,
-so subsequent calculations retain the accumulated influence. Node ranking
-will be derived from the final receiving states rather than treated as an
+mitigating that node. It serves as the upstream state for later relations,
+so subsequent calculations retain accumulated influence. Node ranking is
+derived post-pass from the final receiving states rather than treated as an
 additional propagation mechanism.
 
-A separately specified stochastic reference will support
-controlled evaluation of the recursion; domain usefulness will require
+Embedding this mathematical core inside a complete research system,
+Figure~\ref{fig:unified_architecture} presents the unified end-to-end GBBRPM
+architecture and evaluation framework designed by the proponents. Layer~1
+decouples domain-specific data adapters (the DPWH Bitan-ag--Kolambog drainage
+reach, \texttt{Express 4.18.2}, and \texttt{Caltech SoCal 28-Bus}
+Component~2) and synthetic benchmark generators so that domain semantics are
+never conflated across cases. Layer~2 enforces fail-closed input and
+acyclicity validation before executing the $O(|V|+|E|)$ topological DAG
+propagator, storing full $(B_j, Q_{ij}, R_j)$ traces, applying tie-aware
+ranking, and computing the zero-cost scalar bracket width $W_j = R_j - M_j$.
+Layer~3 integrates matched comparators, exact and bit-packed Monte Carlo
+stochastic reference solvers, and the proponent-designed Two-Stage
+Deterministic Certified Top-$k$ Screening harness built directly on
+$M_j \le T_j \le \pi_j \le R_j$. Layer~4 emits traceable quantitative metrics,
+powers the interactive React/Vite and FastAPI research prototype from the
+exact same versioned core, and generates SHA-256-verified dual thesis and
+journal artifacts. A separately specified stochastic reference supports
+controlled evaluation of the recursion; domain usefulness requires
 independent outcomes rather than agreement with the index itself.
+
+\input{figures/fig_unified_architecture}
 
 \subsection{Definition of Terms}\label{definition-of-terms}
  
@@ -374,11 +691,19 @@ Ranking components according to their modeled risk states relative to one anothe
 \addlinespace
  
 GBBRPM. &
-Graph-Based Bounded Risk Propagation Model, the name assigned in this study to its proposed bounded, non-probabilistic comparative-risk model on DAGs; not an established model-family name. \\
+Graph-Based Bounded Risk Propagation Model: the modular adapter-to-core comparative-risk propagation architecture on DAGs designed by the proponents of this study by integrating established complement-product aggregation with decoupled domain adapters and stochastic-bracket evaluation; not a pre-existing model-family name. \\
 \addlinespace
  
 GBBRPM evaluation engine. &
-Software that will validate inputs and apply the versioned GBBRPM equations in topological order; the implementation of the model. \\
+Proponent-designed software that enforces fail-closed input validation and applies the versioned GBBRPM equations in topological order with full contribution tracing; the executable implementation of the model. \\
+\addlinespace
+
+Two-Stage Deterministic Certified Top-$k$ Screening. &
+A proponent-designed screening harness built on the conditional bracket $M_j \le T_j \le \pi_j \le R_j$ that uses an $O(|V|+|E|)$ scalar $[M_j, R_j]$ pass (Stage~1) followed by targeted restricted-tree $T_j$ refinement only on the uncertified boundary band $U_k^{(1)}$ (Stage~2) to certify top-$k$ membership deterministically without Monte Carlo sampling. \\
+\addlinespace
+
+Bracket-width reliability indicator ($W_j$). &
+The zero-cost scalar difference $W_j = R_j - M_j$ computed in a single topological pass without knowing $\pi_j$, evaluated as an oracle-free diagnostic for flagging high-distortion and reversal-prone regimes. \\
 \addlinespace
 
 Directed acyclic graph (DAG). &
@@ -386,7 +711,7 @@ A directed graph containing no directed cycle. This is the supported graph class
 \addlinespace
 
 Lightweight model. &
-A fixed-form, single-pass DAG model without physical-time integration or training in its core. Runtime, memory, preprocessing, and input requirements will characterize this design; reduced cost does not establish physical fidelity. \\
+A fixed-form, single-pass DAG model without physical-time integration or training in its core. Runtime, memory, preprocessing, and input requirements characterize this design; reduced cost does not establish physical fidelity. \\
 \addlinespace
 
 Stochastic reference. &

@@ -1,0 +1,169 @@
+% Unified End-to-End GBBRPM Architecture & Evaluation Framework (MOM #4).
+% Uses ONLY TikZ libraries (arrows.meta,positioning,shapes.geometric,fit,calc)
+% and colors (gbnavy,gbgray,gblight) already loaded in main.tex, with scalable
+% Palatino (\normalfont) throughout.
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\normalfont,
+  layer/.style={draw=gbgray, rounded corners=3pt, line width=0.8pt, fill=gblight!45},
+  corelayer/.style={draw=gbnavy, rounded corners=3pt, line width=1.15pt, fill=gblight!90},
+  layertitle/.style={font=\normalfont\scriptsize\bfseries, text=gbnavy, anchor=west},
+  layersub/.style={font=\normalfont\tiny\itshape, text=gbgray, anchor=east},
+  box/.style={draw=gbgray, rounded corners=2pt, line width=0.7pt, fill=white,
+    align=center, font=\normalfont\scriptsize, inner sep=3.5pt},
+  corebox/.style={draw=gbnavy, rounded corners=2pt, line width=0.95pt, fill=white,
+    align=center, font=\normalfont\scriptsize, inner sep=3.5pt},
+  accentbox/.style={draw=gbnavy, rounded corners=2pt, line width=0.95pt, fill=gblight!75,
+    align=center, font=\normalfont\scriptsize, inner sep=3.5pt},
+  flowarr/.style={-{Latex[length=2.2mm,width=1.6mm]}, line width=0.9pt, draw=gbnavy},
+  innerarr/.style={-{Latex[length=2.0mm,width=1.5mm]}, line width=0.85pt, draw=gbnavy},
+  pill/.style={draw=gbgray!65, rounded corners=2pt, fill=white, line width=0.5pt,
+    font=\normalfont\scriptsize, text=gbnavy, inner xsep=6pt, inner ysep=2.2pt, align=center}
+]
+
+% ============================================================================
+% LAYER BACKGROUNDS (drawn first so child nodes sit cleanly on top)
+% Canvas: x in [0, 18.4], y in [0, 14.55]
+% ============================================================================
+\draw[layer]     (0, 11.45) rectangle (18.4, 14.55); % Layer 1: Adapters
+\draw[corelayer] (0,  7.65) rectangle (18.4, 10.60); % Layer 2: Validation & Core Engine
+\draw[layer]     (0,  3.70) rectangle (18.4,  6.80); % Layer 3: Evaluation & Screening
+\draw[layer]     (0,  0.00) rectangle (18.4,  2.85); % Layer 4: Outputs & Artifacts
+
+% ============================================================================
+% LAYER 1: DOMAIN & SYNTHETIC INPUT ADAPTERS
+% ============================================================================
+\node[layertitle] at (0.30, 14.23) {1.\quad Domain \& Synthetic Input Adapters};
+\node[layersub]   at (18.10, 14.23) {Decoupled mappings; no cross-domain score pooling};
+
+\node[box, minimum width=4.225cm, text width=3.95cm, minimum height=2.05cm] (ad1) at (2.4125, 12.75) {%
+  \textbf{Urban Drainage}\\
+  DPWH FOI-REQ-2026-7383\\
+  Bitan-ag--Kolambog DAG\\
+  11N/11E;\, $S=\min(1,L/C)$\\
+  Tier-2 $B_i$ (Gate~A Pass)};
+
+\node[box, minimum width=4.225cm, text width=3.95cm, minimum height=2.05cm] (ad2) at (6.9375, 12.75) {%
+  \textbf{Software Dependency}\\
+  Express 4.18.2 (npm)\\
+  71N/128E;\, OSV $\to B_i$\\
+  $S_{ij}=1$;\, $\tau$-sweep\\
+  (Gate~A Pass)};
+
+\node[box, minimum width=4.225cm, text width=3.95cm, minimum height=2.05cm] (ad3) at (11.4625, 12.75) {%
+  \textbf{Electrical Distribution}\\
+  Caltech SoCal 28-Bus\\
+  Comp.~2 (12N/11E)\\
+  Phasor $L_{ij}/C_{ij}\to S_{ij}$\\
+  (Gate~A Pass)};
+
+\node[box, minimum width=4.225cm, text width=3.95cm, minimum height=2.05cm] (ad4) at (15.9875, 12.75) {%
+  \textbf{Synthetic Controls}\\
+  N1--N5;\, 560 branches\\
+  3,600 uniform DAGs\\
+  144 hetero + 12 Express\\
+  Seeds 41--45 / 1001--20};
+
+% ============================================================================
+% LAYER 2: FAIL-CLOSED VALIDATION & TOPOLOGICAL DAG CORE ENGINE
+% ============================================================================
+\node[layertitle] at (0.30, 10.28) {2.\quad Fail-Closed Validation \& Topological DAG Core Engine};
+\node[layersub]   at (18.10, 10.28) {Proponent-designed single-pass $O(|V|+|E|)$ deterministic contract};
+
+\node[corebox, minimum width=5.36cm, text width=5.06cm, minimum height=1.90cm] (core1) at (2.98, 8.88) {%
+  \textbf{Fail-Closed Contract Gate}\\
+  Reject cycles, self-loops,\\
+  duplicates, NaN/$\pm\infty$, dual $S{+}L/C$\\
+  Preserve record\_origin tags};
+
+\node[corebox, minimum width=5.36cm, text width=5.06cm, minimum height=1.90cm] (core2) at (9.20, 8.88) {%
+  \textbf{Topological DAG Propagator}\\
+  Kahn order ($O(|V|+|E|)$)\\
+  $Q_{ij}=S_{ij}\tau_{ij}R_i$\\
+  $R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})$};
+
+\node[corebox, minimum width=5.36cm, text width=5.06cm, minimum height=1.90cm] (core3) at (15.42, 8.88) {%
+  \textbf{Trace \& Tie-Aware Ranker}\\
+  Retain $(B_j,Q_{ij},R_j)$ traces\\
+  Descending rank ($10^{-12}$ tie)\\
+  Zero-cost width $W_j=R_j-M_j$};
+
+\draw[innerarr] (core1.east) -- (core2.west);
+\draw[innerarr] (core2.east) -- (core3.west);
+
+% ============================================================================
+% LAYER 3: COMPARATORS, STOCHASTIC REFERENCE & CERTIFIED SCREENING HARNESS
+% ============================================================================
+\node[layertitle] at (0.30, 6.48) {3.\quad Matched Comparators, Stochastic Reference \& Certified Screening};
+\node[layersub]   at (18.10, 6.48) {Paired accuracy, deterministic certification \& cost};
+
+\node[box, minimum width=5.56cm, text width=5.26cm, minimum height=2.05cm] (ev1) at (3.08, 5.00) {%
+  \textbf{Matched Comparators}\\
+  Local-only,\, $M_j$,\, $H_j$,\, $R^{\mathrm{loc\text{-}up}}$\\
+  Target in-arborescence $T_j$\\
+  Abbe et al.\ (2020) DAG lower bound\\
+  Ancestry-aware diagnostic};
+
+\node[box, minimum width=5.56cm, text width=5.26cm, minimum height=2.05cm] (ev2) at (9.20, 5.00) {%
+  \textbf{Stochastic Reference Solvers}\\
+  Independent Bernoulli $(Z_j,E_{ij})$\\
+  Exact enum.\ ($\le 16$ primitives)\\
+  Bit-packed uint64 MC ($10^5/10^6$)\\
+  Hoeffding CI ($h$, Eq.~3-11)};
+
+\node[accentbox, minimum width=5.56cm, text width=5.26cm, minimum height=2.05cm] (ev3) at (15.32, 5.00) {%
+  \textbf{Two-Stage Certified Top-$k$}\\
+  Bracket $M_j\le T_j\le\pi_j\le R_j$\\
+  Stage~1: $[M_j,R_j]\to I_k^{(1)},O_k^{(1)},U_k^{(1)}$\\
+  Stage~2: $T_j$ only on $U_k^{(1)}$\\
+  Zero MC trials;\, $0$ false certifications};
+
+% ============================================================================
+% LAYER 4: TRACEABLE OUTPUTS, PROTOTYPE & DUAL ARTIFACTS
+% ============================================================================
+\node[layertitle] at (0.30, 2.52) {4.\quad Traceable Outputs, Prototype \& Dual Artifacts};
+\node[layersub]   at (18.10, 2.52) {Reproducible thesis \& journal deliverables};
+
+\node[box, minimum width=5.56cm, text width=5.26cm, minimum height=1.80cm] (out1) at (3.08, 1.18) {%
+  \textbf{Benchmark \& Reliability Metrics}\\
+  Slack $R_j-\pi_j$,\, width $W_j$\\
+  Capture / $\operatorname{Regret}_k$,\, reversals\\
+  Certification rate,\, runtime \& RAM};
+
+\node[box, minimum width=5.56cm, text width=5.26cm, minimum height=1.80cm] (out2) at (9.20, 1.18) {%
+  \textbf{Interactive Research Prototype}\\
+  React/Vite UI + FastAPI service\\
+  Same versioned gbbrpm core\\
+  Graph inspection \& trace replay};
+
+\node[box, minimum width=5.56cm, text width=5.26cm, minimum height=1.80cm] (out3) at (15.32, 1.18) {%
+  \textbf{Reproducible Dual Artifacts}\\
+  Frozen Git tag (v2.0.0)\\
+  SHA-256 verified manifest\\
+  USTP Thesis \& Elsevier Paper~1};
+
+% ============================================================================
+% INTER-LAYER FLOW ARROWS & INTERFACE LABELS
+% Outer arrows at x=1.60 and x=16.80 stay well clear of centered pills.
+% ============================================================================
+\draw[flowarr] (1.60, 11.45) -- (1.60, 10.60);
+\draw[flowarr] (9.20, 11.45) -- (9.20, 10.60);
+\draw[flowarr] (16.80, 11.45) -- (16.80, 10.60);
+\node[pill] at (9.20, 11.025) {Bounded DAG inputs: $G=(V,E)$,\; $B_i\in[0,1]$,\; $S_{ij}\in[0,1]$ (or $L_{ij},C_{ij}$),\; $\tau_{ij}\in[0,1]$};
+
+\draw[flowarr] (1.60, 7.65) -- (1.60, 6.80);
+\draw[flowarr] (9.20, 7.65) -- (9.20, 6.80);
+\draw[flowarr] (16.80, 7.65) -- (16.80, 6.80);
+\node[pill] at (9.20, 7.225) {Node states $R_j$,\; contribution traces $Q_{ij}$,\; tie-aware ranks,\; scalar bracket $[M_j,R_j]$};
+
+\draw[flowarr] (1.60, 3.70) -- (1.60, 2.85);
+\draw[flowarr] (9.20, 3.70) -- (9.20, 2.85);
+\draw[flowarr] (16.80, 3.70) -- (16.80, 2.85);
+\node[pill] at (9.20, 3.275) {Verified accuracy/cost metrics,\; certified sets $(I_k,O_k,U_k)$,\; traces \& SHA-256 manifests};
+
+\end{tikzpicture}}
+\caption{Unified end-to-end GBBRPM architecture and evaluation framework designed by the proponents, connecting decoupled domain and synthetic adapters (Layer~1), the fail-closed validation and topological DAG core engine (Layer~2), matched comparators, stochastic reference solvers, and the Two-Stage Deterministic Certified Top-$k$ Screening harness (Layer~3), and traceable benchmark, prototype, and dual thesis/journal artifacts (Layer~4).}
+\label{fig:unified_architecture}
+\end{figure}

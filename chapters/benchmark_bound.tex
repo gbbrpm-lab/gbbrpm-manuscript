@@ -1,11 +1,77 @@
 \subsubsection{Benchmark Bracket and Its Interpretation}
 \label{benchmark-bracket}
 
+To make the analytical scope of the stochastic benchmark explicit,
+Table~\ref{tab:bracket-assumptions} formalizes the five assumptions
+(A1--A5) required by the receiving-state bracket proposition below.
+
+\begin{table}[H]
+\centering
+\caption{Formal assumptions (A1--A5) underlying the receiving-state bracket proposition.}
+\label{tab:bracket-assumptions}
+\setlength{\fboxsep}{6pt}%
+\setlength{\fboxrule}{0.8pt}%
+\noindent\fcolorbox{gbnavy}{gblight}{%
+\begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+\small
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}p{3.5cm}L@{}}
+\toprule
+\textbf{ID} & \textbf{Assumption} & \textbf{Formal Requirement and Enforcement Contract}\\
+\midrule
+\textbf{A1} & \textbf{Finite DAG} &
+$G=(V,E)$ is finite and directed acyclic; cycles, self-loops, and duplicate
+directed edges trigger fail-closed rejection rather than silent modification.\\
+\addlinespace[4pt]
+\textbf{A2} & \textbf{Strictly Finite Bounded Inputs} &
+All supplied or derived $B_j,S_{ij},\tau_{ij}\in[0,1]$ (hence
+$w_{ij}=S_{ij}\tau_{ij}\in[0,1]$) are strictly finite; \texttt{NaN} and
+$\pm\infty$ inputs are rejected fail-closed prior to clipping or propagation.\\
+\addlinespace[4pt]
+\textbf{A3} & \textbf{Independent Bernoulli Primitives} &
+In the stochastic reference (Equation~(3-10)), all local activations
+$Z_j\sim\operatorname{Bernoulli}(B_j)$ and edge transmissions
+$E_{ij}\sim\operatorname{Bernoulli}(w_{ij})$ are mutually independent.\\
+\addlinespace[4pt]
+\textbf{A4} & \textbf{Monotone Boolean Recursion (Harris--FKG)} &
+Each receiving-node activation $X_j$ is an increasing Boolean function of
+the primitive Bernoulli variables, ensuring positive association of incoming
+failure events $F_{ij}$ under the product Bernoulli measure via Harris--FKG.\\
+\addlinespace[4pt]
+\textbf{A5} & \textbf{Unthresholded Path-Preserving In-Arborescence} &
+For each target $j$, $T_j$ is evaluated on a consistent maximum-weight
+in-arborescence retaining a maximum-weight path from every positive-path
+ancestor without arbitrary path-weight pruning.\\
+\bottomrule
+\end{tabularx}
+\end{minipage}}
+\end{table}
+
+Violating any assumption in Table~\ref{tab:bracket-assumptions} produces a
+specific failure mode rather than a benign approximation shift. Breaking
+\textbf{A1} through directed cycles or hydraulic backwater loops eliminates
+topological order, causing non-termination or cyclic double-counting in a
+single-pass recursion. Breaking \textbf{A2} through non-finite values
+(\texttt{NaN} or $\pm\infty$) corrupts load-to-capacity clipping and invalidates
+$[0,1]$ boundedness. Breaking \textbf{A3} or \textbf{A4}---for example through
+correlated external shocks, common-cause edge failures, or non-monotone
+inhibitory interactions---breaks product-measure positive association and
+invalidates the Harris--FKG upper bound $\pi_j\le R_j$. Breaking \textbf{A5}
+through arbitrary path-weight thresholding or inconsistent edge deletion can
+discard a maximizing ancestor path and violate $M_j\le T_j\le\pi_j$. Every
+executable contract and analytical guarantee will be verified by an automated
+\texttt{pytest} regression suite enforcing fail-closed \texttt{ValueError}
+rejection on malformed inputs, exact enumeration parity against
+Equation~(3-15) to absolute error $<10^{-12}$ with exact configuration
+probability mass equal to $1.0$, zero bracket violations across all 560
+matched-branch and 720 development-DAG scenarios, and zero false
+certifications in the top-$k$ screening harness below.
+
 \textit{Proposition (receiving-state bracket under independent primitives).}
-Let $G$ be a finite DAG and let all initial-activation and edge-transmission
-variables in Equation~(3-10) be mutually independent, with supplied parameters
-in $[0,1]$. On the same graph and inputs, define recursive maximum and
-clipped-additive states by
+Under Assumptions~A1--A5 (Table~\ref{tab:bracket-assumptions}), let
+$G=(V,E)$ be a finite DAG and let all initial-activation and
+edge-transmission variables in Equation~(3-10) be mutually independent, with
+strictly finite supplied parameters in $[0,1]$. On the same graph and inputs,
+define recursive maximum and clipped-additive states by
 \[
 M_j=\max\left(B_j,\max_{i\in P(j)}w_{ij}M_i\right),\qquad
 H_j=\min\left(1,B_j+\sum_{i\in P(j)}w_{ij}H_i\right),
@@ -106,3 +172,99 @@ They do not certify probabilities or physical bounds for the domain index,
 dependent initial events, correlated transmission primitives, feedback, or
 other cascade mechanisms. The ancestry-aware diagnostic will require its
 own analysis and will not inherit the GBBRPM upper-bound guarantee.
+
+\subsubsection{Two-Stage Deterministic Certified Top-\texorpdfstring{$k$}{k} Screening and Self-Diagnosing Reliability}
+\label{certified-screening}
+
+Built strictly on the established receiving-state bracket
+$M_j\le T_j\le\pi_j\le R_j\le H_j$ (Equation~(3-13)) with zero changes to
+the core GBBRPM update equations (Equations~(3-1)--(3-5)), the study
+specifies a two-stage deterministic screening procedure for fixed-budget
+receiving-state top-$k$ prioritization over the candidate set
+$C=\{j\in V:B_j=0\}$ defined in Section~\ref{reference-metrics}. For any
+nontrivial budget $1\le k<|C|$ (when $k=|C|$, all candidates are trivially
+included), let $R_{(1)}\ge R_{(2)}\ge\dots\ge R_{(|C|)}$ and
+$M_{(1)}\ge M_{(2)}\ge\dots\ge M_{(|C|)}$ denote the descending order
+statistics of $R_j$ and $M_j$ over $C$.
+
+\textbf{Stage 1 ($O(|V|+|E|)$ global scalar pass).}
+A single topological pass evaluates both $M_j$ (Equation~(3-12)) and $R_j$
+(Equation~(3-4)) for every node, yielding nodewise brackets $[M_j,R_j]$ over
+$C$. Using the $(k+1)$-th largest upper bound $R_{(k+1)}$ and the $k$-th
+largest lower bound $M_{(k)}$, Stage~1 partitions $C$ into a certified-IN
+set, a certified-OUT set, and an uncertified boundary band:
+\[
+\begin{aligned}
+I_k^{(1)}&=\{a\in C : M_a > R_{(k+1)}\},\\
+O_k^{(1)}&=\{b\in C : R_b < M_{(k)}\},\\
+U_k^{(1)}&=C\setminus\bigl(I_k^{(1)}\cup O_k^{(1)}\bigr).
+\end{aligned}
+\eqtag[Stage 1 scalar certified screening partition]{3-14a}
+\]
+Every node in $I_k^{(1)}\cup O_k^{(1)}$ is resolved deterministically with
+zero Monte Carlo trials and zero per-target tree constructions. If
+$U_k^{(1)}=\emptyset$, Stage~1 fully certifies the exact top-$k$ set
+$\mathcal{T}_k^*=I_k^{(1)}$ in linear propagation time plus candidate
+sorting.
+
+\textbf{Stage 2 (targeted $T_j$ refinement on $U_k^{(1)}$ only).}
+When $U_k^{(1)}\ne\emptyset$, the procedure computes the target-specific
+restricted in-arborescence lower bound $T_j$
+(Section~\ref{reference-comparators}) strictly for boundary nodes
+$j\in U_k^{(1)}$, reducing per-target tree work from
+$O(|V|(|V|+|E|))$ to $O(|U_k^{(1)}|(|V|+|E|))$. Defining the refined lower
+bound $\ell_j^{(2)}=T_j$ for $j\in U_k^{(1)}$ and $\ell_j^{(2)}=M_j$ for
+$j\in C\setminus U_k^{(1)}$, and letting $\ell_{(k)}^{(2)}$ denote its
+$k$-th largest value over $C$, Stage~2 tightens the bracket to
+$[\ell_j^{(2)},R_j]$ and forms
+\[
+\begin{aligned}
+I_k^{(2)}&=\{a\in C : \ell_a^{(2)} > R_{(k+1)}\},\\
+O_k^{(2)}&=\{b\in C : R_b < \ell_{(k)}^{(2)}\},\\
+U_k^{(2)}&=C\setminus\bigl(I_k^{(2)}\cup O_k^{(2)}\bigr).
+\end{aligned}
+\eqtag[Stage 2 tree-refined certified screening partition]{3-14b}
+\]
+Monte Carlo estimation is invoked only when $U_k^{(2)}\ne\emptyset$, and
+solely to resolve the remaining $k-|I_k^{(2)}|$ budget slots among residual
+overlaps or ties within $U_k^{(2)}$.
+
+\textit{Certification soundness.}
+Under Assumptions~A1--A5, $M_j\le\ell_j^{(2)}\le\pi_j\le R_j$ holds for
+every $j\in C$ (Equation~(3-13)). Write $\ell_j^{(1)}=M_j$. For either stage
+$s\in\{1,2\}$, if $a\in I_k^{(s)}$, then $R_a\ge\ell_a^{(s)}>R_{(k+1)}$, so
+the at least $|C|-k$ candidates $b\in C$ satisfying $R_b\le R_{(k+1)}$ are
+all distinct from $a$ and obey
+$\pi_b\le R_b\le R_{(k+1)}<\ell_a^{(s)}\le\pi_a$. At most $k-1$ candidates
+can therefore match or exceed $\pi_a$, forcing $a\in\mathcal{T}_k^*$ for
+every exact top-$k$ set regardless of tie-breaking. Dually, if
+$b\in O_k^{(s)}$, then $\ell_b^{(s)}\le R_b<\ell_{(k)}^{(s)}$, so the at
+least $k$ candidates $a\in C$ satisfying $\ell_a^{(s)}\ge\ell_{(k)}^{(s)}$
+are all distinct from $b$ and obey
+$\pi_a\ge\ell_a^{(s)}\ge\ell_{(k)}^{(s)}>R_b\ge\pi_b$, excluding $b$ from
+every exact top-$k$ set $\mathcal{T}_k^*$. Because
+$\ell_j^{(2)}\ge M_j$ holds pointwise, Stage~2 satisfies monotonic
+refinement ($I_k^{(1)}\subseteq I_k^{(2)}$, $O_k^{(1)}\subseteq O_k^{(2)}$,
+$U_k^{(2)}\subseteq U_k^{(1)}$) and $I_k^{(s)}\cap O_k^{(s)}=\emptyset$. To
+prevent floating-point rounding from inducing spurious strict inequalities,
+the software implementation enforces the declared tolerance
+$\epsilon=10^{-12}$ from Section~\ref{reference-metrics}, requiring
+$\ell_a^{(s)}>R_{(k+1)}+\epsilon$ for $I_k^{(s)}$ and
+$R_b<\ell_{(k)}^{(s)}-\epsilon$ for $O_k^{(s)}$.
+
+\textbf{Self-diagnosing bracket-width reliability.}
+At zero additional asymptotic cost beyond Stage~1, the scalar pass produces
+the nodewise bracket width
+\[
+W_j = R_j - M_j \qquad\text{for every }j\in V.
+\eqtag[Zero-cost scalar bracket-width reliability indicator]{3-14c}
+\]
+Because $0\le R_j-\pi_j\le W_j$ holds unconditionally under
+Assumptions~A1--A5 without computing $T_j$ or estimating $\pi_j$, $W_j$
+operates as a self-diagnosing reliability indicator. Small $W_j$ certifies
+tight pointwise agreement directly from the linear pass, whereas elevated
+$W_j$ flags potential shared-ancestry amplification or ranking ambiguity
+before committing compute to targeted tree bounds or Monte Carlo sampling.
+Section~\ref{reference-metrics} pre-registers the empirical evaluation of
+both Two-Stage Certified Top-$k$ Screening and $W_j$ as a predictor of
+high-distortion and reversal-prone regimes.

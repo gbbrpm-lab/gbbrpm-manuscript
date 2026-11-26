@@ -9,7 +9,11 @@ and resource requirements. Its scientific emphasis will be the receiving-state
 accuracy--cost tradeoff under a separately defined stochastic reference,
 with controlled shared-origin dependence and task-matched comparisons.
 Three separate domain cases will examine coherent instantiation of the same equations. An interactive prototype will expose the
-engine's inputs, calculations, and comparative outputs.
+engine's inputs, calculations, and comparative outputs. Figure~\ref{fig:unified_architecture}
+in Chapter~1 summarizes the unified end-to-end architecture connecting these
+domain adapters, fail-closed validation and topological DAG evaluation,
+matched comparators, stochastic-reference and Two-Stage Deterministic Certified
+Top-$k$ Screening harness, and traceable research artifacts.
 
 The research will proceed through design, implementation, data preparation,
 evaluation, and interpretation. Literature synthesis will inform the design
@@ -69,17 +73,94 @@ with its own primitive assumptions, not a replacement domain adapter. Domain ada
 supply their meanings and calculations; an adapter will not be permitted
 to silently replace the core update rule.
 
+\paragraph{Justification for the DAG Scope.}
 A domain case will be eligible only if it can provide defensible node and
-edge meanings and a valid DAG. A directed graph is not necessarily acyclic.
-Cyclic or bidirectional physical systems will not be declared compatible
-merely because an importer produces directed records. Any extracted
-subgraph, consolidation, or excluded edge will be documented together
-with its effect on the interpretation boundary. Modeling feedback would
-require a separately specified extension.
+edge meanings and a valid directed acyclic graph (DAG). Restricting GBBRPM v1
+to finite DAGs rests on three structural and theoretical requirements:
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+\item \textit{Finite deterministic termination without cyclic double-counting:}
+Acyclicity guarantees a single exact topological evaluation pass in
+$O(|V|+|E|)$ time without arbitrary iteration limits, heuristic damping, or
+self-reinforcing cyclic inflation.
+\item \textit{Structural alignment with target domain networks:} Gravity-fed
+branched urban drainage networks (including engineered diversions and
+downstream confluences), acyclic software package dependency graphs, and
+radial electrical distribution feeders naturally exhibit directional
+upstream-to-downstream propagation.
+\item \textit{Validity of topological induction for formal guarantees:} Both
+global input monotonicity (Section~\ref{model-formulation}) and the
+independent-primitive receiving-state bracket
+$M_j\le T_j\le\pi_j\le R_j\le H_j$ via the Harris--FKG inequality
+(Section~\ref{benchmark-bracket}) require inductively that no predecessor
+state depends on its outgoing edge or downstream receiver.
+\end{enumerate}
+
+\paragraph{Cycle-Handling and Non-Applicability Policy.}
+A directed graph is not necessarily acyclic, and cyclic or bidirectional
+physical systems will not be declared compatible merely because an importer
+produces directed records. Crucially, \emph{converging flows are not cycles}:
+a junction receiving multiple upstream branches (in-degree $\ge 2$, such as
+the Bitan-ag/Agora confluence \texttt{J\_\allowbreak AGORA\_\allowbreak CONF},
+PCSWMM node \texttt{J5}, in the DPWH urban drainage case) preserves strict
+acyclicity and is handled natively by GBBRPM. By contrast, true directed
+cycles---such as looped pipe rings, bidirectional pressure-driven hydraulic
+backwater or surcharged flow reversals, and mutually recursive software
+packages---violate Equation~(3-1) and trigger an explicit \emph{fail-closed
+validation rejection}. The engine will never perform silent edge deletion,
+heuristic cycle breaking, or unannounced graph condensation. Applying GBBRPM
+v1 to a broader network that contains physical loops requires an external,
+pre-documented acyclic sub-catchment or radial-feeder extraction in which
+every excluded edge, consolidated bus, and resulting interpretation boundary
+is explicitly logged (Section~\ref{domain-parameterization}). Native modeling
+of cyclic feedback, hydraulic backwater, or strongly connected component
+(SCC) condensation with redefined super-node semantics is explicitly out of
+scope for GBBRPM v1 and is reserved for a separately specified future
+extension.
 
 \subsection{Detailed Formulation of GBBRPM}\label{model-formulation}
 
-\subsubsection{Graph, State, and Input Contract}
+\paragraph{Formal Problem Representation and Complexity Summary.}
+Given a validated finite DAG $G=(V,E)$, supplied bounded local disturbances
+$B_i\in[0,1]$, relation-specific susceptibilities $S_{ij}\in[0,1]$ (direct or
+adapter-derived), and transmission modifiers $\tau_{ij}\in[0,1]$ defining
+effective edge weights $w_{ij}=S_{ij}\tau_{ij}$, the deterministic core
+problem is to compute the receiving-state vector
+$\mathbf{R}=(R_j)_{j\in V}\in[0,1]^{|V|}$ in a single topological pass and
+derive its descending comparative ranking. Within the separately defined
+independent-primitive stochastic benchmark (Section~\ref{stochastic-reference}),
+the evaluation problem additionally brackets each node's activation marginal
+$\pi_j=\Pr(X_j=1)$ via $M_j\le T_j\le\pi_j\le R_j\le H_j$
+(Section~\ref{benchmark-bracket}) and performs Two-Stage Deterministic
+Certified Top-$k$ Screening over the zero-local-input candidate set
+$C=\{j\in V: B_j=0\}$ (Section~\ref{certified-screening}).
+Table~\ref{tab:complexity-summary} summarizes the worst-case time and space
+complexities of GBBRPM, its comparators, screening stages, and reference
+solvers.
+
+\begin{table}[htbp]
+\centering
+\caption{Problem representation and asymptotic complexity of GBBRPM, comparators, screening, and reference solvers.}
+\label{tab:complexity-summary}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{2.3cm} L@{}}
+\toprule
+Method / Routine & Time complexity & Space & Role in framework\\
+\midrule
+GBBRPM core ($\mathbf{R}$, Eq.~3-4) & $O(|V|+|E|)$; full sort $+O(|V|\log|V|)$ & $O(|V|+|E|)$ & Single-pass bounded index and upper bound\\
+Recursive max ($M_j$, Eq.~3-12) & $O(|V|+|E|)$ & $O(|V|+|E|)$ & Global scalar lower bound; strongest-path baseline\\
+Clipped sum ($H_j$, Eq.~3-12) & $O(|V|+|E|)$ & $O(|V|+|E|)$ & Global scalar outer upper bound comparator\\
+Target-specific tree ($T_j$, Sec.~\ref{reference-comparators}) & $O(|V|(|V|+|E|))$ all nodes ($O(|V|+|E|)$ per target) & $O(|V|+|E|)$ & Tighter MIA-style in-arborescence lower bound\\
+Two-Stage Certified Top-$k$ Screening (Sec.~\ref{certified-screening}) & Stage~1: $O(|V|+|E|)$; Stage~2: $O(|U_k^{(1)}|(|V|+|E|))$ & $O(|V|+|E|)$ & Zero-MC deterministic IN/OUT certification over $C$\\
+Abbe (2020) lower bound (Sec.~\ref{reference-comparators}) & $O(|V|+|E|)$ & $O(|V|+|E|)$ & Published fixed-seed DAG cascade lower comparator\\
+Ancestry-aware diagnostic (Sec.~\ref{ancestry-diagnostic}) & $O(|V|+|E|+K\sum_j d_j^2)$ & $O(K|V|+|E|)$ & Overlap-grouped diagnostic ($K$ labels, in-degree $d_j$)\\
+Batched Monte Carlo ($\widehat{\pi}_j$, Eq.~3-10) & $O(N(|V|+|E|))$ (bit-packed 64-trial words) & $O(|V|+|E|+B_b|V|)$ & Independent-primitive reference ($N$ trials, batch $B_b$)\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Graph, State, and Input Contract}\label{input-contract}
 
 The proposed graph is
 \[
@@ -111,6 +192,32 @@ $L_{ij},C_{ij}$ & Compatible loading and positive capacity & Optional domain-ada
 \end{tabularx}
 \end{table}
 
+Because Table~\ref{tab:model-notation} states only abstract admissibility
+bounds, Table~\ref{tab:cross-domain-mapping} specifies how each domain adapter
+transforms raw dataset fields into bounded $[0,1]$ inputs and derived states
+without altering the GBBRPM core equations.
+
+\begin{table}[htbp]
+\centering
+\caption{Cross-domain dataset-to-parameter mapping from raw fields to bounded GBBRPM quantities.}
+\label{tab:cross-domain-mapping}
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{1.2cm} L L L@{}}
+\toprule
+Param. & Urban Drainage (DPWH Bitan-ag--Kolambog) & Software Dependencies (Express 4.18.2) & Electrical Distribution (Caltech SoCal Comp.~2)\\
+\midrule
+$B_i$ & Tier~1: observed obstruction $b_i\%/100$ or 5-point field grade (Table~\ref{tab:blockage-rubric}). Tier~2 (applied to FOI data): baseline $0.0$ + declared stress injections $\{0.25,0.50,0.75,1.00\}$ (\texttt{simulated\_\allowbreak scenario}). & OSV advisory severity mapped deterministically: None $\to 0.00$, Low $\to 0.25$, Moderate $\to 0.50$, High $\to 0.75$, Critical $\to 1.00$ (7 advisory-backed packages). & Baseline $0.0$ under normal-operation phasors; controlled node-disturbance injections $\{0.25,0.50,0.75,1.00\}$ (\texttt{simulated\_\allowbreak scenario}).\\
+$S_{ij}$ & Eq.~(3-7): $\min(1,L_{ij}/C_{ij})$ from documented $Q_{25}$/PCSWMM flow $L_{ij}$ and hydraulic capacity $C_{ij}$ ($\mathrm{m}^3/\mathrm{s}$, Manning-verified $<1\%$); $S_{ij}\in[0.4639,0.8471]$, mean $0.6417$. & Unit baseline $S_{ij}=1.0$ across all 128 reversed dependency-to-dependent edges (no empirical reachability weight claimed). & Eq.~(3-7): $\min(1,L_{ij}/C_{ij})$ where $L_{ij}$ is mean apparent power across 24 phasor snapshots (Eq.~3-8, kVA) and $C_{ij}$ is nameplate or $3V_{\mathrm{phase}}I_{\mathrm{rated}}/1000$ rating (kVA).\\
+$\tau_{ij}$ & Neutral baseline $1.0$; controlled attenuation sweep $\{0,0.25,0.50,0.75,1.00\}$. & Neutral baseline $1.0$; uniform sensitivity sweep $\tau\in\{0,0.25,0.50,0.75,1.00\}$. & Neutral baseline $1.0$; controlled sensitivity sweep $\{0,0.25,0.50,0.75,1.00\}$.\\
+$w_{ij}$ & Effective edge weight $w_{ij}=S_{ij}\tau_{ij}\in[0,1]$ (heterogeneous $L/C$ weights at $\tau=1$). & Effective weight $w_{ij}=1\cdot\tau_{ij}=\tau_{ij}\in[0,1]$ (uniform across edges per sweep level). & Effective weight $w_{ij}=S_{ij}\tau_{ij}\in[0,1]$ (heterogeneous measured-loading weights at $\tau=1$).\\
+$Q_{ij}$ & Engine-derived $Q_{ij}=w_{ij}R_i\in[0,1]$ per directed reach $(i,j)$ (Eq.~3-2). & Engine-derived $Q_{ij}=w_{ij}R_i\in[0,1]$ per dependency-to-dependent edge (Eq.~3-2). & Engine-derived $Q_{ij}=w_{ij}R_i\in[0,1]$ per radial transformer/line segment (Eq.~3-2).\\
+$R_j$ & Engine-derived $1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})$ (Eq.~3-4); dimensionless reach index (not flood probability). & Engine-derived Eq.~(3-4); comparative package-exposure index (not exploit probability). & Engine-derived Eq.~(3-4); comparative feeder-exposure index (not outage probability).\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 $R_i$ will be a continuous comparative index, not a calibrated probability.
 Its interpretation will be conditional on the selected graph, scenario, and
 normalization. Values from different domains will not be placed on a common
@@ -121,6 +228,17 @@ $S_{ij}$ will describe the response of a relation or receiving context.
 $\tau_{ij}$ will describe transfer along that relation. The baseline will set
 $\tau_{ij}=1$ where independently defensible heterogeneous values are unavailable.
 A non-neutral uniform sweep will test attenuation, not empirical calibration.
+
+\paragraph{Direct-Neighbor (Local-State) Assumption.}
+By construction, the GBBRPM core update at any receiving node $j$ reads
+\emph{only} its own local disturbance $B_j$, its incoming edge modifiers
+$(S_{ij},\tau_{ij})$, and the scalar accumulated states $R_i$ of its immediate
+predecessors $i\in P(j)$. The scalar engine maintains no path history or
+upstream origin labels during propagation. This local-state design is what
+enables single-pass $O(|V|+|E|)$ evaluation, while also establishing the exact
+structural boundary where reconvergent paths sharing a common upstream ancestor
+cannot be disentangled by the scalar update alone
+(Section~\ref{dependence-boundary} and Section~\ref{ancestry-diagnostic}).
 
 \subsubsection{Relation-Level Contribution and Identifiability}
 
@@ -135,6 +253,25 @@ the current upstream state. It is a bounded response construction, not
 a physical law of transported load or energy. Branching will allow the same
 upstream state to influence several receivers without interpreting it as a
 conserved quantity that must be divided among outgoing edges.
+
+\par\medskip
+{\setlength{\fboxsep}{7pt}\setlength{\fboxrule}{0.7pt}%
+\noindent\fcolorbox{gbnavy}{gblight}{%
+\begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+\small
+\textbf{Non-Conservative Transmission vs.\ Conserved Flow Apportionment.}
+GBBRPM does \emph{not} split a fixed $100\%$ mass or flow budget across
+outgoing edges ($\sum_{j:(i,j)\in E} f_{ij}=1$). Instead, each outgoing edge
+$(i,j)$ applies \emph{bounded influence scaling} independently via
+$Q_{ij}=S_{ij}\tau_{ij}R_i\in[0,1]$. For example, if $R_i=0.60$ feeds two
+branches with effective weights $w_{ij_1}=0.50$ and $w_{ij_2}=0.40$, the
+resulting contributions are $Q_{ij_1}=0.30$ and $Q_{ij_2}=0.24$ without
+forcing outgoing fractions to sum to $100\%$. Conversely, when multiple
+upstream contributions enter a single receiver $j$, they are never summed
+linearly; they are combined with local disturbance $B_j$ through the bounded
+complement-product rule $R_j=1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})\in[0,1]$.
+\end{minipage}}\par}
+\medskip
 
 The effective edge weight is $w_{ij}=S_{ij}\tau_{ij}$. For fixed topology
 and local disturbances, any admissible factor pairs with the same product
@@ -194,18 +331,64 @@ the engine will not substitute the original $B_i$ for an accumulated $R_i$.
 Disconnected components will be evaluated independently.
 
 Figure~\ref{fig:generic-node-example} illustrates these mechanisms.
-Appendix~\ref{app:worked-example} provides a complete controlled calculation.
-The schematic and calculation explain the model; they are not independent
-domain validation.
+Appendix~\ref{app:worked-example} provides the complete step-by-step
+derivation, while the trace box below demonstrates the exact numeric sequence
+and where comparative ranking occurs. The schematic and trace explain the
+core mechanism; they are not independent domain validation.
 
 \input{figures/fig_generic_node_example}
+
+\par\medskip
+{\setlength{\fboxsep}{7pt}\setlength{\fboxrule}{0.7pt}%
+\noindent\fcolorbox{gbnavy}{gblight}{%
+\begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+\small
+\textbf{Worked Numeric Trace and Ranking Illustration (Consistent with Appendix~\ref{app:worked-example}).}
+\emph{Input provenance:} All numbers below are controlled illustrative inputs
+(chosen to exhibit initialization, convergence, local-plus-inherited
+aggregation, and recursion---such as $S_{23}=0.75$---rather than
+dataset-derived weights; see Table~\ref{tab:cross-domain-mapping} for
+domain-adapter derivations). On Figure~\ref{fig:generic-node-example} with
+topological order $N_1,N_4,N_2,N_3$, set local disturbances
+$B_1=0.60$, $B_4=0.30$, $B_2=0.10$, $B_3=0.00$, neutral transmission
+$\tau_{ij}=1.00$, and susceptibilities $S_{12}=0.50$, $S_{42}=0.40$,
+$S_{23}=0.75$.
+
+\smallskip
+\textbf{Step 1 (Topological Pass --- each node's $R_j$ integrates both its own $B_j$ and all incoming $Q_{ij}$ before downstream transfer):}
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textit{Sources (Eq.~3-5):} $R_1=B_1=0.6000$; $R_4=B_4=0.3000$.
+\item \textit{Converging node $N_2$ (Eqs.~3-2, 3-4):}
+$Q_{12}=(0.50)(1.00)(0.60)=0.3000$ and
+$Q_{42}=(0.40)(1.00)(0.30)=0.1200$, giving
+$R_2=1-(1-0.10)(1-0.30)(1-0.12)=1-0.5544=0.4456$
+(compared to $0.3840$ if local $B_2=0.10$ were absent).
+\item \textit{Downstream node $N_3$:} Propagates the accumulated state
+$R_2=0.4456$ (not raw $B_2=0.10$):
+$Q_{23}=(0.75)(1.00)(0.4456)=0.3342$, giving
+$R_3=1-(1-0.00)(1-0.3342)=0.3342$.
+\end{itemize}
+
+\smallskip
+\textbf{Step 2 (Post-Pass Comparative Ranking):}
+Ranking occurs \emph{only after} all node states settle, sorting descending by
+final $R_j$:
+\textbf{Rank~1:} $N_1\,(0.6000) >$ \textbf{Rank~2:} $N_2\,(0.4456) >$
+\textbf{Rank~3:} $N_3\,(0.3342) >$ \textbf{Rank~4:} $N_4\,(0.3000)$.
+In general inspection outputs, all nodes are ranked with ties preserved at
+$10^{-12}$ tolerance; in the controlled receiving-state benchmark
+(Section~\ref{reference-metrics}), fixed-budget top-$k$ evaluation restricts
+the candidate set $C$ strictly to $B_j=0$ nodes (here $N_3$) so supplied local
+disturbances do not trivially dominate receiving-state selection.
+\end{minipage}}\par}
+\medskip
 
 Final $R_i$ values will be sorted in descending order. Ties will represent
 equal modeled standing under the declared numerical policy rather than
 receive an unsupported decision priority. Ranking is a derived output,
 not an additional propagation mechanism.
 
-\subsubsection{Analytical Properties and Dependence Boundary}
+\subsubsection{Analytical Properties and Dependence Boundary}\label{dependence-boundary}
 
 The operator's basic boundedness and monotonicity are established
 properties \citep{klement2004}. The following arguments will confirm
@@ -230,11 +413,21 @@ $Q_{ij}=\tau_{ij}R_i$ and does not guarantee $R_j=1$.
 The clipped $L/C$ adapter can saturate an edge's susceptibility before
 the network's states saturate.
 
-When one disturbance splits and reconverges, incoming contributions can
-share ancestry. Equation~(3-4) will still combine them separately.
-Boundedness therefore does not establish dependence correction. This
-limitation will be evaluated explicitly rather than hidden by a stable
-ranking or a high receiving-node state.
+Under the Direct-Neighbor (Local-State) Assumption stated in
+Section~\ref{input-contract}, the update at receiver $j$ reads only the
+scalar states $R_i$ of immediate predecessors $i\in P(j)$ without retaining
+path history or ancestor identities. Consequently, when one upstream
+disturbance splits along multiple branches and reconverges---as occurs at the
+Agora diversion confluence \texttt{J\_\allowbreak AGORA\_\allowbreak CONF}
+in the DPWH drainage network (Section~\ref{domain-parameterization}) and along
+shared \texttt{qs}/\texttt{send} paths in Express~4.18.2---incoming
+contributions share ancestry, yet Equation~(3-4) combines their collapsed
+scalar values as if they were separate inputs. Boundedness therefore does not
+establish dependence correction. This structural boundary is investigated
+explicitly through the matched shared-versus-independent branch controls
+(Section~\ref{dependence-controls}) and the prospective ancestry-aware
+diagnostic (Section~\ref{ancestry-diagnostic}), rather than hidden behind a
+stable ranking or a high receiving-node state.
 
 \subsection{Evaluation Engine and Prototype Design}\label{engine-design}
 
@@ -293,6 +486,44 @@ inspection of the specified model. Additional presentation features will be
 outside the planned mechanism evaluation. Appendix~\ref{app:prototype-contract}
 records the supporting contract and outstanding checks.
 
+\subsubsection{Module-by-Module Implementation and Verification Plan}
+\label{implementation-plan}
+
+To translate the architectural phases in Section~\ref{research-design} and
+the schedule in Section~\ref{study-timeline} into an auditable software
+engineering workflow, Table~\ref{tab:implementation-plan} maps every
+repository module to its primary callable entrypoint, automated
+\texttt{pytest} verification assertions, and assigned team ownership. Core
+mathematical, solver, benchmark, and pipeline implementation is owned by
+\texttt{JCE}, while independent verification, domain spot-checks, prototype
+and replication quality assurance, prior-art cross-checking, and compliance
+auditing are assigned to \texttt{DJA}, \texttt{GMA}, \texttt{JJC}, and
+\texttt{SMF}.
+
+\begin{table}[htbp]
+\centering
+\caption{Module-by-module technical implementation, verification, and ownership plan.}
+\label{tab:implementation-plan}
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{3.2cm} L >{\raggedright\arraybackslash}p{2.1cm}@{}}
+\toprule
+Module & Primary entrypoint(s) & Automated \texttt{pytest} assertions & Owner(s)\\
+\midrule
+\texttt{core} & \texttt{gbbrpm/core.py}: \texttt{evaluate\_\allowbreak gbbrpm()}, \texttt{derive\_\allowbreak susceptibility()} & Fail-closed rejection of \texttt{NaN}/\texttt{$\pm$inf}, dual $S$+$L,C$, and cycles; boundedness and monotonicity (\texttt{generic\_\allowbreak properties\_\allowbreak test.py}, \texttt{package\_\allowbreak api\_\allowbreak test.py}) & JCE (Core)\\
+\texttt{exact\_\allowbreak ref} & \texttt{gbbrpm/exact\_\allowbreak ref.py}: \texttt{evaluate\_\allowbreak exact\_\allowbreak marginals()} & Total probability mass $=1.0$; Eq.~(3-15) closed-form parity ($<10^{-12}$); chain, isolated, and diamond identities ($\le 16$ primitives) & JCE (Core)\\
+\texttt{mc\_\allowbreak ref} & \texttt{gbbrpm/mc\_\allowbreak ref.py}: \texttt{run\_\allowbreak mc\_\allowbreak reference()} (\texttt{uint64} bit-packed) & Hoeffding interval (Eq.~3-11) coverage vs.\ exact solver on N1--N5 and branch fixtures; fixed-seed reproducibility & JCE (Core)\\
+\texttt{comparators} & \texttt{comparators.py}, \texttt{reconvergence.py}: \texttt{run\_\allowbreak comparators()} & Zero violations of $M_j\le T_j\le\pi_j\le R_j\le H_j$; Abbe (2020) parity; strict $Q_{ij}>0$ ancestry filter & JCE (Core); JJC (Prior-art check)\\
+\texttt{certified\_\allowbreak screening} & \texttt{gbbrpm/certified\_\allowbreak screening.py}: \texttt{certify\_\allowbreak top\_\allowbreak k\_\allowbreak two\_\allowbreak stage()} & Zero false IN/OUT certifications vs.\ exact $\pi_j$; monotone refinement $|U_k^{(2)}|\le|U_k^{(1)}|$ & JCE (Core)\\
+\texttt{generators} & \texttt{scenarios.py}, \texttt{gbbrpm/generators.py}: \texttt{generate\_\allowbreak benchmark\_\allowbreak suite()} & Exact $2|V|$ edge counts; layered feasibility check; SHA-256 heterogeneous weights; dev/eval seed isolation & JCE (Core)\\
+\texttt{metrics} & \texttt{metrics.py}, \texttt{robustness.py}, \texttt{scalability.py} & $10^{-12}$ anchored tie groups; seed-140 permutations; Eq.~(3-17) capture/regret; undefined Spearman handling & JCE (Core)\\
+\texttt{adapters} & \texttt{scripts/build\_*\_\allowbreak case.py}, \texttt{generate\_\allowbreak paper\_\allowbreak outputs.py} & Schema and DAG checks; DPWH Manning $<1\%$ check; SHA-256 \texttt{paper\_\allowbreak outputs\_\allowbreak manifest.json} audit (\texttt{*\_\allowbreak case\_\allowbreak test.py}) & JCE (Core); GMA (DPWH spot-check); SMF (Compliance/refs)\\
+\texttt{prototype} & FastAPI validation service + React/Vite graph UI & Engine-API numeric parity ($\le 10^{-12}$); malformed/non-finite 422 rejection; replay invariance (Appendix~\ref{app:prototype-contract}) & JCE (Core); DJA (Prototype \& replication QA)\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \subsection{Data Sources, DAG Construction, and Parameterization}
 \label{domain-parameterization}
 
@@ -304,25 +535,104 @@ synthetic, and simulated fields will be labeled separately.
 
 \subsubsection{Drainage Instantiation}
 
-Nodes and directed relations will represent the chosen drainage entities
-and permitted downstream influence. A load-to-capacity adapter will use
+Nodes and directed relations will represent engineered urban drainage
+junctions or outfalls and permitted gravity-fed downstream reaches. A
+load-to-capacity adapter will derive relation susceptibility via
 \[
 u_{ij}=\frac{L_{ij}}{C_{ij}},\qquad S_{ij}=\min(1,u_{ij}),
 \quad L_{ij}\ge0,\ C_{ij}>0.
 \eqtag{3-7}
 \]
-Local $B_i$ values will represent the declared disturbance scenario or
-documented condition mapping. Synthetic inputs will not be called
-operational measurements. Operational records will be sought for topology,
-flow direction, specifications, loading/capacity, inspection and
-maintenance history, and relevant outcomes. Their adequacy will be
-assessed before any field-validation claim is made.
+To supply verified engineering inputs rather than synthetic placeholders, the
+study acquired official drainage records from the Department of Public Works
+and Highways Regional Office~X under Freedom of Information release
+\texttt{FOI-REQ-2026-7383} (October 22, 2026) \citep{dpwh2026foi}, anchored
+by the UP PLANADES \emph{Master Plan and Feasibility Study of Urban Drainage
+Improvement and Related Works in Cagayan de Oro City} (Contract ID
+\texttt{15K00003}, August 20, 2016) \citep{upplanades2016}.
 
-SWMM scenarios will supply an external hydraulic reference. They will be
-aligned to the corresponding graph, intervention, and node mapping.
-Acyclic downstream influence does not represent hydraulic backwater,
-surcharge, ponding, or redistribution. Simulated reference outputs will
-remain distinct from field observations.
+\paragraph{Verified DPWH Provenance and Gate A / Gate B Triage.}
+From the UP PLANADES hydraulic tables and PCSWMM network profiles, the study
+constructed the reproducible case
+\texttt{drainage\_\allowbreak dpwh\_\allowbreak cdo\_\allowbreak bitanag\_\allowbreak kolambog\_v1},
+which passes \textbf{Gate~A (Real-Data DAG Instantiation and Mechanism Study)}.
+The extracted network contains 11 nodes (three headwater sources, six
+intermediate/diversion/confluence junctions, and two coastal outfalls) and 11
+directed gravity-flow reaches forming a validated single weakly connected DAG
+with zero self-loops and zero duplicate edges. Documented $Q_{25}$ and PCSWMM
+discharges $L_{ij}$ and conduit capacities $C_{ij}$ ($\mathrm{m}^3/\mathrm{s}$),
+independently cross-checked against Manning's conveyance equation within
+$<1\%$ relative error across all 11 reaches, yield heterogeneous
+susceptibilities $S_{ij}\in[0.4639,0.8471]$ (mean $0.6417$, zero saturated
+edges at $1.0\times$ load), with no dual $S$ column stored. Crucially, the
+topology captures an authentic real-world \emph{shared-ancestry reconvergence
+diamond}: flow splits at the Agora Street diversion tap
+(\texttt{J\_\allowbreak AGORA\_\allowbreak SPLIT}, PCSWMM \texttt{J16}) into
+the main trunk (\texttt{BCI-1B\_\allowbreak POST} $\to$
+\texttt{BCI-1A\_\allowbreak UP}) and the twin $3.0\,\mathrm{m}\times 3.0\,\mathrm{m}$
+Agora diversion box culvert (\texttt{BDC-1}) before reconverging at the
+Puntod--Lapasan confluence (\texttt{J\_\allowbreak AGORA\_\allowbreak CONF},
+PCSWMM \texttt{J5}), alongside the inter-basin Camaman-an--Bolonsiri diversion
+(\texttt{BDC-2}) into Kolambog Creek. Consistent with Section~\ref{design-requirements},
+converging junctions such as \texttt{J\_\allowbreak AGORA\_\allowbreak CONF}
+are valid DAG nodes rather than cycles, whereas discharge-incomplete branches
+(\texttt{BCI-3A}/\texttt{3B}, \texttt{BDC-2D}, sub-barrel splits, and
+disconnected street lines in Contract ID \texttt{22KD0016} and Barangay Bugo)
+are explicitly excluded and logged in the case manifest.
+
+By contrast, the case receives a \textbf{Gate~B FAIL (Exploratory Field
+Context Only)} verdict for confirmatory operational flood validation. The
+accompanying June 10, 2025 flooding inspection report
+(\texttt{CDO 2ND DEO\_\allowbreak FLOODING AREAS.pdf}, hotspots
+\texttt{B01}--\texttt{B16}) \citep{dpwh2026foi} records positive-only flood
+locations along the \emph{existing} pre-intervention channel without
+non-flooded control sites or pre-event observed blockage $B_i$, whereas UP
+PLANADES models the 2016 \emph{proposed} Master Plan intervention topology
+incorporating diversions \texttt{BDC-1} and \texttt{BDC-2}. Accordingly, those
+hotspots provide strictly exploratory geographic context and will never be
+presented as confirmatory operational ground truth. Per the DPWH RO-X release
+conditions (\texttt{FOI-REQ-2026-7383}), raw agency PDFs and archives remain
+external to public repositories, extracted model tables strip all personal
+identifying information (PII), and raw files are neither modified nor
+redistributed.
+
+\paragraph{Two-Tier Blockage-to-$B_i$ Measurement and Fallback Rubric.}
+In the urban drainage instantiation, $B_i\in[0,1]$ is defined operationally as
+the fractional cross-sectional obstruction severity (due to debris, siltation,
+or structural constriction) at junction $i$. Table~\ref{tab:blockage-rubric}
+establishes the deterministic two-tier assignment protocol governing both
+observed inspection records and unobserved baselines. Because the DPWH FOI
+package lacks uniform node-level blockage measurements across all 11 DAG
+junctions, Tier~2 applies to
+\texttt{drainage\_\allowbreak dpwh\_\allowbreak cdo\_\allowbreak bitanag\_\allowbreak kolambog\_v1}:
+the baseline table records explicit $B_i=0.0$ rather than imputing synthetic
+observations, and all disturbance scenarios inject declared stress severities
+tagged \texttt{record\_\allowbreak origin = simulated\_\allowbreak scenario}.
+
+\begin{table}[H]
+\centering
+\caption{Two-tier blockage-to-$B_i$ measurement and fallback rubric for urban drainage.}
+\label{tab:blockage-rubric}
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{2.9cm} L >{\raggedright\arraybackslash}p{3.0cm}@{}}
+\toprule
+Tier \& condition & Raw input source & Deterministic mapping to $B_i\in[0,1]$ & Provenance tag\\
+\midrule
+Tier~1a: Observed quantitative inspection & Measured cross-sectional obstruction $b_i\in[0,100]\%$ & $B_i=\min(1,\max(0,b_i/100))$ & \texttt{observed\_\allowbreak inspection}\\
+Tier~1b: Observed ordinal field scale & Standardized 5-point inspection grade & Clear ($0\%$): $0.00$; Minor ($1$--$25\%$): $0.25$; Moderate ($26$--$50\%$): $0.50$; Severe ($51$--$75\%$): $0.75$; Complete ($>75\%$): $1.00$ & \texttt{observed\_\allowbreak ordinal\_\allowbreak grade}\\
+Tier~2: Missing in dataset (applied to DPWH FOI case) & No full-DAG node blockage record & Baseline $B_i=0.0$; controlled stress injections $B_i\in\{0.25,0.50,0.75,1.00\}$ & \texttt{baseline\_\allowbreak zero\_\allowbreak no\_\allowbreak observed\_\allowbreak blockage}; \texttt{simulated\_\allowbreak scenario}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+SWMM scenarios will supply an external hydraulic sensitivity reference aligned
+to the corresponding graph, intervention, and node mapping. Acyclic downstream
+influence does not represent pressurized hydraulic backwater, surcharge,
+ponding, or flow reversal (which violate Equation~(3-1) and remain out of
+scope for GBBRPM v1 per Section~\ref{design-requirements}). Simulated
+hydraulic reference outputs will remain distinct from field observations.
 
 \subsubsection{Software-Dependency Instantiation}
 
@@ -330,15 +640,18 @@ Packages will represent nodes, with edges directed from a dependency to
 its dependent so that modeled influence reaches the consuming package.
 The preliminary Express 4.18.2 case has 71 packages and 128 edges.
 Version-specific advisory evidence and the declared severity mapping
-will provide $B_i$; severity categories will be treated as bounded index
-inputs rather than calibrated exploit probabilities.
+(Table~\ref{tab:cross-domain-mapping}) will provide $B_i$; severity categories
+will be treated as bounded index inputs rather than calibrated exploit
+probabilities.
 
 The initial case will retain $S_{ij}=1$ and neutral baseline transmission.
 The uniform sensitivity sweep will use
 $\tau\in\{0,0.25,0.50,0.75,1.00\}$.
-The topology and advisory snapshots will be versioned. Cyclic dependency
-input will be rejected by the DAG engine; any separately proposed
-component-condensation approach would require its own node semantics.
+The topology and advisory snapshots will be versioned. Consistent with the
+fail-closed cycle policy in Section~\ref{design-requirements}, cyclic
+dependency input will be rejected by the DAG engine without silent edge
+removal; any separately proposed SCC-condensation approach would require its
+own redefined super-node semantics outside GBBRPM v1.
 
 Shared \texttt{qs} and \texttt{send} paths in the preliminary Express
 case will be identified as reconvergence rather than independent sources.
@@ -525,6 +838,7 @@ This stated protocol will be versioned; earlier outputs will not be
 assumed identical if their generation conventions differ.
 
 \subsubsection{Specified Ancestry-Aware Diagnostic and Its Evaluation}
+\label{ancestry-diagnostic}
 
 The prospective diagnostic will assign each node a set of local-origin labels.
 A positive local term will introduce that node's own label; a positive incoming
@@ -632,12 +946,18 @@ benchmark will not be relabeled as observed loss. Intervention evaluation
 would require independently assessed avoided consequence and will not be
 inferred from current receiving states.
 
-The drainage case will compare scenario-induced priority changes with
-SWMM maximum-depth and flooding changes under the aligned intervention
-protocol. Spearman association, priority-set overlap, and the share of
-positive hydraulic worsening outside the downstream region will be
-reported. Negative or low agreement will inform the limits of the graph
-index rather than be converted into evidence of validated utility.
+The drainage case will evaluate the verified DPWH Bitan-ag--Kolambog DAG
+(\texttt{drainage\_\allowbreak dpwh\_\allowbreak cdo\_\allowbreak bitanag\_\allowbreak kolambog\_v1},
+Gate~A PASS, Tier-2 controlled injections) for real-world heterogeneous $L/C$
+propagation and shared-ancestry reconvergence at
+\texttt{J\_\allowbreak AGORA\_\allowbreak CONF}, alongside aligned SWMM
+maximum-depth and flooding sensitivity comparisons. Because the June 10, 2025
+DEO flood hotspots fail Gate~B (Section~\ref{domain-parameterization}),
+drainage findings will not be claimed as confirmatory operational flood
+validation. Spearman association, priority-set overlap, and the share of
+positive hydraulic worsening outside the downstream region will be reported;
+negative or low agreement will inform the limits of the graph index rather
+than be converted into evidence of validated utility.
 
 The software case will report root and network states, root rank, and
 ranking agreement across the uniform transmission sweep. Advisory-derived
@@ -652,6 +972,32 @@ transmission levels; 15 pairs of internal sources; and one all-internal
 case. Node and terminal risk, risk sums, and affected-node counts will
 be reported. The arborescence tests local-plus-incoming aggregation and
 branch coverage, not downstream reconvergence.
+
+Table~\ref{tab:domain-contingency} consolidates the independent reference
+requirements, eligibility gates, and pre-registered contingency boundaries
+across all three domains and three cross-cutting methodological risks so that
+conclusions remain strictly supported by available evidence.
+
+\begin{table}[htbp]
+\centering
+\caption{Domain reference eligibility and methodological contingency matrix.}
+\label{tab:domain-contingency}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{2.1cm} L@{}}
+\toprule
+Domain / Risk & Input source & Independent outcome target & Eligibility gate & Fallback claim scope \& contingency\\
+\midrule
+Urban Drainage (DPWH Bitan-ag--Kolambog) & DPWH \texttt{FOI-REQ-2026-7383} / UP PLANADES 11-node DAG; Tier-2 $B_i$ & Aligned SWMM depth/flooding changes; 2025 DEO hotspots (\texttt{B01}--\texttt{B16}) ineligible & Gate~A: PASS; Gate~B: FAIL (exploratory only) & Real-data $L/C$ mechanism, \texttt{J\_\allowbreak AGORA\_\allowbreak CONF} reconvergence, and aligned SWMM sensitivity only; no field-flooding validation claim.\\
+Software (\texttt{Express 4.18.2}) & Verified 71-node, 128-edge deps.dev DAG + frozen OSV snapshot & None (OSV severity defines input $B_i$, not an independent incident label) & Gate~A: PASS; Gate~B: N/A & Mapping, $\tau$ sweep, shared-path reconvergence (\texttt{qs}, \texttt{send}), and 12-scenario real-topology stochastic benchmark; no exploit-prediction claim.\\
+Electrical (Caltech SoCal Comp.~2) & Authorized 24-snapshot phasors \& nameplate $C$; 12-node arborescence & Event-aligned switching/outage records (absent in normal-operation data) & Gate~A: PASS; Gate~B: FAIL unless obtained by W8 & 43-scenario measured-$L/C$ mechanism and branch-coverage study; no operational fault-prediction claim without pre-frozen event labels.\\
+Cyclic / Looped input & Any graph with directed cycle or pressurized backwater & N/A (violates Eq.~3-1) & Fail-closed DAG validator & Reject with diagnostic error; never silently delete edges. Require documented acyclic sub-catchment extraction or defer to future iterative/SCC extension.\\
+High reconvergence / distortion & Reconvergent DAGs with wide $W_j=R_j-M_j$ or rank reversals & Exact $\pi_j$ or batched MC reference & Empirical bound \& reversal audit & Report unfavorable regimes transparently alongside Two-Stage Screening band $|U_k^{(2)}|$; allocate targeted MC only to uncertified band.\\
+Unresolved MC / score ties & Rare tails or gaps below $h$ (Eq.~3-11) or $10^{-12}$ tolerance & 48 preselected $N=10^6$ audits + Hoeffding intervals & Interval intersection \& tie policy & Report unresolved differences explicitly; never claim advantage below $h$; average boundary ties across 100 seed-140 permutations.\\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 Cross-case synthesis will examine defensible mappings, DAG eligibility,
 core-rule consistency, computational requirements, and evidence limits.
@@ -738,10 +1084,33 @@ study will report that limitation and review the permitted scope with the
 adviser. Missing field records will not be replaced with invented
 operational observations.
 
+\paragraph{Reproducibility and One-Command Replication Contract.}
+Before any held-out evaluation scenario (seeds 1001--1020) is executed, the
+frozen specification, core engine, benchmark harness, and scenario/seed
+configuration will be locked in version control under Git release tag
+\texttt{v2.0.0-protocol-freeze} together with a pinned Python dependency
+lockfile and an immutable seed manifest (covering development seeds 41--45,
+held-out seeds 1001--1020, robustness seed 41, and tie-permutation seed 140).
+A single deterministic command
+(\texttt{scripts/generate\_\allowbreak paper\_\allowbreak outputs.py}) will
+rebuild all thesis and publication tables and figures directly from the
+frozen result directory and emit a cryptographic
+\texttt{paper\_\allowbreak outputs\_\allowbreak manifest.json} containing
+SHA-256 digests for every input snapshot, script revision, and generated
+output artifact (recording external source-archive hashes for protected DPWH
+and Caltech payloads without redistributing restricted raw files). To verify
+end-to-end reproducibility prior to manuscript finalization, an independent
+team verifier (\texttt{DJA}) will execute the frozen one-command pipeline
+inside a clean virtual environment and confirm bitwise SHA-256 parity against
+\texttt{paper\_\allowbreak outputs\_\allowbreak manifest.json}; any hash
+discrepancy will trigger a logged defect audit before results are reported.
+
 \subsection{Timeline of the Study}\label{study-timeline}
 
 Figure~\ref{fig:timeline} gives a provisional calendar for completing the
-revised proposal and its planned evaluation. The model formulation,
+revised proposal and its planned evaluation, complementing the
+module-by-module software implementation and ownership plan in
+Table~\ref{tab:implementation-plan}. The model formulation,
 prototype, and exploratory experiments already exist; the opening activity
 identifies work completed before W1 without assigning its original duration.
 Their record will be consolidated during proposal revision.

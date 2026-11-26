@@ -1,0 +1,48 @@
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\emergencystretch=1.5em
+\begin{longtable}{@{}>{\raggedright\arraybackslash\hspace{0pt}}p{0.20\dimexpr\textwidth-6\tabcolsep\relax}
+>{\raggedright\arraybackslash\hspace{0pt}}p{0.24\dimexpr\textwidth-6\tabcolsep\relax}
+>{\raggedright\arraybackslash\hspace{0pt}}p{0.30\dimexpr\textwidth-6\tabcolsep\relax}
+>{\raggedright\arraybackslash\hspace{0pt}}p{0.26\dimexpr\textwidth-6\tabcolsep\relax}@{}}
+\caption{Three-layer model lineage, baseline-delta accounting, direct-neighbor distinction, and empirical evaluation basis for GBBRPM.}
+\label{tab:model-lineage-delta}\\
+\toprule
+\textbf{Lineage Layer / Comparison Axis} & \textbf{Smaller Baseline / Closest Precedent} & \textbf{Exact Addition / Distinction (This Study)} & \textbf{Empirical Evaluation \& Honest Scope}\\
+\midrule
+\endfirsthead
+\caption[]{Three-layer model lineage and baseline-delta accounting (continued).}\\
+\toprule
+\textbf{Lineage Layer / Comparison Axis} & \textbf{Smaller Baseline / Closest Precedent} & \textbf{Exact Addition / Distinction (This Study)} & \textbf{Empirical Evaluation \& Honest Scope}\\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\textbf{Layer 1:} Algebraic \& recursion primitive (smaller baseline) &
+Probabilistic-sum t-conorm \citep{klement2004} and Leaky Noisy-OR DAG recursion \citep{fallet2012}; closest risk-path precedent is additive RIPA \citep{faraji2026}. &
+\textbf{Adopted, not invented.} Retained as the bounded scalar recursion $R_j = 1-(1-B_j)\prod_{i\in P(j)}(1-Q_{ij})$ with $Q_{ij}=S_{ij}\tau_{ij}R_i$, declared explicitly as a comparative index rather than calibrated posterior probability. &
+Matched ablations against recursive maximum ($M_j$), clipped additive ($H_j$), local-only ($B_j$), and local-upstream recursion under identical inputs.\\
+\addlinespace
+\textbf{Layer 2:} Modular adapter-to-core architecture &
+Domain-coupled drainage and infrastructure ranking models \citep{simone2023,dastgir2023,zhang2025} that bind raw physical variables into a single formula. &
+Proponent-designed adapter-to-core decoupling of local disturbance ($B_i$), relation susceptibility ($S_{ij}$), and transmission ($\tau_{ij}$) in $[0,1]$, enforced by fail-closed DAG and finiteness validation across drainage, software, and electrical adapters. &
+Contract and regression verification, Gate~A structural eligibility, and separate Gate~B independent outcome validation per domain (never conflated with core mathematical proofs).\\
+\addlinespace
+\textbf{Layer 3:} Receiving-state bracket, certified top-$k$ screening, \& diagnostics &
+Seed-set IC bounds and restricted-tree heuristics \citep{abbe2017,abbe2020,chen2010mia} focused on aggregate spread maximization. &
+Conditional receiving-state bracket $M_j\le T_j\le\pi_j\le R_j\le H_j$; \textbf{Two-Stage Deterministic Certified Top-$k$ Screening} (Stage~1 $O(|V|+|E|)$ global $[M_j,R_j]$ pruning; Stage~2 targeted $T_j$ on $U_k^{(1)}$ only); zero-cost self-diagnosing width $W_j=R_j-M_j$; and shared-ancestry diagnostics. &
+Zero-violation bracket audit; Stage~1/2 zero-MC deterministic resolution rate $(|I_k|+|O_k|)/|C|$ with zero false certifications; empirical utility of $W_j$ as a distortion/reversal warning.\\
+\addlinespace
+\textbf{Mechanism axis:} Direct-neighbor failure redistribution vs.\ pathway accumulation &
+Binary cascading-failure and load-redistribution models \citep{buldyrev2010,he2019,shuang2017} that split conserved load across direct neighbors upon threshold failure ($L_j'>C_j$). &
+Non-conservative continuous bounded influence scaling ($Q_{ij}$ evaluated independently per outgoing edge without conserved flow splitting) propagated recursively along multi-hop DAG pathways via immediate-predecessor scalar states, isolating shared-ancestry overlap explicitly. &
+Matched shared-origin vs.\ independent-origin branch controls and reconvergence suites quantifying exact distortion $R_j-\pi_j$ where local scalar states collapse upstream ancestry.\\
+\addlinespace
+\textbf{Advantage axis:} Comparative advantage without universal-superiority claims &
+Monte Carlo IC reference \citep{kempe2003}, full-graph tree bounds \citep{chen2010mia}, all-pairs centrality \citep{dastgir2023}, and physical/GNN surrogates \citep{zhang2024}. &
+Empirically identifies when $O(|V|+|E|)$ bounded recursion and Two-Stage Certified Screening deliver tight, low-regret top-$k$ decisions at substantially lower computational cost—without claiming universal superiority over simulators or exact solvers. &
+Evaluated via paired tightness ($R_j-T_j$, $R_j-M_j$), fixed-budget top-$k$ capture and regret, deterministic zero-MC certification rate, and runtime/memory cost; unfavorable regimes (dense reconvergence, high saturation, strong shared ancestry) are retained and reported honestly.\\
+\end{longtable}
+\endgroup

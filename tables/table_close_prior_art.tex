@@ -1,35 +1,113 @@
-{\small\renewcommand{\arraystretch}{1.08}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\dimexpr\textwidth-4\tabcolsep\relax}
->{\raggedright\arraybackslash}p{0.38\dimexpr\textwidth-4\tabcolsep\relax}
->{\raggedright\arraybackslash}p{0.40\dimexpr\textwidth-4\tabcolsep\relax}@{}}
-\caption{Close mathematical and architectural precedents and the comparison required.}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\emergencystretch=1.5em
+\begin{longtable}{@{}>{\raggedright\arraybackslash\hspace{0pt}}p{0.15\dimexpr\textwidth-10\tabcolsep\relax}
+>{\raggedright\arraybackslash\hspace{0pt}}p{0.24\dimexpr\textwidth-10\tabcolsep\relax}
+>{\raggedright\arraybackslash\hspace{0pt}}p{0.14\dimexpr\textwidth-10\tabcolsep\relax}
+>{\raggedright\arraybackslash\hspace{0pt}}p{0.15\dimexpr\textwidth-10\tabcolsep\relax}
+>{\raggedright\arraybackslash\hspace{0pt}}p{0.17\dimexpr\textwidth-10\tabcolsep\relax}
+>{\raggedright\arraybackslash\hspace{0pt}}p{0.15\dimexpr\textwidth-10\tabcolsep\relax}@{}}
+\caption{Equation-level prior-art and gap-resolution matrix comparing GBBRPM and Two-Stage Deterministic Certified Top-$k$ Screening against close algebraic, stochastic-cascade, risk-pathway, failure-redistribution, and domain-coupled precedents.}
 \label{tab:close-prior-art}\\
 \toprule
-Precedent & Established overlap & Distinction or evaluation need\\
+\textbf{Model / Precedent} & \textbf{Governing Equation / Rule} & \textbf{State Semantics} & \textbf{Bounds \& Guarantees} & \textbf{Neighbor vs.\ Pathway Role} & \textbf{Complexity}\\
 \midrule
 \endfirsthead
-\caption[]{Close mathematical and architectural precedents (continued).}\\
+\caption[]{Equation-level prior-art and gap-resolution matrix (continued).}\\
 \toprule
-Precedent & Established overlap & Distinction or evaluation need\\
+\textbf{Model / Precedent} & \textbf{Governing Equation / Rule} & \textbf{State Semantics} & \textbf{Bounds \& Guarantees} & \textbf{Neighbor vs.\ Pathway Role} & \textbf{Complexity}\\
 \midrule
 \endhead
 \bottomrule
 \endlastfoot
 Probabilistic-sum t-conorm \citep{klement2004} &
-Exact repeated complement-product aggregation; established boundedness,
-associativity, and monotonicity &
-Identifies adopted mathematics. A graph-index application must justify
-its semantics and aggregation choice; it cannot claim a new operator.\\
+$\mathcal{S}_P(x,y)=x+y-xy$;\newline
+$1-\prod_k(1-x_k)$ &
+Algebraic operator on $[0,1]$; no intrinsic probability or risk meaning &
+Bounded in $[0,1]$; commutative, associative, monotone; $0$ neutral &
+Local $n$-ary aggregation operator only; no graph topology or pathway dynamics &
+$O(d)$ per $d$-input aggregation\\
 \addlinespace
-Leaky noisy-OR and evidential extensions \citep{fallet2012} &
-Background term plus parent influences in a complement-product structure &
-Conditional/evidential uncertainty differs from a supplied scalar index.
-Similar algebra does not equate index recursion with Bayesian inference.\\
+Leaky Noisy-OR \& evidential \citep{fallet2012} &
+$\Pr(Y\!=\!1\mid\mathbf{x})=$\newline
+$1-(1-\ell)$\newline
+$\times\prod_{i:x_i=1}(1-p_i)$ &
+Conditional event probability or evidential belief mass &
+Valid probability in $[0,1]$ under causal independence; correlated parents require joint inference &
+Parent-to-child conditional table on a Bayesian\slash evidential DAG; no single-pass scalar index bracket &
+$O(d)$ per CPT; joint exact inference exp.\ in treewidth\\
+\addlinespace
+IC and LT diffusion \citep{kempe2003} &
+IC: active $i$ triggers $(i,j)$ w.p.\ $p_{ij}$;\newline
+LT: active if $\sum_{i\in P(j)} b_{ij}\ge\theta_j$ &
+Stochastic binary activation ($0/1$) and expected seed spread $\sigma(S)$ &
+Submodular spread gives $(1-1/e)$ greedy seed bound; no closed-form per-node deterministic bracket &
+Multi-hop stochastic pathway spread from fixed seeds; live-edge reachability serves as exact IC reference &
+\#P-hard exact; $N$ MC trials in $O(|V|+|E|)$ each\\
 \addlinespace
 RIPA \citep{faraji2026} &
-Current total-risk propagation through multiplicative context and
-dependency factors, with initial plus incoming risk &
-Uses additive node aggregation. Comparing accumulation behavior does
-not establish superior ranking or operational accuracy.\\
+$R_{\mathrm{pro},ij}=R_{\mathrm{tot}}(i)$\newline
+$\times(1-RE_i)(1-RE_j)$\newline
+$\times LI_{ij}C_j$;\newline
+$R_{\mathrm{tot}}(j)=R_0(j)$\newline
+$+\sum_i R_{\mathrm{pro},ij}$ &
+Continuous dynamic pathway risk across interdependent infrastructures &
+Unbounded above under additive convergence; no receiving-state stochastic bracket &
+Recursive multi-hop pathway propagation with multiplicative modifiers and additive node aggregation &
+$O(|V|+|E|)$ on DAG; iterative on cyclic graphs\\
+\addlinespace
+Non-backtracking IC bounds \citep{abbe2017,abbe2020} &
+Upper: $m_{i\to j}^{(t)}=$\newline
+$1-\prod(1-p\,m^{(t-1)})$;\newline
+Lower (DAG): incoming-message bound (Eqs.~21--23) &
+Marginal IC activation probability summed to seed-set influence &
+Harris--FKG upper bound and DAG lower bound on IC marginals; targets seed spread, not top-$k$ certification &
+Multi-hop non-backtracking or DAG message passing; upper messages track path length $t$ &
+Upper: $O(T|E|)$;\newline
+DAG lower: $O(|V|+|E|)$\\
+\addlinespace
+MIA and LDAG \citep{chen2010mia,chen2010ldag} &
+MIA (tree): $1-\prod(1-p_{ij}\mathrm{ap}_i)$;\newline
+LDAG (LT): $\sum_i b_{ij}\mathrm{ap}_i$ &
+Approximate activation probability for seed-set influence maximization &
+Thresholded pruning breaks strict lower bounds unless unthresholded; LDAG is LT-specific (additive) &
+Target-specific pathway restriction: MIA tree removes shared-origin reconvergence; LDAG restricts local DAG &
+Local Dijkstra + tree/DAG pass per node\\
+\addlinespace
+Dynamic causal risk \citep{wu2026} &
+Time-varying causal edge weights $w_{ij}(t)$ with weighted causal risk update &
+Domain-calibrated operational hazard risk (airport movement areas) &
+Empirical causal calibration; no closed-form deterministic bracket or certified top-$k$ pruning rule &
+Directed multi-hop causal pathway propagation coupled to operational hazard weights &
+Graph/matrix pass per time step\\
+\addlinespace
+Cascading failure \& load transfer \citep{buldyrev2010,he2019} &
+$L_j'=L_j+\Delta L_{ij}$;\newline
+node $j$ fails if $L_j'>C_j$ or loses support &
+Conserved physical load vs.\ capacity and binary failed/active state &
+Percolation/criticality thresholds on ensembles; no continuous comparative-risk bracket on general DAGs &
+Direct-neighbor load redistribution upon binary overload/failure; discrete cascade rounds, not continuous risk accumulation &
+$t$ rounds of $O(|V|+|E|)$\\
+\addlinespace
+Domain-coupled drainage models \citep{simone2023,dastgir2023,zhang2025} &
+Relevance centrality; runoff edge betweenness + capacity; siltation risk chains &
+Drainage-specific criticality, vulnerability, or siltation-chain priority &
+Empirically compared vs.\ hydrodynamics; degrades with loops/stress; no cross-domain bracket or top-$k$ certificate &
+Global shortest/runoff paths or domain-specific siltation chains; raw physical variables coupled inside ranking formula &
+$O(|V||E|)$ to $O(|V|^3)$ (all-pairs paths)\\
+\addlinespace
+\textbf{GBBRPM + Two-Stage Certified Top-$k$ (This Study)} &
+$Q_{ij}=S_{ij}\tau_{ij}R_i$;\newline
+$R_j=1-(1-B_j)$\newline
+$\times\prod_{i\in P(j)}(1-Q_{ij})$;\newline
+Stg.~1 $[M_j,R_j]$;\newline
+Stg.~2 $[T_j,R_j]$ on $U_k^{(1)}$ &
+Bounded non-probabilistic comparative index $R_j\in[0,1]$ plus exact stochastic bracket comparator ($\pi_j$) &
+Provable $M_j\le T_j\le\pi_j\le R_j\le H_j$ on finite DAGs; zero-MC Stage~1/2 certified sets ($I_k,O_k$); self-diagnosing width $W_j=R_j-M_j$ &
+Non-conservative continuous pathway accumulation via immediate-predecessor topological pass; modular $B,S,\tau$ adapters; shared-ancestry overlap explicitly diagnosed &
+Core \& Stg.~1: $O(|V|+|E|)$;\newline
+Stg.~2: $|U_k^{(1)}|$ passes of $O(|V|+|E|)$\\
 \end{longtable}
-}
+\endgroup
