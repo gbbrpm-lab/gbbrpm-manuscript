@@ -1,121 +1,51 @@
-# Briefing 05: Architecture Results, Robustness, and Scalability
+# Briefing 05: Planned Accuracy, Robustness, and Cost Evaluation
 
-## Baseline behavior
+**Proposal briefing: no completed benchmark results are asserted.** The legacy filename is retained for compatibility.
 
-| Network | Maximum risk | Mean risk | Outlet risk | Main interpretation |
-|---|---:|---:|---:|---|
-| N1 | 0.800000 | 0.249493 | 0.053760 | Strong attenuation along a chain |
-| N2 | 0.800000 | 0.465250 | 0.408000 | High-susceptibility branches retain downstream risk |
-| N3 | 0.700000 | 0.420205 | 0.106814 | Bounded convergence from independent sources |
-| N4 | 0.800000 | 0.579719 | 0.351372 | Reconvergence increases downstream state |
-| N5 | 0.816448 | 0.632660 | 0.708640 | Mixed mechanisms elevate internal nodes |
+## Primary selection outcomes
 
-In the N5 baseline, the top three are `N13 > N19 > N16`, showing that neither the source nor the outlet must rank highest.
+Candidates are nodes with B=0, including unreachable nodes. Exclude positive-local-input nodes so supplied disturbances do not trivially dominate. For f in {0.10,0.20,0.30}, set `k=max(1,ceil(f*|C|))` and select exactly k candidates.
 
-## Source-severity response
+Average boundary-tie handling over 100 seeded random node-order permutations, shared by methods and independent of reference outcomes (seed 140). Numerical tie groups use absolute tolerance 1e-12 anchored to the highest score in each descending group.
 
-All networks showed monotone outlet response as selected source severity increased from `0.25` to `1.00`.
+| Measure | Interpretation |
+|---|---|
+| Capture | Sum of pi over selected nodes divided by sum of pi over candidates |
+| Regret | Optimal k-node activation mass minus selected activation mass |
+| Tie-aware Spearman | Association with reference receiving-state ordering |
+| Strict reversals | Strict model order contradicted by strict reference order |
+| Resolved-pair fraction | Shows how much ordering the reference precision actually resolves |
 
-Ranking was not always fixed:
+Capture is undefined when total candidate activation mass is zero. Report that case. Monte Carlo oracle membership and regret are estimates. A set-mass difference has conservative uncertainty bounded by h times the symmetric-difference size.
 
-- N1 and N2 retained their top-three ordering;
-- N3, N4, and N5 changed ordering; and
-- N5 outlet change was relatively small because other active disturbances already contributed to its baseline state.
+Descriptive top-three/top-20% Jaccard uses expanded cutoff ties and can exceed nominal k. It is a separate measure and must not be used to claim fixed-budget superiority. Constant-rank Spearman is undefined.
 
-Interpretation: monotonicity of values does not imply invariance of rankings.
+## Score tightness and uncertainty
 
-## `L/C` stress response
+Report R-M, R-T, actual upper slack R-pi, lower slacks pi-M and pi-T, mean/max absolute error, and terminal error. The bracket already guarantees the sign and pointwise ordering under the declared process. Measure tightness and ordering consequences; do not present the guaranteed inequality as an empirical discovery.
 
-Scaling edge loads and recomputing clipped susceptibility changed risk magnitude and ranking. When one edge reaches `S = 1`, it saturates individually, but other unsaturated edges can still change. Recursive downstream states can therefore continue increasing after some edges have clipped.
+Intersect per-node Monte Carlo intervals with [T,R], or [M,R] for scalar-only certificates, when nonempty. An empty intersection is a sampling-coverage or implementation discrepancy to retain and investigate. A sampled reversal is resolved only when nonempty intersected intervals establish the opposite strict order at the stated per-solve coverage. Report counts, denominator, ties, and unresolved pairs together.
 
-## Location sensitivity
+Also report near-saturation fractions (scores/reference estimates at least 0.95), numerical saturation at 1-1e-12, and distinct score groups. Retain near-zero and saturated cases. A tighter pointwise bound need not yield better rankings.
 
-Equal local severity `B = 0.75` produced wide outlet-risk ranges:
+Graph is the replication unit. Average nodes within graph first; give graphs equal weight; keep development, evaluation, graph families, sizes, weights, source settings, heterogeneous cases, and Express summaries distinguishable. Repeated conditions on one graph are not independent graph replications.
 
-| Network | Lowest outlet risk | Highest outlet risk | Range |
-|---|---:|---:|---:|
-| N1 | 0.050400 | 0.600000 | 0.549600 |
-| N2 | 0.000000 | 0.750000 | 0.750000 |
-| N3 | 0.000000 | 0.487500 | 0.487500 |
-| N4 | 0.000000 | 0.562500 | 0.562500 |
-| N5 | 0.058820 | 0.619410 | 0.560590 |
+## Prospective dependence diagnostic
 
-This directly supports the claim that local severity alone is insufficient for network-level prioritization.
+Carry local-origin label sets. Form an overlap graph of positive incoming contributions; connected components, including transitive overlap, define groups. Keep the largest incoming contribution per group, combine group maxima and the local term by complement product, and propagate this variant's own states and union labels.
 
-## Multi-source response
+It may suppress independent edge opportunities or merge partially overlapping origins. It is not the restricted-tree comparator and inherits no stated upper-bound guarantee. Evaluate both failures and gains against the same reference. A straightforward implementation can need `O(K*sum_j d_j^2)` overlap work; record label sizes, checks, runtime, and memory.
 
-In N3, the outlet risks were:
+## Robustness and cost plans
 
-- source A only: `0.056306`;
-- source B only: `0.073734`; and
-- sources A+B: `0.106814`.
+Planned robustness uses 600 trials at each delta in {0.05,0.10,0.20}, seed 41, and independently perturbed S clipped to [0,1]. Freeze topology, B, and tau. Historical robustness tables do not certify this exact revised implementation.
 
-In N5, all three sources produced outlet risk `0.708640`. The bounded aggregator allowed contributions to coexist without exceeding one, but this does not establish probabilistic independence.
+Validation/order and scalar propagation are O(V+E), full sorting adds O(V log V), and graph/contribution-trace storage is O(V+E). These bounds exclude adapters and extra diagnostic/tree work. Measure validation/order, propagation, ranking, total evaluation, and peak memory separately. Use five warm-ups and 30 deterministic repetitions; state hardware and instrumentation. Reference timings include trial count/precision, preparation, and sampling; per-target tree construction is included.
 
-## Intermediate disturbance
+A development-only pilot precedes the full compute commitment. The primary generated references imply 75.6 billion potential edge-trial checks, audits another 10.08 billion, and heterogeneity another 3.024 billion under direct execution. These are workload estimates, not measured runtimes. Document any reduction before held-out outcomes.
 
-The largest tested outlet responses included:
+## Preliminary context
 
-- N1: `0.613440` for `E = 0.75`;
-- N2: `0.852000` for `H = 0.75`; and
-- N5: `0.852160` for `N19 = 0.75`.
+Appendix D preserves historical 136-run behavior evidence, 600 randomized property trials, robustness summaries, counterfactual dependence differences, and sparse-DAG timings. These motivate the proposed evaluation but do not provide its reference errors, fixed-budget results, or matched memory/cost comparisons. Historical disagreement with GBBRPM measures information dependence, not accuracy against ground truth.
 
-This family demonstrates that a node can combine inherited risk with a newly introduced local disturbance.
-
-## Comparator evidence
-
-N5 agreement with heterogeneous GBBRPM:
-
-| Comparator | Spearman | Top-three Jaccard |
-|---|---:|---:|
-| Local only | 0.108627 | 0.0 |
-| Uniform `S = 0.25` | -0.042105 | 0.0 |
-| Uniform `S = 0.50` | 0.150376 | 0.0 |
-| Uniform `S = 0.75` | 0.696241 | 0.5 |
-
-Low local-only agreement shows that propagation changes prioritization. Varying agreement across uniform conditions shows that heterogeneous edge patterns also matter.
-
-## Robustness
-
-| Perturbation | Mean Spearman | Mean top-three Jaccard |
-|---|---:|---:|
-| `+/-5%` | 0.979190 | 0.744500 |
-| `+/-10%` | 0.938267 | 0.546667 |
-| `+/-20%` | 0.845552 | 0.388833 |
-
-Broad ordering remains comparatively stable, but membership among the highest-priority nodes is more sensitive. Do not summarize robustness using Spearman alone.
-
-## Mathematical property tests
-
-All 600 randomized trials passed each declared property:
-
-- boundedness;
-- monotonicity;
-- full local disturbance; and
-- zero-susceptibility gating.
-
-These tests support implementation consistency over sampled cases, not a proof of correctness for every possible future extension.
-
-## Reconvergence and dependence
-
-| Network | Maximum overlap inflation | Outlet GBBRPM | Outlet path-pruned |
-|---|---:|---:|---:|
-| N3 | 0.000000 | 0.106814 | 0.106814 |
-| N4 | 0.189280 | 0.351372 | 0.252000 |
-| N5 | 0.439353 | 0.708640 | 0.386003 |
-
-N3 convergence comes from independent source branches. N4 and N5 contain shared-origin reconvergence, where ordinary local aggregation may count related ancestry through multiple paths.
-
-## Scalability
-
-Median runtime increased from approximately:
-
-- `1.63 ms` at 20 nodes and 60 edges; to
-- `16.65 ms` at 1000 nodes and 3000 edges.
-
-The observed trend is consistent with one-pass `O(|V| + |E|)` evaluation on sparse DAGs. Runtime values remain environment-dependent.
-
-## Strongest architecture conclusion
-
-GBBRPM behaves consistently with its declared bounded and monotone semantics, responds materially to topology and heterogeneous conditions, remains broadly rank-stable under modest perturbation, exposes a clear reconvergence limitation, and is computationally lightweight on the tested sparse DAGs.
-
+Sources: Chapter 3 properties/cost/reporting sections; `chapters/reference_benchmark.tex`; Appendix D.

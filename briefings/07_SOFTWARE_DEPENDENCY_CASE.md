@@ -1,84 +1,34 @@
-# Briefing 07: Software-Dependency Case
+# Briefing 07: Software Inputs and Planned Express Benchmark
 
-## Purpose
+**Verified inputs and historical calculations exist; the 12 new stochastic scenarios are planned.**
 
-The software case tests whether the frozen GBBRPM roles can be instantiated on a real non-physical directed dependency graph without changing the update rule.
+The original Express 4.18.2 case contains 71 package/version nodes and 128 edges. Direction is **dependency to dependent**, so influence reaches consuming packages. The preserved dependency response uses the source convention; the CSV direction is checked against it.
 
-## Dataset and graph
+## Included originals
 
-- target package: Express 4.18.2;
-- nodes: 71 packages;
-- edges: 128 directed dependency-to-dependent relations;
-- evidence-backed affected versions: 7 packages.
+`data/software/express_4.18.2/` contains nodes/edges CSVs, dependency JSON, OSV snapshot, case manifest, and input-verification record. The original CSV hashes match the historical paper-output manifest. The source records support seven advisory-origin identities, including Express itself.
 
-## Local disturbance mapping
+From the manuscript root run:
 
-Advisory severity is mapped to bounded `B` values:
+```bash
+python3 scripts/verify_express_inputs.py
+```
 
-| Package | Severity | B |
-|---|---|---:|
-| body-parser | High | 0.75 |
-| path-to-regexp | High | 0.75 |
-| express | Moderate | 0.50 |
-| qs | Moderate | 0.50 |
-| cookie | Low | 0.25 |
-| send | Low | 0.25 |
-| serve-static | Low | 0.25 |
+This checks input identity, endpoints, direction, acyclicity, and advisory-origin consistency. It does not execute a stochastic benchmark, validate current incident outcomes, or authenticate the separate reconstructed N1–N5 fixtures. Reacquiring Express originals is no longer an outstanding task.
 
-This mapping is a transparent controlled severity encoding, not exploit probability.
+## Two distinct uses of this topology
 
-## Transmission sweep
+| Use | Inputs and status | Interpretation |
+|---|---|---|
+| Preliminary index calculation | Advisory severity mapped to B; S=1; historical tau sweep {0,0.25,0.50,0.75,1} | Comparative index response, not exploit probability |
+| Planned stochastic topology benchmark | Seven verified advisory identities receive controlled B=0.5 or 1; other nodes B=0; six declared uniform weights | 12 future scenarios against the independent-primitive process on real topology |
 
-Uniform `tau` values: `0`, `0.25`, `0.50`, `0.75`, and `1.00`.
+Do not treat advisory severities as Bernoulli probabilities. The planned experiment uses advisory identities to locate controlled initial terms, including the root where applicable. It does not import severity values as calibrated probabilities.
 
-| tau | Express risk | Express rank | Maximum network risk |
-|---:|---:|---:|---:|
-| 0.00 | 0.5000 | 3 | 0.7500 |
-| 0.25 | 0.7673 | 2 | 0.7812 |
-| 0.50 | 0.9118 | 1 | 0.9118 |
-| 0.75 | 0.9766 | 1 | 0.9766 |
-| 1.00 | 0.9975 | 1 | 0.9975 |
+Appendix B traces the historical tau=0.50 index calculation, giving Express R approximately 0.9118. Appendix D retains the historical root range 0.5000 to 0.9975 across the transmission sweep. These values are preliminary index calculations, not results of the 12 planned benchmark scenarios.
 
-Express reaches rank one by `tau = 0.50`. Ranking agreement with the `tau = 1` reference remains extremely high, and top-20% Jaccard remains `1.0` throughout.
+Shared `qs` and `send` paths reconverge. Stable root rank does not quantify dependence slack. The controlled stochastic reference will support that evaluation under its own assumptions.
 
-**Worked-calculation reference:** Appendix B independently traces the nonzero dependency contributions, intermediate-node recursion, and bounded aggregation that reproduce `R_Express = 0.9118` at `tau = 0.50`.
+W8 will confirm selected hashes, mappings, and scenario eligibility before protocol freezing. Express results remain separate from generated-graph averages. Cyclic dependency input is rejected; component condensation would require separately defined node semantics. Independent incident prediction is not established.
 
-## Interpretation
-
-As transmission increases, more dependency risk reaches packages that depend on the affected packages. Express accumulates several incoming dependency contributions and approaches saturation.
-
-The sweep demonstrates expected attenuation sensitivity. It does not calibrate the true probability that a dependency vulnerability will be exploited or compromise Express.
-
-## What the software case supports
-
-- coherent mapping of the frozen architecture to a real dependency topology;
-- evidence-backed local disturbance inputs;
-- controlled transmission sensitivity;
-- traceable accumulation at a dependent package; and
-- cross-domain structural instantiability.
-
-## What it does not support
-
-- future exploit prediction;
-- compromise probability;
-- incident forecasting;
-- empirical calibration of `tau`; or
-- causal proof that a dependency advisory compromises Express.
-
-## Likely examiner questions
-
-### “Why direct edges from dependency to dependent?”
-
-That direction represents the modeled influence pathway: evidence at a dependency may affect the package that relies on it. Direction must follow the risk-transfer interpretation, not merely package-manager display conventions.
-
-### “Why is Express locally disturbed if it also receives propagated risk?”
-
-Express has its own evidence-backed advisories, so it legitimately has local `B = 0.50` while also receiving contributions from vulnerable dependencies. The architecture was designed to combine both.
-
-### “Why does Express approach one?”
-
-Several nonzero contributions combine with its local disturbance through the saturating multiplicative complement. The value is a high comparative index, not near-certain exploitation.
-
-### “Why is ranking already similar at tau = 0?”
-
-The same seven local disturbances already determine much of the ordering. Increasing transmission changes accumulated magnitudes and elevates Express while leaving much of the broader ordering stable.
+Sources: Chapter 3 software and reference sections; Appendix B; Appendix D; `docs/INPUT_PROVENANCE_UPDATE.md`.

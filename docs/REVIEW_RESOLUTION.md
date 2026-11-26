@@ -1,5 +1,7 @@
 # Review resolution
 
+> Historical revision record. It describes the authoring pass below, not the current source configuration or newly reproduced tests. For current scope, evidence, inventory, and remaining work, use [CURRENT_PROPOSAL_STATUS.md](CURRENT_PROPOSAL_STATUS.md) and [NEXT_STEPS.md](NEXT_STEPS.md). Chapters I–III govern; the new benchmark remains planned. Earlier front-matter, page-count, compile, and test statements must not be read as current verification.
+
 This pass uses the unchanged uploaded manuscript and applies supported
 clarifications from the supplied Review.pdf. It does not change the
 model, scenario inputs, or computed risk results.

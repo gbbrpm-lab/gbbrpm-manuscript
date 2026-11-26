@@ -1,5 +1,7 @@
 # Input provenance update — 14 October 2026
 
+> Historical revision record. It describes the authoring pass below, not the current source configuration or newly reproduced tests. For current scope, evidence, inventory, and remaining work, use [CURRENT_PROPOSAL_STATUS.md](CURRENT_PROPOSAL_STATUS.md) and [NEXT_STEPS.md](NEXT_STEPS.md). Chapters I–III govern; the new benchmark remains planned. Earlier front-matter, page-count, compile, and test statements must not be read as current verification.
+
 ## Verified original Express inputs
 
 The supplied `express_4.18.2.zip` contains the original software inputs.
