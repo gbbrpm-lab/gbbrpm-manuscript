@@ -1,37 +1,86 @@
 \section{Recommendations}\label{recommendations}
 
-The following recommendations follow directly from the evidence limits
-identified in the drainage, software-dependency, and electrical-network
-cases:
+Grounded directly in the empirical findings, partial hypothesis
+outcomes, and Gate~A/Gate~B evidence boundaries established in
+Chapters~IV and~V, the study advances six concrete recommendations for
+future research, engineering practice, and verification:
 
 \begin{enumerate}[label=\arabic*.,leftmargin=*]
-  \item Obtain electrical measurements and independent event outcomes
-  aligned with the four requested November 13 event groups, then execute
-  the preregistered event-window analysis against the Component 2
-  controlled baseline.
-  \item Evaluate domain-specific rankings against independent outcomes
-  that were not used to construct the model inputs.
-  \item Obtain provenance-complete operational drainage observations so
-  that the controlled and SWMM-based findings can be compared with field
-  conditions rather than being interpreted as field validation.
-  \item Investigate ancestry-aware or dependence-aware aggregation for
-  reconvergent paths while retaining the current v1 formulation as the
-  comparison baseline.
-  \item Calibrate or justify heterogeneous transmission and
-  susceptibility functions separately within each domain.
-  \item Develop explicit extensions for cyclic, bidirectional, and
-  temporal networks rather than silently applying the DAG evaluator
-  outside its assumptions.
-  \item Repeat the cross-domain protocol on additional datasets to test
-  out-of-sample applicability without overstating generalizability.
-  \item Evaluate the research prototype with representative users and
-  harden its accessibility, error reporting, authentication, persistence,
-  and deployment controls before considering operational use.
+\item \textbf{Acquire Aligned Independent Outcome Datasets for Gate~B
+Domain Validation.}
+\begin{itemize}[leftmargin=*]
+\item \emph{Urban Drainage:} Partner with DPWH Regional Office~X and
+the Cagayan de Oro City Disaster Risk Reduction and Management Office
+to obtain provenance-complete, pre-event blockage surveys paired with
+post-storm inundation observations (including verified non-flooded
+control junctions) aligned to the exact as-built or Master Plan
+conduit topology, enabling confirmatory Gate~B evaluation separate from
+Tier-2 controlled injections.
+\item \emph{Electrical Distribution:} Obtain event-aligned switching,
+protection-trip, and outage logs corresponding to the November~13, 2024
+event windows in the Caltech SoCal 28-Bus feeder (or comparable
+instrumented radial feeders) so that preregistered event-response
+validation can be executed against the verified Component~2 arborescence
+baseline.
+\item \emph{Software Dependencies:} Evaluate GBBRPM on software
+ecosystems where vulnerability advisories ($B_i$) and downstream
+real-world exploitability or patch-urgency outcomes are recorded from
+independent telemetry sources, ensuring inputs are never reused as
+validation labels.
+\end{itemize}
+\item \textbf{Develop Dedicated Extensions for Cyclic, Bidirectional,
+and Hydraulic-Backwater Networks.} Rather than applying the acyclic
+GBBRPM~v1 core outside its assumptions or deleting edges heuristically,
+future work should formulate a separate \texttt{v2+} extension capable
+of handling directed cycles, surcharged hydraulic backwater, meshed
+electrical grids, and cyclic package dependencies---for example through
+damped fixed-point solvers, strongly connected component (SCC)
+condensation with explicit within-SCC physics, or hybrid coupling with
+hydrodynamic (SWMM/PCSWMM) and power-flow solvers where bidirectional
+redistribution dominates downstream propagation.
+\item \textbf{Advance Tighter Dependence-Aware and Hybrid
+Monte Carlo Screening Bounds.} Because naive connected-component
+ancestry pruning degraded selection regret ($0.5590$ vs.\ $0.00742$
+for $R_j$) and Stage~2 tree resolution narrowed under heavy weights
+($53.75\%$ at $w=0.75$), future methodological work should investigate
+two refinements while retaining GBBRPM~v1 as the benchmark baseline:
+(a)~localized $k$-hop or cut-set junction-tree bounds applied solely to
+high-overlap reconvergent diamonds (such as \texttt{J\_AGORA\_CONF} or
+the \texttt{qs}/\texttt{send} subgraphs), and (b)~adaptive
+\textbf{Stage~3 Targeted Monte Carlo Escalation} that allocates
+bit-packed simulation trials exclusively to the residual uncertified
+boundary band $U_k^{(2)}$ whenever $W_{\max} \ge 0.10$ or
+$|U_k^{(2)}| > 0$, combining deterministic screening speed with
+user-specified statistical precision.
+\item \textbf{Refine Nodewise Distortion Diagnostics Beyond Scalar
+$W_j$.} Because $W_j = R_j - M_j$ proved strong as a scenario-level
+reversal alarm ($\rho = 0.6769$, $100\%$ recall at $W_{\max} \ge 0.10$)
+but weak for within-graph nodewise slack ranking ($\rho = 0.2286$),
+practitioners should use $W_{\max}$ strictly as a regime-level trigger
+for Stage~2 screening rather than as a nodewise error ranker. Future
+research should test whether the Stage~2 tree width $R_j - T_j$ or
+inexpensive two-predecessor overlap indicators separate shared-ancestry
+slack from independent multi-branch convergence at near-linear cost.
+\item \textbf{Harden the Research Prototype for Human-in-the-Loop
+Usability and Operational Readiness.} While the current prototype
+passed all $76/76$ automated functional, fail-closed validation, and
+replay parity checks, it should undergo structured usability evaluation
+with domain engineers (drainage, cybersecurity, and power-systems
+analysts) and software hardening---specifically interactive
+visualization of Stage~1/Stage~2 certified bands ($I_k, O_k, U_k$),
+explicit Gate~A/Gate~B warning banners, accessibility compliance,
+large-graph layout performance ($|V| \ge 500$), authentication,
+persistent scenario storage, and deployment security controls---before
+any operational adoption.
+\item \textbf{Complete Independent Clean-Environment Replication
+(\texttt{DJA}) and Long-Term Archival.} Prior to journal submission and
+final archival, an independent team verifier (\texttt{DJA}) should
+execute the frozen one-command pipeline
+(\texttt{scripts/generate\_\allowbreak paper\_\allowbreak outputs.py})
+from \texttt{v2.0.0-heldout-eval} inside a fresh virtual environment
+pinned to \texttt{requirements-lock-v2.0.0.txt} and verify bitwise
+SHA-256 parity against \texttt{paper\_\allowbreak outputs\_\allowbreak manifest.json}
+(with public synthetic and \texttt{Express 4.18.2} artifacts deposited
+in an open archival repository while maintaining restricted custody of
+raw DPWH and Caltech agency payloads).
 \end{enumerate}
-
-These recommendations preserve the distinction between the model's
-validated computational behavior and the empirical claims that still
-require domain-specific evidence. GBBRPM v1 is not a universal predictor,
-a hydraulic simulator, or a completed electrical event model; subsequent
-work should retain those interpretation boundaries while strengthening
-field evidence and dependence handling.

@@ -1,211 +1,164 @@
 \section{Summary and Conclusion}\label{summary-and-conclusion}
 
-\subsection{Overview}
+\subsection{Summary of the Study}
 
-This study designed and evaluated GBBRPM v1 as a bounded recursive model
-for comparative node-risk prioritization in directed acyclic networks.
-The evidence combines controlled architecture tests with three
-domain-specific cases: drainage, software dependency, and electrical
-networks. The cases intentionally support different claims and are not
-presented as equivalent forms of outcome validation.
+This study designed, formally specified, implemented, and evaluated the
+\textbf{Graph-Based Bounded Risk Propagation Model (GBBRPM)}, a
+modular adapter-to-core framework for static bounded receiving-state
+prioritization on directed acyclic graphs (DAGs), together with its
+\textbf{Two-Stage Deterministic Certified Top-$k$ Screening} harness
+and traceable evaluation engine. Rather than claiming a newly invented
+algebraic operator, the study integrated the established
+probabilistic-sum t-conorm \citep{klement2004} into a domain-decoupled,
+fail-closed single-pass DAG architecture and tested it against matched
+aggregation, restricted-tree, association-bound, and ancestry-aware
+comparators under a frozen protocol
+(\texttt{v2.0.0-protocol-freeze} $\to$ \texttt{v2.0.0-heldout-eval}).
+Across $4,316$ primary benchmark scenarios ($88.86\text{ billion}$
+edge-trials), $48$ independent $N=1{,}000{,}000$ precision audits,
+$158$ computational scaling measurements, and $115$ real-domain
+evaluations, the findings addressed all six research questions (RQ1--RQ6)
+and Specific Objectives~1--6 as follows:
 
-\subsection{Summary of Findings}
-
-\subsubsection{Architecture Behavior}
-
-Across the controlled N1--N5 experiments, GBBRPM preserved the declared
-$[0,1]$ bounds and monotone response to increases in local disturbance
-and susceptibility. Recursive current-state propagation, heterogeneous
-edge conditions, disturbance location, and multi-source configuration
-materially affected both risk magnitude and ranking. Randomized property
-tests passed all 600 trials for boundedness, monotonicity, full local
-disturbance, and zero-susceptibility gating.
-
-Ranking robustness remained high under modest perturbations, although
-agreement among the highest-priority nodes declined faster than the
-overall Spearman ordering. The reconvergence diagnostic also showed that
-shared ancestry can be counted through multiple paths, especially in N5.
-This is a known boundary of the local multiplicative-complement
-aggregator rather than evidence of probabilistic independence.
-
-The sparse-DAG timing experiment was consistent with the expected
-one-pass $O(|V|+|E|)$ implementation. Median execution time increased
-from approximately 1.63 ms at 20 nodes to 16.65 ms at 1000 nodes under
-the reported environment.
-
-\subsubsection{Drainage Evidence and Hydraulic Boundary}
-
-The drainage case supplied the most complete behavioral evaluation. The
-controlled experiments demonstrated the effects of attenuation,
-branching, convergence, reconvergence, local disturbance, susceptibility,
-and multiple active sources. However, the 12-scenario SWMM comparison
-produced negative mean rank association and low top-20\% overlap for
-both maximum-depth and flooding outcomes. Hydraulic worsening also
-occurred outside the model's strictly downstream region.
-
-These findings do not support interpreting the GBBRPM index as a
-hydraulic predictor. Instead, they identify a clear scope boundary:
-GBBRPM represents lightweight downstream comparative propagation,
-whereas SWMM represents hydraulic mechanisms such as backwater,
-surcharge, ponding, and flow redistribution.
-
-The mismatch does not identify the causal hydraulic mechanism in each
-scenario or establish the usefulness of GBBRPM for drainage maintenance
-prioritization. That intended use remains subject to separate validation
-against relevant outcomes.
-
-\subsubsection{Software-Dependency Evidence}
-
-The Express 4.18.2 case instantiated the frozen core on a real topology
-of 71 packages and 128 dependency edges, with seven evidence-backed
-affected versions. Express root risk increased from 0.5000 to 0.9975
-across the transmission sweep and reached rank one by $\tau=0.50$.
-Ranking agreement with the $\tau=1$ reference remained high.
-
-This result supports real-topology structural applicability and expected
-sensitivity to transmission. It does not establish that the modeled
-index is an exploit probability or a predictor of future incidents.
-
-Reconverging dependencies also carry shared-origin influence into
-multiple Express inputs. The local aggregator may therefore inflate the
-root state through overlap; the software case does not quantify this
-effect, and ranking stability does not establish unbiased magnitudes.
-
-\subsubsection{Electrical-Network Evidence}
-
-The full-network electrical stage verified import and baseline
-preprocessing for 187 bus records, 177 active directed connections, and
-269 channel files. The workflow handled 38 empty archive members without
-terminating, reported mapping and missingness explicitly, identified 54
-usable voltage channels, and measured 98.31\% overall timestamp coverage.
-
-The Component 2 stage extended this evidence through a controlled
-real-topology, measured-loading instantiation. Its observable model contained
-12 nodes and 11 edges parameterized from 24 aligned phasor snapshots.
-Across 43 deterministic scenarios, risks and edge contributions remained
-bounded. Root severity, measured-load scaling, and uniform transmission
-produced monotone increases in downstream risk. Equal disturbances at
-different nodes produced different risk sums, with C2\_N02 highest at
-1.417 because it bypassed the initial transformer attenuation while
-retaining broad downstream reach. The all-internal-source case affected
-10 of 12 nodes while remaining bounded at a maximum node risk of 0.599.
-
-These findings support controlled electrical mechanism and sensitivity
-claims, not event prediction. The measurements represent normal operation
-and are not aligned with the requested switching-event outcomes;
-electrical event-response validation therefore remains pending.
-
-\subsubsection{Research Prototype Evidence}
-
-The interactive prototype connected the frozen evaluator to validated
-synthetic and imported data through a common schema. It exposed explicit
-editing of $B$, $L$, $C$, and $\tau$, directed-network visualization,
-risk coloring, edge-contribution tracing, and comparative rankings. The
-prototype reproduced the frozen N5 outlet result, evaluated a controlled
-imported graph correctly, rejected invalid endpoint and cyclic inputs,
-and completed a production frontend build. Operational mode remained
-inactive pending a provenance-complete agency dataset.
-
-These findings support implementation feasibility and traceable model
-interaction. They do not constitute usability evaluation, production
-readiness, or operational decision validation.
-
-\subsection{Answers to the Research Questions}
-
-The combined evidence answers the six research questions within the
-declared non-probabilistic and non-predictive scope:
-
-\begin{enumerate}[label=\textbf{RQ\arabic*.},leftmargin=*]
-  \item Local disturbance, current upstream risk, relation-specific
-  susceptibility, optional transmission, directed reachability, and
-  multi-source input are integrated through a topologically ordered
-  evaluator and the multiplicative-complement aggregation rule. The
-  resulting state remains traceable to its local and incoming terms.
-  \item The formulation preserved the declared $[0,1]$ bounds and
-  monotone response in the controlled scenarios and all 600 randomized
-  property trials. Comparative rankings also changed in the expected
-  direction when source severity, edge susceptibility, and disturbance
-  placement changed.
-  \item The model responded materially to severity, susceptibility,
-  topology, location, and multi-source configuration; retained high
-  overall ranking agreement under modest perturbation; exposed reduced
-  top-set stability at larger perturbations; and exhibited runtime growth
-  consistent with one-pass $O(|V|+|E|)$ evaluation on the tested sparse
-  DAGs.
-  \item The frozen update rule was instantiated without redefinition in
-  drainage, software-dependency, and electrical-network cases. The
-  domain meanings and evidence sources changed, but the roles of $B$,
-  $S$, $\tau$, $Q$, and $R$ remained fixed.
-  \item The validated architecture was implemented as an interactive
-  research prototype using a common input contract, graph validation,
-  controlled parameter editing, the pinned model engine, and traceable
-  network and ranking outputs. Functional checks reproduced preserved
-  results and rejected invalid graphs, supporting implementation
-  feasibility without implying production readiness.
-  \item The domains and prototype provide unequal but complementary evidence: drainage
-  supplies controlled behavior and a hydraulic-reference boundary;
-  software supplies real-topology structural and transmission-sensitivity
-  evidence; and electrical data supply importer verification plus
-  controlled real-topology, measured-loading sensitivity evidence. None
-  of these results establishes universal predictive validity, and the
-  electrical case still lacks event-aligned independent outcomes.
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item \textbf{Formal Architecture and Contract Specification (RQ1 /
+Objective~1).} GBBRPM separated raw domain adapters from a shared
+single-pass DAG core mapping bounded local disturbance $B_j \in [0,1]$,
+relation-specific susceptibility $S_{ij} \in [0,1]$, and optional
+transmission $\tau_{ij} \in [0,1]$ into a dimensionless receiving-state
+index $R_j \in [0,1]$ via Equations~(3-1)--(3-5). Under independent
+Bernoulli primitive assumptions (Assumptions~A1--A5), topological
+induction and Harris--FKG positive association established the
+conditional receiving-state bracket
+$M_j \le T_j \le \pi_j \le R_j \le H_j$, which grounded both Two-Stage
+Deterministic Certified Top-$k$ Screening and the zero-cost scalar
+reliability indicator $W_j = R_j - M_j$.
+\item \textbf{Reproducible Engine and Traceable Prototype (RQ2 /
+Objective~2).} The frozen evaluation engine and interactive research
+prototype passed \texttt{88/88} core \texttt{pytest} checks,
+\texttt{5/5} legacy analytical verification scripts, \texttt{76/76}
+prototype functional checks, and \texttt{35/35} cryptographic SHA-256
+protocol-freeze manifest verifications. Both layers enforced
+fail-closed rejection of directed cycles, self-loops, non-finite inputs,
+and ambiguous dual $S+L/C$ specifications while maintaining $0.0$
+numerical discrepancy between the traceable DataFrame API and the CSR
+execution kernel and exposing node-level, edge-contribution, and
+bracket-width traces.
+\item \textbf{Bracket Tightness, Comparator Ranking, and Certified
+Screening (RQ3 / Objective~3).} Across $2,880$ held-out uniform-DAG
+scenarios ($240$ independent graph replicates) with zero bracket
+violations and zero false certifications across $8,640$ screening
+evaluations, GBBRPM achieved mean upper slack $R_j - \pi_j = 0.0060$
+(compared to tree lower slack $\pi_j - T_j = 0.0390$ and scalar lower
+slack $\pi_j - M_j = 0.1065$). At the primary $f=0.20$ budget, GBBRPM
+attained the lowest fixed-budget selection regret ($0.00742$), highest
+captured activation mass ($50.59\%$), and highest rank correlation
+($\rho = 0.9833$), outperforming $T_j$ ($0.1483$), clipped-sum $H_j$
+($0.2889$, which saturated $\ge 0.95$ on $16.29\%$ of candidates vs.\
+$1.49\%$ for $R_j$), the \citet{abbe2020} DAG lower bound ($0.2968$),
+the ancestry diagnostic ($0.5590$), local-upstream ablation ($0.9185$),
+and $M_j$ ($0.9332$) on $97.5\%$--$100.0\%$ of graph replicates.
+Two-Stage Certified Screening increased deterministic top-$k$
+resolution from $47.5\%$ (Stage~1) to $78.9\%$ (Stage~2) at $f=0.20$
+($16.25\%$ full certification), delivering $2.00\times$ aggregate speedup
+over full-graph $T_j$ and $18.6\times$ over $100\text{k}$ Monte Carlo.
+Paired heterogeneous-weight experiments ($120$ evaluations) tightened
+brackets further ($\Delta W = -0.00702$, $\Delta\mathrm{Regret} = -0.00112$,
+$\Delta\mathrm{Res}_{S2} = +3.27\text{ pp}$), and $48$ independent
+$1\text{M}$-trial audits verified $100.0\%$ agreement inside $100\text{k}$
+Hoeffding intervals ($\max|\Delta\hat{\pi}| = 0.00475$, zero reversals).
+\item \textbf{Shared-Ancestry Dependence, $W_j$ Self-Diagnosis, and
+Ancestry Diagnostic Limits (RQ4 / Objective~4).} Across $560$ exact
+matched branch controls, GBBRPM matched $\pi_j$ to machine precision
+($1.11\times 10^{-16}$) on independent origins and collapsed exactly to
+$R_j = \pi_j$ at deterministic shared origins ($b=1$), while exposing
+one-sided upper slack up to $0.6499$ under uncertain shared origins
+($0 < b < 1$). On held-out DAGs, shared-ancestry collapse generated
+interval-resolved pairwise reversals in $696/2,880$ scenarios (pooled
+rate $0.198\%$), concentrated almost entirely at $w \in \{0.50, 0.75\}$
+and $B=0.50$. The scalar width $W_j = R_j - M_j$ proved effective as a
+scenario-level reversal alarm (Spearman $\rho = 0.6769$, $100.0\%$
+recall at $W_{\max} \ge 0.10$), but weak for within-graph nodewise
+slack ordering ($\rho = 0.2286$) because $W_j$ combines small upper
+slack with much larger legitimate independent multi-branch convergence.
+The connected-component ancestry diagnostic worsened fixed-budget
+ranking ($\mathrm{Regret}_{0.20}=0.5590$) by discarding genuine
+cumulative multi-path contributions.
+\item \textbf{Computational Scalability and Memory Tradeoffs (RQ5 /
+Objective~5).} CSR GBBRPM propagation scaled near-linearly against
+$|V|+|E|$ on both sparse DAGs ($|V|=20\dots 1000$: $0.058\to 3.27\text{ ms}$,
+$b=1.045$, $R^2=0.9982$, peak heap $8.3\text{ KB}$) and dense DAGs
+($|V|\le 250, |E|\le 7,781$: $b=1.022$, $R^2=0.9974$, $2.4\text{ KB}$),
+whereas full-graph $T_j$ grew super-linearly ($b=1.853$,
+$1,225.0\text{ ms}$ at $|V|=1000$). Against paired bit-packed
+$100\text{k}$ Monte Carlo ($16.4$--$268.8\text{ ms}$,
+$3.7$--$45.7\text{ MB}$), CSR GBBRPM achieved $879\times$--$1,103\times$
+speedups and Two-Stage Certified Screening achieved
+$17.1\times$--$28.0\times$ speedups.
+\item \textbf{Real-Domain Instantiations and Eligibility Boundaries
+(RQ6 / Objective~6).} All three domains passed Gate~A structural
+readiness with zero invariant violations: the DPWH Cagayan de Oro
+Bitan-ag--Kolambog drainage DAG ($11$ nodes, $11$ edges, $67$ Tier-2
+runs) quantified real-topology reconvergence at \texttt{J\_AGORA\_CONF}
+($\max R - \pi = 0.05108$, $98.8\%$ Stage-2 resolution);
+\texttt{npm:express@4.18.2} ($71$ nodes, $128$ edges) verified root
+risk $0.997528076171875$ at $\tau=1.00$ and isolated \texttt{qs}
+($0.2500$) and \texttt{send} ($0.1875$) reconvergence while documenting
+that all $7$ OSV advisory roots occupy the top-most dependent subgraph
+($0/64$ non-advisory downstream nodes); and \texttt{Caltech SoCal
+28-Bus} Component~2 ($12$-node arborescence, $43$ runs) confirmed exact
+tree equivalence ($\max|R-\pi| = 2.22\times 10^{-16}$). None of the
+three cases met Gate~B independent outcome validation (DPWH and Caltech
+failed Gate~B; Express was Gate~B N/A).
 \end{enumerate}
 
 \subsection{Conclusions}
 
-Within the tested scope, the study concludes that:
+Based on the confirmatory \texttt{v2.0.0-heldout-eval} evidence, the
+study draws five conclusions with explicit scope boundaries:
 
 \begin{enumerate}[label=\arabic*.,leftmargin=*]
-  \item GBBRPM v1 provides a deterministic, bounded, and interpretable
-  recursive architecture for comparative risk prioritization on DAGs.
-  \item Network structure and heterogeneous relation conditions can
-  change prioritization beyond what local disturbance alone indicates.
-  \item The model is broadly robust to modest input perturbations, but
-  exact membership of the highest-priority set becomes less stable as
-  uncertainty increases.
-  \item The same frozen propagation rule can be instantiated coherently
-  in the tested drainage, software, and electrical network structures.
-  This supports cross-domain instantiability, not universal validity.
-  \item The SWMM disagreement establishes that GBBRPM should not be used
-  as a substitute for hydraulic simulation.
-  \item The electrical evidence verifies topology and baseline
-  preprocessing and demonstrates bounded, monotone controlled responses
-  on Component 2 under measured loading. Event-centered validation cannot
-  be claimed until temporally aligned inputs and independent outcomes are
-  obtained.
-  \item The prototype demonstrates that the frozen model can be exposed
-  through a validated, interactive, and traceable workflow. It remains a
-  research artifact rather than a production or autonomous decision
-  system.
+\item \textbf{GBBRPM is a tight, saturation-resistant receiving-state
+upper bound for sparse and moderately weighted DAGs.} Under the
+declared independent-primitive reference, scalar complement-product
+propagation achieves substantially lower fixed-budget regret and higher
+rank fidelity than maximum, clipped-additive, local-only, local-upstream,
+restricted-tree, \citet{abbe2020}, and naive ancestry-pruning
+comparators while running in near-linear $O(|V|+|E|)$ time and
+kilobyte-scale memory---two to three orders of magnitude faster than
+vectorized $100\text{k}$ Monte Carlo.
+\item \textbf{Shared-ancestry collapse is bounded, diagnosable, and
+manageable without abandoning $O(|V|+|E|)$ screening.} Scalar local-state
+updates cannot eliminate shared-origin overestimation on reconvergent
+DAGs with uncertain sources and strong edge weights ($w \ge 0.50$),
+where interval-resolved pairwise reversals occur at a small but nonzero
+rate ($0.198\%$ pooled across held-out runs). However, pairing GBBRPM
+with \textbf{Two-Stage Deterministic Certified Top-$k$ Screening}
+certifies nearly four-fifths ($78.9\%$) of candidate top-$k$ decisions
+with zero false certifications and zero Monte Carlo trials, while
+$W_{\max}$ provides a zero-cost, $100\%$-recall scenario alarm for
+identifying reversal-prone regimes.
+\item \textbf{Heuristic ancestry pruning is not a drop-in improvement.}
+Naive connected-component ancestry reduction discarded genuine
+multi-branch accumulation and degraded selection regret by two orders
+of magnitude relative to scalar $R_j$. Improving upon GBBRPM in
+high-overlap regimes requires exact or tighter dependence-aware
+bounding rather than ad-hoc path deletion.
+\item \textbf{Coherent cross-domain instantiation does not equate to
+operational validation.} The shared GBBRPM core cleanly accommodated
+urban drainage, software dependency, and radial electrical topologies
+under documented Gate~A mappings without pooling scores across domains.
+Because DPWH drainage and Caltech electrical datasets lacked aligned
+independent outcome records (Gate~B FAIL) and OSV advisories served as
+software inputs rather than incident labels (Gate~B N/A), the present
+study establishes \emph{methodological, algorithmic, and structural
+mechanism validity}---not validated field-flooding prediction,
+exploitation forecasting, or electrical fault prediction.
+\item \textbf{Strict DAG acyclicity remains a hard applicability
+boundary.} GBBRPM~v1 is unsuitable without modification for looped
+stormwater grids, surcharged backwater hydraulics
+(\hyperref[app:preliminary]{Appendix D}), meshed power grids, or cyclic
+software dependency rings; enforcing fail-closed cycle rejection ensures
+that these boundaries are surfaced transparently rather than hidden by
+silent graph mutation.
 \end{enumerate}
-
-\subsection{Limitations}
-
-GBBRPM v1 is limited to directed acyclic graphs and one-pass propagation.
-It does not model cycles, feedback, bidirectional influence, explicit
-time evolution, or common-cause dependence correction. The bounded risk
-state is a comparative index rather than a calibrated probability.
-Domain-specific disturbance, susceptibility, and transmission mappings
-remain dependent on the quality and defensibility of their input
-evidence.
-
-The drainage case uses controlled networks and simulated hydraulic
-reference outcomes rather than a calibrated operational field study.
-The software case demonstrates structural applicability and sensitivity
-rather than observed incident prediction. The Component 2 electrical
-suite injects controlled disturbances into a measured normal-operation
-baseline; it does not contain observed event labels or outcomes aligned
-with the requested windows. Component 2 was selected purposively using
-observability, traceability, branching structure, and DAG compatibility,
-not through random sampling; the 24-snapshot window supports descriptive
-parameter instantiation rather than temporal or population-level
-generalization. Its residual power is reported but not spatially
-allocated, and one unobserved component edge is excluded. The three cases
-therefore cannot be pooled as if they offered identical empirical
-strength.
-
-The prototype was verified for core functions and production compilation,
-but not through formal user testing, accessibility evaluation, concurrent
-multi-user operation, authentication, persistent storage, or deployment
-hardening. Its operational-data mode remains inactive until a documented
-adapter and provenance-complete dataset are available.
