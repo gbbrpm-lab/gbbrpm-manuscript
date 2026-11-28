@@ -1,834 +1,726 @@
 \section{Results and Discussion}\label{results-and-discussion}
 
-\subsection{Overview of Validation Results}
+This chapter reports the confirmatory empirical results of the
+\textbf{Graph-Based Bounded Risk Propagation Model (GBBRPM)} executed
+under the frozen \texttt{v2.0.0-protocol-freeze} release
+(\texttt{0b986e4}) and archived in the \texttt{v2.0.0-heldout-eval}
+evaluation bundle (\texttt{76ae58c}). Every metric, uncertainty
+interval, and assertion in Sections~4.1--4.8 was produced strictly from
+the frozen benchmark harness, scalability suite, and real-domain
+instantiation scripts specified in Chapter~3 without altering core
+model equations or tuning parameters after held-out evaluation began.
+Historical preliminary evidence from the September~2026 N1--N5
+136-scenario study and the exploratory SWMM hydraulic-mismatch study is
+intentionally kept separate and preserved in
+\hyperref[app:preliminary]{Appendix D} so that confirmatory held-out
+outcomes and earlier exploratory diagnostics are never conflated.
 
-The restored GBBRPM v1 validation pipeline was executed using the
-historical reconstructed validation inputs and the frozen model
-formulation described in Chapter 3. The controlled experiment suite
-produced 136 scenario runs, supplemented by comparator analysis,
-robustness trials, mathematical property tests, scalability measurements,
-reconvergence diagnostics, a SWMM external-reference comparison, and
-software and electrical cross-domain cases, including a separate 43-run
-Component 2 controlled electrical suite.
+\subsection{Protocol Freeze Execution, Hard Invariant Verification, and Inventory Audit}
+\label{sec:v2-protocol-audit}
 
-The results are interpreted according to the evidence role of each case.
-They are not interpreted as calibrated failure probabilities, proof that
-GBBRPM reproduces full hydraulic behavior, prediction of software
-exploitation, or completed electrical event-response validation.
+Before any held-out evaluation seed (\texttt{1001--1020}) was executed,
+the complete computational contract---covering the core engine,
+Compressed Sparse Row (CSR) kernels, synthetic DAG generators, exact
+enumeration and bit-packed Monte Carlo references, matched comparators,
+Two-Stage Deterministic Certified Top-$k$ Screening, and frozen public
+inputs---was locked under Git tag \texttt{v2.0.0-protocol-freeze} with
+a cryptographic SHA-256 manifest spanning \texttt{35/35} tracked files
+(plus external SHA-256 verification of the restricted DPWH and Caltech
+source archives without exporting restricted payloads into version
+control). Automated pre-freeze verification confirmed \texttt{88/88}
+passing tests in the core \texttt{pytest} suite, \texttt{5/5} passing
+legacy analytical/behavioral verification scripts, and \texttt{76/76}
+passing automated checks in the interactive research prototype
+(\texttt{gbbrpm-prototype}), establishing fail-closed rejection of
+cycles, self-loops, non-finite inputs, and dual $S+L/C$ specifications,
+exact numerical parity between the reference DataFrame engine and the
+CSR implementation (maximum discrepancy $0.0$), and exact replay
+traceability (\hyperref[app:prototype-contract]{Appendix E}).
 
-\input{tables/paper/table_cross_domain_evidence}
+A pre-freeze development compute pilot ($54$ timed configurations on
+development seed \texttt{41}, peak traced heap memory $46.49\text{ MB}$,
+elapsed runtime $25.27\text{ s}$) measured bit-packed Monte Carlo
+throughput of $219.95\text{ million}$ edge-trials/s at $|V|=250$ and
+extrapolated $26.30\text{ min}$ single-core ($4.38\text{ min}$ on
+$8$ workers) for the full $4,316$-scenario primary inventory
+($88.86\text{ billion}$ edge-trials). Because the full inventory proved
+feasible without scenario reduction, no pre-registered protocol scope
+was pruned. Executing the entire held-out evaluation bundle
+($3,060$ total evaluations across held-out uniform DAGs, held-out
+heterogeneous DAGs, stochastic \texttt{Express 4.18.2}, and independent
+$N=1{,}000{,}000$ precision audits) required $175.59\text{ s}$
+($2.93\text{ min}$) on $8$ CPU workers under Python~3.13.14 on
+Windows~11 (12 logical AMD64 cores), with all \texttt{35/35} frozen
+file hashes passing pre-run verification.
 
-\subsection{Baseline Behavior Across N1--N5}
+\input{tables/paper_v2/table_v2_inventory_and_assertions}
 
-The baseline experiments evaluate the five synthetic DAGs under their
-reference local disturbances and heterogeneous edge susceptibilities. N1
-isolates sequential propagation, N2 exposes branch-dependent differences,
-N3 demonstrates bounded multi-source convergence, N4 stresses
-reconvergence from a shared upstream origin, and N5 combines multiple
-sources, branching, convergence, heterogeneous susceptibility, and an
-intermediate local disturbance.
+Table~\ref{tab:v2-inventory-assertions} summarizes the complete frozen
+v2.0.0 inventory and hard mathematical invariant assertions. Across all
+$4,316$ primary benchmark scenarios ($1,304$ development controls and
+$3,012$ held-out/real-topology runs), all $48$ independent $1\text{M}$-trial
+precision audits, and all $115$ real-domain instantiation scenarios
+($4,479$ evaluations in total), the study recorded \textbf{zero}
+receiving-state bracket violations ($M_j \le T_j \le R_j \le H_j$
+within $10^{-12}$ tolerance), \textbf{zero} \citet{abbe2020} lower-bound
+violations, and \textbf{zero} false top-$k$ certifications across every
+tested budget fraction $f \in \{0.10, 0.20, 0.30\}$ against both the
+analytic $[T_j, R_j]$ bracket and nonempty Hoeffding-intersected
+reference intervals.
 
-\input{tables/paper/table_drainage_networks}
+Consistent with the preregistered non-repair policy
+(Section~\ref{analysis-reproducibility}), empty intersections between
+the analytic bracket $[T_j, R_j]$ and the $95\%$ union-bound Hoeffding
+interval $[\hat{\pi}_j - h, \hat{\pi}_j + h]$ were logged without
+silent clamping. Across all $3,012$ primary held-out evaluations,
+exactly \textbf{one} node produced an empty Hoeffding intersection
+(scenario \texttt{dag\_\allowbreak uniform|\allowbreak eval|\allowbreak layered|\allowbreak n=250|\allowbreak seed=1003|\allowbreak w=0.25|\allowbreak B=0.5},
+occurring on a non-candidate source node with $B_j > 0$, leaving
+\textbf{zero} affected candidate nodes in $C=\{B_j=0\}$), mirroring
+one non-candidate source node in the $720$ development controls and
+\textbf{zero} empty intersections across all $48$ independent
+$1\text{M}$-trial precision audits. At a $5\%$ family-wise Hoeffding
+tail rate across thousands of scenarios, two non-candidate tail
+excursions in $4,316$ runs lie well below the conservative union bound
+and confirm statistical honesty rather than bracket failure.
 
-\begin{figure}[H]
+\subsection{Matched Shared-vs.-Independent Branch Dependence Controls}
+\label{sec:v2-matched-branch}
+
+To isolate shared-ancestry collapse from topology noise, the
+$560$-scenario matched branch control suite evaluated paired
+shared-origin and independent-origin branch families across branch
+counts $m \in \{1, 2, 4, 8\}$, path lengths $\ell \in \{2, 4\}$,
+effective edge weights $p \in \{0.05, 0.10, 0.20, 0.25, 0.50, 0.75, 1.00\}$,
+and local source severities $b \in \{0.10, 0.25, 0.50, 0.75, 1.00\}$,
+using the exact closed-form reference of Equation~(3-15) and
+cross-checking $404$ tractable instances against direct state-space
+enumeration with zero discrepancies.
+
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.88\textwidth]{figures/figure4_1.jpg}
-\caption{Baseline outlet risk across the five controlled GBBRPM networks under the historical validation configuration.}
-\label{fig:baseline-outlet-risk}
+\includegraphics[width=0.96\textwidth]{figures/v2/fig_v2_matched_branch_controls.pdf}
+\caption{Matched shared-origin versus independent-origin branch dependence controls ($560$ exact scenarios): exact agreement under independent origins versus bounded one-sided upper slack $R_j - \pi_j$ under uncertain shared origins ($0 < b < 1$) and exact collapse to zero at $b = 1$.}
+\label{fig:v2-matched-branch}
 \end{figure}
 
-For the historical N5 baseline, the designated outlet risk is
+Figure~\ref{fig:v2-matched-branch} confirms every analytical prediction
+of Hypothesis~$H_1$ under exact reference probabilities:
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item \textbf{Exact Equivalence Under Independent Origins.} Across all
+$280$ independent-origin scenarios, GBBRPM ($R_j$) and the
+target-specific in-arborescence bound ($T_j$) coincided identically with
+exact $\pi_j$: maximum upper slack was $1.11 \times 10^{-16}$
+(floating-point machine epsilon), mean tree width $R_j - T_j$ was $0.0$,
+mean fixed-budget selection regret at $f=0.20$ was $1.17 \times 10^{-17}$,
+and \textbf{zero} pairwise rank reversals occurred. By contrast, even
+under independent origins, the \citet{abbe2020} DAG lower bound
+exhibited mean lower slack $0.0792$ because its path-decay formulation
+is more conservative than exact tree recursion.
+\item \textbf{Controlled Shared-Origin Divergence at Intermediate $b$.}
+Across the $280$ matched shared-origin scenarios, the receiver node's
+true probability $\pi_j$ fell strictly below $R_j$ whenever $0 < b < 1$
+and $m \ge 2$, producing mean upper slack $R_j - \pi_j = 0.0447$ and a
+peak divergence of $0.6499$ ($0.649887$, occurring under high fan-out
+$m=8$, high transmission, and uncertain source $b$). Mean lower slack
+was $0.0500$ for $T_j$ and $0.0345$ for the \citet{abbe2020} bound,
+with zero Abbe lower-bound violations. Unequal shared-origin slack
+produced interval-resolved pairwise rank reversals in $23/280$ shared
+scenarios ($8.21\%$), while mean fixed-budget selection regret for $R_j$
+at $f=0.20$ remained small at $0.00157$.
+\item \textbf{Exact Collapse at Deterministic Sources ($b = 1$) and
+Monotone $W_j$ Alignment.} Whenever the shared origin was deterministic
+($b = 1$), the incoming branches became conditionally independent
+given the active source, causing $R_j - \pi_j$ to collapse identically
+to $0.0$. Furthermore, within these controlled branch topologies where
+reconvergence is the sole source of multi-branch width, the nodewise
+Spearman correlation between the zero-cost scalar width
+$W_j = R_j - M_j$ and true upper slack $R_j - \pi_j$ equaled
+$1.0000$ across all matched instances.
+\end{enumerate}
 
-\[
-R_{N20}=0.7086404493.
-\eqtag{4-1}\]
+\subsection{Held-Out Uniform-DAG Bracket Tightness and Comparator Ranking}
+\label{sec:v2-tightness-ranking}
 
-The highest-ranked internal nodes are ordered
+The primary confirmatory benchmark evaluated $2,880$ held-out uniform-weight
+DAG scenarios spanning $240$ independent graph replicates ($20$ held-out
+seeds \texttt{1001--1020} $\times$ $3$ topology families: Forward,
+Layered, and Preferential Attachment $\times$ $4$ graph sizes
+$|V| \in \{20, 50, 100, 250\}$), each tested across $6$ uniform edge
+weights $w \in \{0.05, 0.10, 0.20, 0.25, 0.50, 0.75\}$ and $2$ source
+severities $B \in \{0.50, 1.00\}$ against $N=100{,}000$-trial bit-packed
+Monte Carlo references. To avoid pseudo-replication across correlated
+parameterizations of the same graph, all headline descriptive
+statistics were computed at the independent graph-replicate level
+($n=240$ overall; $n=20$ per family $\times$ size stratum) after
+averaging the $12$ $(w, B)$ conditions per topology.
 
-\[
-N13>N19>N16.
-\eqtag{4-2}\]
+\input{tables/paper_v2/table_v2_bracket_tightness}
 
-This ranking shows that the model does not simply prioritize source nodes
-or the final outlet. Accumulated upstream state, susceptibility,
-convergence structure, and local disturbance can elevate intermediate
-nodes.
-
-\begin{table}[H]
+\begin{figure}[htbp]
 \centering
-\caption{Baseline summary across the controlled network set.}
-\label{tab:baseline-summary}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrl@{}}
+\includegraphics[width=0.96\textwidth]{figures/v2/fig_v2_bracket_tightness.pdf}
+\caption{Held-out uniform-DAG receiving-state bracket tightness ($2,880$ scenarios; $240$ graph replicates): decomposition of scalar width $W_j = R_j - M_j$ and tree width $R_j - T_j$ into upper slack $R_j - \pi_j$ and lower slack $\pi_j - T_j$ across topology families, graph sizes, and weight regimes.}
+\label{fig:v2-bracket-tightness}
+\end{figure}
+
+Table~\ref{tab:v2-bracket-tightness} and
+Figure~\ref{fig:v2-bracket-tightness} reveal a striking asymmetry inside
+the analytic receiving-state bracket $M_j \le T_j \le \pi_j \le R_j$:
+across all $240$ held-out graph replicates, the mean scalar bracket
+width was $W_j = R_j - M_j = 0.1125 \pm 0.0445$ (median $0.1374$,
+IQR $0.0868$), which Stage~2 tree refinement compressed by $60.0\%$ to
+mean tree width $R_j - T_j = 0.0450 \pm 0.0310$. Crucially,
+\textbf{$86.7\%$ of the tree width lay below $\pi_j$} (mean lower slack
+$\pi_j - T_j = 0.0390 \pm 0.0278$; mean $\pi_j - M_j = 0.1065$), while
+GBBRPM's actual mean one-sided upper slack was only
+$R_j - \pi_j = 0.0060 \pm 0.0052$ (mean MAE $0.00636$, versus $0.0392$
+for $T_j$ and $0.0466$ for \citealp{abbe2020}).
+
+Stratification by topology, edge weight, and source uncertainty
+confirms the dependence mechanisms predicted by $H_1$:
+\begin{itemize}[leftmargin=*]
+\item \textbf{Topology Family and Size:} Forward DAGs exhibited the
+tightest brackets ($W=0.0537$, $R-T=0.0140$, $R-\pi=0.00334$), whereas
+Layered DAGs ($W=0.1376$, $R-T=0.0754$, $R-\pi=0.00650$) and
+Preferential Attachment DAGs ($W=0.1461$, $R-T=0.0456$,
+$R-\pi=0.00815$) incurred wider brackets due to denser shared-ancestry
+reconvergence. Upper slack $R_j - \pi_j$ decreased monotonically with
+graph size $|V|$ across all three families (e.g., from $0.0194$ at
+$|V|=20$ to $0.0022$ at $|V|=250$ in Preferential Attachment) as
+multi-hop attenuation diluted distant shared origins across fixed-degree
+sparse DAGs.
+\item \textbf{Edge Weight ($w$) and Source Uncertainty ($B$):} Mean
+upper slack remained near zero under strong attenuation ($R-\pi < 0.00002$
+at $w=0.05$ and $w=0.10$; $0.00039$ at $w=0.20$; $0.00091$ at $w=0.25$),
+rising substantially only in high-transmission regimes ($0.01243$ at
+$w=0.50$ and $0.02221$ at $w=0.75$, with worst-case single-node slack
+$0.4203$ and peak $W_{\max}=0.9870$). Consistent with the conditional
+independence mechanism at certain sources, mean upper slack under
+uncertain sources ($B=0.50$, $R-\pi = 0.01080$) was $9.1\times$ larger
+than under deterministic sources ($B=1.00$, $R-\pi = 0.00119$).
+\end{itemize}
+
+\input{tables/paper_v2/table_v2_comparator_ranking}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/v2/fig_v2_fixed_budget_ranking.pdf}
+\caption{Fixed-budget top-$k$ selection regret ($\operatorname{Regret}_k$), captured activation mass, and rank correlation across GBBRPM ($R_j$) and matched comparators on $2,880$ held-out uniform-DAG scenarios ($240$ graph replicates).}
+\label{fig:v2-fixed-budget-ranking}
+\end{figure}
+
+Table~\ref{tab:v2-comparator-ranking} and
+Figure~\ref{fig:v2-fixed-budget-ranking} report fixed-budget candidate
+selection ($C = \{B_j = 0\}$, evaluated across $100$ shared
+outcome-independent tie permutations using seed~\texttt{140}) and
+whole-graph rank correlation against $\pi_j$. Across all three budget
+fractions $f \in \{0.10, 0.20, 0.30\}$, GBBRPM ($R_j$) achieved the
+lowest fixed-budget regret and highest captured activation mass among
+all seven deterministic methods. At the primary $f=0.20$ budget,
+GBBRPM attained mean regret $0.00742 \pm 0.0075$ (capture $50.59\%$)
+and mean Spearman rank correlation $\rho = 0.9833 \pm 0.0143$,
+substantially outperforming the target-specific tree lower bound $T_j$
+(regret $0.1483$, $20.0\times$ higher; $\rho = 0.8992$), clipped
+additive aggregation $H_j$ (regret $0.2889$, $38.9\times$ higher;
+$\rho = 0.9554$), the \citet{abbe2020} DAG lower bound (regret
+$0.2968$, $40.0\times$ higher; $\rho = 0.9149$), the ancestry-aware
+diagnostic (regret $0.5590$, $75.3\times$ higher; $\rho = 0.8586$),
+the local-upstream recursion ablation (regret $0.9185$, $123.8\times$
+higher; $\rho = 0.6810$), and recursive maximum $M_j$ (regret $0.9332$,
+$125.8\times$ higher; $\rho = 0.8198$). In paired graph-replicate
+comparisons at $f=0.20$, $R_j$ strictly achieved lower regret than
+every comparator on $97.5\%$ to $100.0\%$ of the $240$ topologies
+($97.5\%$ vs.\ $T_j$, $98.3\%$ vs.\ Abbe, $98.8\%$ vs.\ local-upstream,
+$99.6\%$ vs.\ ancestry and $M_j$, and $100.0\%$ vs.\ $H_j$).
+
+Two mechanism findings explain this separation:
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item \textbf{Saturation Resistance vs.\ Clipped Additive Aggregation ($H_j$).}
+Because clipped-sum aggregation ($H_j$) adds incoming contributions
+linearly until hitting the hard ceiling $1.0$, $H_j$ saturated at or
+above $0.95$ on $16.29\%$ of candidate nodes overall ($33.97\%$ at
+$w=0.50$ and $63.61\%$ at $w=0.75$) and clipped identically at $1.0$ on
+$15.84\%$ of candidates, collapsing distinct candidate tiers into
+massive top-rank ties (mean $41.18$ distinct score groups vs.\ $57.35$
+for $R_j$ and $74.37$ for $\pi_j$). GBBRPM's asymptotic complement
+product limited $\ge 0.95$ saturation to $1.49\%$ ($0.06\%$ at $w=0.50$;
+$8.89\%$ at $w=0.75$) with $0.0\%$ numerical clipping at $1.0$,
+preserving ranking discrimination under heavy multi-source load.
+\item \textbf{Honest Accounting of Unfavorable Reversal Regimes and
+Ancestry-Diagnostic Tradeoffs.} Although GBBRPM dominated aggregate
+ranking accuracy, shared-ancestry collapse still generated measurable
+\emph{interval-resolved pairwise rank reversals} ($R_a > R_b$ while the
+entire Hoeffding interval of $\pi_a$ lay strictly below that of $\pi_b$)
+in $696/2,880$ held-out scenarios ($24.17\%$). Across all
+$18,943,293$ Hoeffding-resolved strict model pairs, $37,489$ pairs
+reversed, yielding a pooled reversal rate of $0.198\%$ ($0.001979$;
+replicate mean $0.523\%$), while $13.30\%$ of all valid candidate pairs
+($2,906,873 / 21,850,560$) remained statistically unresolved within the
+$N=100{,}000$ Hoeffding margin. Reversals were heavily concentrated in
+high-weight, uncertain-source regimes: $694$ of the $696$ reversal
+scenarios occurred at $w \in \{0.50, 0.75\}$ ($359$ at $w=0.50$, $335$
+at $w=0.75$, only $2$ at $w=0.25$, and $0$ for $w \le 0.20$), and
+$466$ occurred at $B=0.50$ (pooled rate $0.313\%$) versus $230$ at
+$B=1.00$ ($0.082\%$), peaking in Layered ($285$ scenarios, $0.311\%$)
+and Preferential Attachment ($185$ scenarios, $0.225\%$) over Forward
+DAGs ($226$ scenarios, $0.063\%$). Notably, the connected-component
+ancestry diagnostic did \emph{not} outperform scalar $R_j$: by pruning
+secondary paths within shared-origin components, it discarded genuine
+multi-path cumulative activation and raised $f=0.20$ regret to $0.5590$.
+\end{enumerate}
+
+\subsection{Two-Stage Deterministic Certified Top-\texorpdfstring{$k$}{k} Screening and \texorpdfstring{$W_j$}{Wj} Self-Diagnosis}
+\label{sec:v2-certified-screening}
+
+Rather than relying on scalar point rankings alone when upper slack may
+cause reversals, Two-Stage Deterministic Certified Top-$k$ Screening
+exploits the proven bracket $M_j \le T_j \le \pi_j \le R_j$ to partition
+candidates into provably certified top-$k$ inclusions ($I_k$), provably
+certified exclusions ($O_k$), and an explicit uncertified boundary band
+($U_k$) without executing a single Monte Carlo trial. Stage~1 applies
+the $O(|V|+|E|)$ scalar bracket $[M_j, R_j]$; Stage~2 computes the
+tighter target-specific in-arborescence bound $T_j$ \emph{exclusively}
+for nodes surviving inside the Stage~1 boundary band $U_k^{(1)}$.
+
+\input{tables/paper_v2/table_v2_certified_screening}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/v2/fig_v2_certified_screening.pdf}
+\caption{Two-Stage Deterministic Certified Top-$k$ Screening performance on $2,880$ held-out scenarios: Stage~1 versus Stage~2 deterministic resolution fractions, full-certification rates, and wall-clock speedups relative to full-graph $T_j$ and $N=100{,}000$ Monte Carlo.}
+\label{fig:v2-certified-screening}
+\end{figure}
+
+Table~\ref{tab:v2-certified-screening} and
+Figure~\ref{fig:v2-certified-screening} demonstrate the operational
+effectiveness of two-stage screening across all $8,640$ held-out
+screening evaluations ($2,880$ scenarios $\times$ $3$ budgets):
+\begin{itemize}[leftmargin=*]
+\item \textbf{Zero False Certifications and Large Boundary-Band
+Contraction.} False certifications equaled \textbf{zero} across all
+$8,640$ evaluations. At the primary $f=0.20$ budget, Stage~1 scalar
+filtering deterministically resolved $\mathrm{Res}_{S1} = 47.5\% \pm 17.7\%$
+($0.4745$) of candidate nodes in $O(|V|+|E|)$ time. Targeted Stage~2
+tree refinement lifted deterministic resolution to
+$\mathrm{Res}_{S2} = 78.9\% \pm 11.4\%$ ($0.7891$)---a $+31.5\text{ pp}$
+($+0.3146$) boundary-band contraction---and expanded full top-$k$
+certification ($|U_k^{(2)}| = 0$, requiring zero downstream MC work)
+nearly sevenfold from $2.43\%$ in Stage~1 to $16.25\%$ ($16.2\%$) in
+Stage~2. Similar gains held at $f=0.10$ ($\mathrm{Res}_{S1}=50.2\% \to
+\mathrm{Res}_{S2}=82.1\%$, $+31.9\text{ pp}$, $12.1\%$ full cert.) and
+$f=0.30$ ($\mathrm{Res}_{S1}=44.4\% \to \mathrm{Res}_{S2}=72.0\%$,
+$+27.6\text{ pp}$, $7.6\%$ full cert.).
+\item \textbf{Topology-Dependent Gains and Wall-Clock Speedups.}
+Stage~2 refinement delivered its largest resolution lift in Preferential
+Attachment DAGs ($24.3\% \to 72.7\%$ at $f=0.20$, $+48.4\text{ pp}$,
+$19.9\%$ full cert.), where Stage~1 scalar $M_j$ is loose on hub-fed
+paths but targeted $T_j$ tightens dramatically. Forward DAGs reached
+$87.2\%$ Stage~2 resolution ($89.6\%$ at $f=0.10$), while Layered DAGs
+reached $76.9\%$ ($85.3\%$ at $f=0.10$, $23.5\%$ full cert.). Across
+all $2,880$ held-out scenarios at $f=0.20$, restricting $T_j$
+construction to $U_k^{(1)}$ achieved an aggregate wall-clock speedup of
+\textbf{$2.00\times$} ($1.997\times$; scenario median $1.79\times$,
+graph-replicate median $2.24\times$, up to $8.26\times$ on Layered
+$f=0.10$) over full-graph $T_j$ evaluation and \textbf{$18.6\times$}
+($18.65\times$; scenario median $43.3\times$, replicate median
+$56.2\times$) over bit-packed $100\text{k}$ Monte Carlo.
+\item \textbf{High-Weight Limit.} Under heavy transmission ($w=0.75$),
+Stage~2 resolution fell to $53.75\%$ (versus $90.11\%$ at $w=0.05$ and
+$88.13\%$ at $w=0.20$), leaving nearly half of candidates inside
+$U_k^{(2)}$ for optional targeted Monte Carlo escalation.
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/v2/fig_v2_w_self_diagnosis.pdf}
+\caption{Evaluation of the zero-cost scalar bracket width $W_j = R_j - M_j$ as a self-diagnosing reliability indicator across $2,880$ held-out scenarios: strong scenario-level reversal screening ($\rho = 0.6769$) contrasted with modest within-graph nodewise slack correlation ($\rho = 0.2286$).}
+\label{fig:v2-w-self-diagnosis}
+\end{figure}
+
+Figure~\ref{fig:v2-w-self-diagnosis} presents a nuanced empirical
+verdict on Hypothesis~$H_4$ regarding the zero-cost scalar width
+$W_j = R_j - M_j$. At the \textbf{scenario screening level}, the
+maximum scalar width $W_{\max}$ proved to be a strong, conservative
+alarm for interval-resolved rank reversals: Spearman rank correlation
+between $W_{\max}$ and continuous scenario reversal rate was
+\textbf{$\rho = 0.6769$} ($0.67686$) across all $2,880$ held-out
+scenarios. Thresholding at $W_{\max} \ge 0.10$ achieved \textbf{$100.0\%$
+recall} ($696/696$ reversal-bearing scenarios detected, \textbf{zero}
+false negatives) while safely clearing $27.4\%$ of scenarios
+($788/2,880$ flagged negative, precision $33.3\%$, $F_1 = 0.499$).
+
+By contrast, at the \textbf{within-graph nodewise level} and for
+continuous fixed-budget regret, $W_j$ exhibited only modest rank
+association: graph-replicate mean nodewise Spearman correlation between
+$W_j$ and actual upper slack $R_j - \pi_j$ was \textbf{$\rho = 0.2286$}
+(SD $0.1507$, median $0.2602$, IQR $0.2430$; scenario-level median
+$0.1702$), and scenario-level Spearman correlation with continuous
+$f=0.20$ regret was $\rho = 0.2815$ using $W_{\mathrm{mean}}$
+($\rho = 0.2839$ using boundary-band $W$). The mathematical explanation
+is directly visible in Table~\ref{tab:v2-bracket-tightness}: $W_j =
+(R_j - \pi_j) + (\pi_j - M_j)$ sums both shared-ancestry overestimation
+($R_j - \pi_j$, mean $0.0060$) and legitimate \emph{independent}
+multi-branch convergence ($\pi_j - M_j$, mean $0.1065$). Because
+$\pi_j - M_j$ dominates $W_j$ by an order of magnitude on multi-source
+DAGs, a node fed by several independent parents acquires a large $W_j$
+even when its true upper slack $R_j - \pi_j$ is negligible. Consequently,
+$W_j$ functions reliably as a \emph{necessary high-recall regime alarm}
+(small $W_{\max}$ certifies low reversal risk), whereas ranking exact
+nodewise slack or certifying individual top-$k$ boundaries requires
+Stage~2 $T_j$ refinement.
+
+\subsection{Weight-Heterogeneity Sensitivity and Million-Trial Precision Audits}
+\label{sec:v2-hetero-audits}
+
+Two targeted confirmatory suites tested whether the uniform-weight
+results were sensitive to edge-weight dispersion or finite-sample
+$N=100{,}000$ Monte Carlo noise: (a)~the $120$-scenario held-out
+heterogeneous-weight suite ($60$ graph replicates across seeds
+\texttt{1001--1005}, assigning deterministic SHA-256 edge weights
+$w \in \{0.10, 0.20, 0.30\}$ with exact graph mean $0.20$, paired
+against the identical topologies under uniform $w=0.20$); and (b)~the
+$48$-scenario independent $N=1{,}000{,}000$-trial precision audit suite
+(seed~\texttt{1001}, low-weight high-tie regimes $w \in \{0.05, 0.10\}$,
+executed with independent RNG streams).
+
+\input{tables/paper_v2/table_v2_hetero_and_audits}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/v2/fig_v2_hetero_and_precision_audit.pdf}
+\caption{Weight-heterogeneity sensitivity ($120$ paired heterogeneous vs.\ uniform $w=0.20$ evaluations) and independent $N=1{,}000{,}000$-trial Monte Carlo precision audits ($48$ low-weight scenarios).}
+\label{fig:v2-hetero-audits}
+\end{figure}
+
+Table~\ref{tab:v2-hetero-audits} (Part~A) and
+Figure~\ref{fig:v2-hetero-audits} show that introducing edge-weight
+heterogeneity around the same mean weight $0.20$ \textbf{improved}
+rather than degraded GBBRPM's bracket tightness, ranking accuracy, and
+screening resolution across all three topology families. Across the
+$60$ paired graph replicates ($120$ scenario pairs), heterogeneous
+weights reduced mean scalar width by $\Delta W = -0.00702$ ($-0.0070$,
+largest in Preferential Attachment at $-0.0125$), reduced tree width by
+$\Delta(R-T) = -0.0025$, kept upper slack virtually unchanged
+($\Delta(R-\pi) = -0.00005$), lowered $f=0.20$ selection regret by
+$\Delta\mathrm{Regret}_{R,0.20} = -0.00112$ (and reduced $M_j$ regret
+by $-0.4260$), increased Spearman $\rho(R)$ by $+0.0023$, and boosted
+Stage~1 screening resolution by $+14.9\text{ pp}$ and Stage~2 resolution
+by $+3.27\text{ pp}$ ($+3.3\text{ pp}$), with zero reversals in both
+matched conditions. Weight heterogeneity breaks near-ties among
+candidate paths, confirming that the primary uniform-weight grid acts as
+a conservative stress test rather than an artificially favorable regime.
+
+Table~\ref{tab:v2-hetero-audits} (Part~B) confirms that $N=100{,}000$
+Monte Carlo sampling noise did not distort any held-out conclusion.
+Increasing trials tenfold to $N=1{,}000{,}000$ contracted the union-bound
+Hoeffding half-width by $\sqrt{10}\times$ from mean $h_{100k}=0.0063$
+($0.0058$--$0.0068$) to $h_{1M}=0.0020$ ($0.0018$--$0.0021$). Across
+all $48$ independent audits, \textbf{$100.0\%$} of $1\text{M}$ node
+estimates lay inside the $100\text{k}$ Hoeffding CI (and $100.0\%$
+within the combined $h_{100k}+h_{1M}$ interval), $97.34\%$ ($97.3\%$) of
+$100\text{k}$ estimates lay inside the tighter $1\text{M}$ CI, maximum
+single-node discrepancy across all audited nodes was $0.00475$
+($0.004752$; mean of scenario maxima $0.00257$), and mean absolute
+discrepancy was $0.000375$ ($0.00038$). Tighter $1\text{M}$ intervals
+resolved $+2,213$ additional strict model pairs ($305,552 \to 307,765$;
+resolved fraction $91.70\% \to 92.37\%$) while recording \textbf{zero}
+reversals, \textbf{zero} false certifications, and \textbf{zero} empty
+Hoeffding intersections at both precisions.
+
+\subsection{Computational Scalability and Memory Tradeoffs}
+\label{sec:v2-scalability}
+
+Hypothesis~$H_5$ was evaluated through an isolated $158$-row
+computational benchmark ($5$ warm-up passes, $30$ measured
+\texttt{time.perf\_counter()} repetitions, and separate post-GC
+\texttt{tracemalloc} peak Python heap passes so profiling overhead
+never perturbed wall-clock timings). The benchmark spanned a sparse DAG
+series ($|V| \in \{20, 50, 100, 250, 500, 1000\}$, $|E| = 3|V|$), a
+dense DAG stress series ($|V| \in \{20, 50, 100, 250\}$, $25\%$ edge
+density up to $|E| = 7,781$), and a paired $100\text{k}$ bit-packed
+Monte Carlo reference series on held-out Forward DAGs
+(seed~\texttt{1001}, $w=0.50$, $B=0.50$, $5$ MC repetitions).
+
+\input{tables/paper_v2/table_v2_scalability}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/v2/fig_v2_scalability_sparse_dense.pdf}
+\caption{Empirical runtime scaling (median ms with log-log power-law fits against $|V|+|E|$) and isolated peak Python heap memory across sparse DAGs ($|V|=20\dots 1000$), dense DAGs ($25\%$ density), and paired $N=100{,}000$ bit-packed Monte Carlo references.}
+\label{fig:v2-scalability}
+\end{figure}
+
+Table~\ref{tab:v2-scalability} and Figure~\ref{fig:v2-scalability}
+confirm near-linear complexity for the CSR propagation core alongside
+clear cost boundaries for heavier comparators:
+\begin{itemize}[leftmargin=*]
+\item \textbf{Near-Linear CSR Propagation and Low Heap Footprint.} On
+sparse DAGs ($|V| = 20 \dots 1000$), single-pass CSR GBBRPM runtime
+scaled from $0.058\text{ ms}$ (IQR $0.014\text{ ms}$) to
+$3.27\text{ ms}$ (IQR $0.61\text{ ms}$) with empirical log-log power-law
+exponent $b = 1.045$ ($R^2 = 0.9982$) against $|V|+|E|$ and peak Python
+heap memory of only $8.3\text{ KB}$ at $|V|=1000$ ($0.5\text{ KB}$ at
+$|V|=20$). On dense DAGs up to $|V|=250, |E|=7,781$, CSR propagation
+remained near-linear at $b = 1.022$ ($R^2 = 0.9974$, median
+$2.52\text{ ms}$, peak heap $2.4\text{ KB}$). Complete ranking added
+only $0.752\text{ ms}$ ($37.7\text{ KB}$) at $|V|=1000$.
+\item \textbf{Wrapper Overhead vs.\ Algorithmic Complexity.} The
+traceable pandas DataFrame API (\texttt{gbbrpm\_core\_df}), which
+constructs full edge-contribution tables and schema metadata for the
+prototype, required $13.23\text{ ms}$ ($114.6\text{ KB}$) at $|V|=20$
+and $131.2\text{ ms}$ ($3,799\text{ KB}$) at $|V|=1000$ (with graph
+validation/preparation taking $7.06$--$27.69\text{ ms}$). Separating
+one-time validation from CSR propagation is therefore essential for
+batch sweeps and screening.
+\item \textbf{Super-Linear Growth of Full $T_j$ and Dense Ancestry vs.\
+Two-Stage Screening.} Computing full-graph target-specific trees $T_j$
+for every node scaled super-linearly on sparse DAGs at $b = 1.853$
+($R^2 = 0.9992$), reaching $1,225.0\text{ ms}$ at $|V|=1000$
+($375\times$ slower than CSR $R_j$). Two-Stage Certified Screening at
+$f=0.20$ cut $|V|=1000$ runtime by $2.67\times$ to $458.1\text{ ms}$
+($229.0\text{ KB}$). On dense DAGs ($|V|=250, |E|=7,781$), the
+connected-component ancestry diagnostic escalated sharply to
+$63.91\text{ ms}$ ($b = 1.390$, $523.8\text{ KB}$), whereas CSR $R_j$
+stayed at $2.52\text{ ms}$ and \citet{abbe2020} at $5.62\text{ ms}$.
+\item \textbf{Paired $100\text{k}$ Monte Carlo Speedups and Cost
+Caveat.} Against vectorized bit-packed $100\text{k}$ Monte Carlo
+($16.4\text{ ms}$--$268.8\text{ ms}$, throughput $186$--$245\text{M}$
+edge-trials/s, peak heap $3.7$--$45.7\text{ MB}$), CSR GBBRPM achieved
+\textbf{$879\times$--$1,103\times$} wall-clock speedups ($879\times$ at
+$|V|=20$, $959\times$ at $|V|=50$, $1,103\times$ at $|V|=100$,
+$1,094\times$ at $|V|=250$) with $>1{,}500\times$ lower peak heap
+allocation, while Two-Stage Certified Screening achieved
+\textbf{$17.1\times$--$28.0\times$} speedups with deterministic
+soundness. Consistent with Chapter~1, these speedups reflect a static,
+local-state scalar DAG pass and do not establish computational
+equivalence to hydrodynamic or AC power-flow simulators.
+\end{itemize}
+
+\subsection{Eligible Real-Domain Instantiations and Evidence Boundaries}
+\label{sec:v2-domain-cases}
+
+Three real-data instantiations were evaluated independently using the
+identical frozen GBBRPM core while preserving strict non-pooling across
+domains, explicit Gate~A (structural readiness) and Gate~B (independent
+outcome validation) status, and strict privacy/redistribution boundaries.
+Zero bracket violations, zero Abbe violations, and zero false
+certifications occurred across all $115$ real-domain scenario runs
+(plus the $12$ stochastic \texttt{Express 4.18.2} benchmark runs).
+
+\input{tables/paper_v2/table_v2_domain_cases}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/v2/fig_v2_domain_synthesis.pdf}
+\caption{Strictly non-pooled cross-domain mechanism synthesis across the three Gate~A eligible topologies: (a)~DPWH Cagayan de Oro Bitan-ag--Kolambog drainage reach reconvergence at \texttt{J\_AGORA\_CONF} (Gate~B FAIL), (b)~\texttt{npm:express@4.18.2} transmission sweep and isolated \texttt{qs}/\texttt{send} reconvergence (Gate~B N/A), and (c)~\texttt{Caltech SoCal 28-Bus} Component~2 exact arborescence verification (Gate~B FAIL).}
+\label{fig:v2-domain-synthesis}
+\end{figure}
+
+Table~\ref{tab:v2-domain-cases} and Figure~\ref{fig:v2-domain-synthesis}
+summarize the verified mechanism findings and non-negotiable evidence
+boundaries of each domain.
+
+\subsubsection{Urban Drainage: DPWH Cagayan de Oro Bitan-ag--Kolambog Reach (Gate~A PASS / Gate~B FAIL)}
+
+Constructed from the official DPWH Regional Office~X FOI release
+(\texttt{FOI-REQ-2026-7383}; \citealp{dpwh2026foi,upplanades2016}), the
+verified Bitan-ag--Kolambog DAG
+(\texttt{drainage\_\allowbreak dpwh\_\allowbreak cdo\_\allowbreak bitanag\_\allowbreak kolambog\_\allowbreak v1})
+comprises $11$ junctions and $11$ directed drainage conduits with
+heterogeneous engineering load-to-capacity susceptibilities
+$S_{ij} \in [0.4639, 0.8471]$ (mean $0.6417$, Manning conveyance checks
+within $1\%$) and a real physical reconvergence diamond where the Agora
+diversion split (\texttt{J\_AGORA\_SPLIT}) bifurcates into the two-hop
+main Bitan-ag trunk (via \texttt{J\_TRIB1\_CONF}) and the one-hop Agora
+diversion channel before reconverging at \texttt{J\_AGORA\_CONF}
+(PCSWMM junction \texttt{J5}).
+
+Across $67$ Tier-2 controlled blockage scenarios ($63$ solved by exact
+enumeration and $4$ all-node stress runs by $100\text{k}$ MC fallback;
+zero violations and zero DataFrame-vs.-CSR parity error), GBBRPM
+captured real heterogeneous $L/C$ propagation and quantified exact
+shared-ancestry inflation at \texttt{J\_AGORA\_CONF}. Positive upper
+slack ($R_j > \pi_j$) occurred in $49/63$ exact scenarios, peaking at
+$R - \pi = 0.05108$ ($0.051080$, with $R = 0.4931$, exact $\pi = 0.4420$,
+$T = M = 0.4236$, $W = 0.0695$) under single-source injection at
+\texttt{J\_AGORA\_SPLIT} ($B = 0.50, \tau = 1.00$), and collapsing
+identically to $R - \pi = 0.0$ when the split disturbance became
+deterministic ($B = 1.00$, $R = \pi = 0.8840$). Under headwater
+injection (\texttt{J\_BIT\_HEAD}, $\tau=1.00$), upper slack rose
+smoothly from $0.0187$ ($B=0.25$) to $0.0493$ ($B=1.00$, because
+upstream attenuation makes the split arrival uncertain even at $B=1.00$),
+while the ancestry diagnostic differed from $R$ by up to $0.2105$ in
+all-headwaters scenarios. Two-Stage Certified Screening at $f=0.20$
+resolved $94.3\%$ of candidates in Stage~1 and $98.8\%$ ($0.9881$) in
+Stage~2.
+
+\textbf{Evidence Boundary (Gate~B FAIL).} Consistent with
+Table~\ref{tab:domain-contingency}, these $67$ runs verify only
+structural DAG instantiation, heterogeneous $L/C$ propagation, and
+real-topology reconvergence mechanics. Because the June~10, 2025 CDO
+2nd~DEO flood-hotspot inspection records (\texttt{B01--B16}) reflect
+existing-channel conditions rather than the 2016 Master Plan diversion
+geometry and lack non-flooded controls and pre-event blockage
+measurements, \textbf{no confirmatory field-flooding validation claim
+is made}. Furthermore, historical exploratory SWMM comparisons
+(\hyperref[app:preliminary]{Appendix D}) demonstrated that backwater,
+surcharge, and upstream ponding fall outside a strictly downstream
+static DAG model. No raw DPWH conduit tables or personally identifiable
+information were exported to the repository or manuscript.
+
+\subsubsection{Software Dependency: \texttt{npm:express@4.18.2} (Gate~A PASS / Gate~B N/A)}
+
+The verified public software dependency DAG
+(\texttt{software\_\allowbreak npm\_\allowbreak express\_\allowbreak 4.18.2}; $71$ exact package-version
+nodes, $128$ reversed dependency edges, $7$ OSV advisory roots,
+SHA-256 verified against the frozen manifest) confirmed coherent
+real-topology instantiation across a $5$-point deterministic
+transmission sweep ($\tau \in \{0.00, 0.25, 0.50, 0.75, 1.00\}$) and
+the $12$-scenario held-out stochastic suite. At $\tau = 1.00$, GBBRPM
+reproduced the exact verified root risk
+$R(\texttt{npm:express@4.18.2}) = 0.997528076171875$ against exact
+enumeration $\pi = 0.993408203125$ (combined upper slack
+$R - \pi = 0.004120$, scalar width $W = 0.2475$), with the root
+ascending from rank~$3$ at $\tau = 0.00$ ($R = 0.5000$) to rank~$1$ by
+$\tau = 0.50$ ($R = 0.9118$).
+
+Isolating individual reconvergent dependency diamonds revealed
+substantial latent overlap masked by multi-root saturation in the
+combined graph: \texttt{npm:qs@6.11.0} reaches \texttt{express@4.18.2}
+both directly and via \texttt{body-parser@1.20.1}, producing an
+isolated exact upper slack of $R - \pi = 0.2500$ ($R = 0.7500$ vs.\
+$\pi = 0.5000$) at $\tau = 1.00$, while \texttt{npm:send@0.18.0}
+reaches the root directly and via \texttt{serve-static@1.15.0},
+producing an isolated exact upper slack of $R - \pi = 0.1875$
+($R = 0.4375$ vs.\ $\pi = 0.2500$).
+
+An important structural transparency note emerged from the $12$-scenario
+held-out stochastic benchmark (\texttt{heldout\_express\_12}, uniform
+$w \in \{0.05, 0.10, 0.20, 0.25, 0.50, 0.75\}$, $B \in \{0.50, 1.00\}$):
+because all $7$ OSV advisory roots (\texttt{cookie},
+\texttt{path-to-regexp}, \texttt{qs}, \texttt{send} $\to$
+\texttt{body-parser}, \texttt{serve-static} $\to$ \texttt{express@4.18.2})
+occupy the top-most dependent subgraph of the reversed dependency DAG,
+\textbf{$0/64$ non-advisory packages} ($C = \{B_j = 0\}$) lie
+downstream of any advisory root. Consequently, strict candidate-set
+($C$) metrics are identically zero ($W=0, R=\pi=0$), whereas
+non-trivial stochastic reconvergence occurs within the $7$-node
+advisory subgraph and root package: at $B=0.50$, root scalar width
+$W(\texttt{express})$ spanned $0.0710$ ($w=0.05$) to $0.4821$
+($w=0.75$) with mean tree width $0.00707$ and maximum upper slack
+$0.00630$ ($0.0063$).
+
+\textbf{Evidence Boundary (Gate~B N/A).} OSV advisory severities define
+the local disturbance inputs $B_i$, not independent exploitation or
+incident outcome labels. The software case establishes structural
+instantiation and quantifies reconvergence sensitivity; it makes
+\textbf{no claim of software exploit prediction}.
+
+\subsubsection{Electrical Distribution: Caltech SoCal 28-Bus Component~2 (Gate~A PASS / Gate~B FAIL)}
+
+The verified Component~2 radial feeder from the Caltech SoCal 28-Bus
+dataset \citep{xie2025} (\texttt{electrical\_\allowbreak caltech\_\allowbreak socal28\_\allowbreak component2}:
+$12$ nodes, $11$ directed edges, $24$ phasor snapshots, baseline
+measured load-to-capacity susceptibilities $S_{ij} \in [0.0139, 0.3949]$,
+mean $0.1909$) is a strict directed arborescence ($\max$ in-degree $= 1$,
+zero reconvergent nodes). Across all $43$ exact scenarios spanning
+single-node disturbances, root severities, load scales, transmission
+levels, and multi-source pairs, the evaluation confirmed theoretical
+tree equivalence to machine precision: $\max |R_j - \pi_j| =
+2.22 \times 10^{-16} < 10^{-12}$, $\max |T_j - R_j| = 0.0$,
+$\max |R_j - \text{Ancestry}_j| = 0.0$, and zero bracket or
+certification violations, with aggregate network risk sum ranging from
+$0.0$ to $3.7544$ and Two-Stage Screening resolving $75.3\%$ of
+candidates identically in Stage~1 and Stage~2.
+
+\textbf{Evidence Boundary (Gate~B FAIL).} Because the authorized
+telemetry covers a normal-operation window following the November~13,
+2024 switching event without aligned fault or outage labels, this case
+verifies radial arborescence instantiation and exact tree equivalence
+only; \textbf{no operational fault-prediction or switching-response
+claim is made}, and raw phasor measurements remain strictly outside
+version control.
+
+\subsection{Synthesis Against Research Hypotheses (\texorpdfstring{$H_1$--$H_5$}{H1--H5}) and Threats to Validity}
+\label{sec:v2-synthesis-threats}
+
+Table~\ref{tab:v2-hypothesis-verdict} maps the confirmatory v2.0.0
+empirical findings directly onto the five falsifiable research
+hypotheses ($H_1$--$H_5$) stated in Section~\ref{research-hypotheses}
+and the evaluation criteria of Table~\ref{tab:evaluation-criteria}.
+
+\begin{table}[htbp]
+\centering
+\caption{Confirmatory empirical verdicts against Research Hypotheses $H_1$--$H_5$ (frozen \texttt{v2.0.0-heldout-eval} evidence).}
+\label{tab:v2-hypothesis-verdict}
+\footnotesize
+\renewcommand{\arraystretch}{1.14}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.35cm} >{\raggedright\arraybackslash}p{2.05cm} L@{}}
 \toprule
-Network & Max. risk & Mean risk & Outlet & Outlet risk & Top-three nodes \\
+Hypothesis & Verdict & Confirmatory Evidence and Boundary Conditions \\
 \midrule
-N1 & 0.800000 & 0.249493 & F   & 0.053760 & A $>$ B $>$ C \\
-N2 & 0.800000 & 0.465250 & H   & 0.408000 & A $>$ C $>$ G \\
-N3 & 0.700000 & 0.420205 & H   & 0.106814 & A $>$ C $>$ B \\
-N4 & 0.800000 & 0.579719 & G   & 0.351372 & A $>$ D $>$ B \\
-N5 & 0.816448 & 0.632660 & N20 & 0.708640 & N13 $>$ N19 $>$ N16 \\
-\bottomrule
-\end{tabular*}
-\end{table}
-
-The networks do not exhibit a uniform propagation pattern. N1 shows
-strong attenuation along a chain, while N2 retains comparatively high
-downstream risk because several high-susceptibility branches feed later
-nodes. N3 demonstrates bounded convergence from two local sources, N4
-produces stronger downstream amplification under reconvergence, and N5
-produces a high-risk intermediate ranking rather than prioritizing the
-outlet alone. These patterns are consistent with the intended use of the
-networks as mechanism-isolation cases rather than interchangeable test
-graphs.
-
-\subsection{Controlled Scenario Analysis}
-
-The restored historical suite contains 136 runs distributed across five
-scenario families.
-
-\begin{table}[H]
-\centering
-\caption{Controlled scenario families and run counts.}
-\label{tab:scenario-families}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\textwidth}{@{}lrL@{}}
-\toprule
-Scenario family & Runs & Purpose \\
-\midrule
-Source severity & 20 & Increasing local disturbance \\
-$L/C$ stress & 25 & Increasing operating susceptibility \\
-Disturbance location & 36 & Sensitivity to disturbance placement \\
-Multi-source configuration & 10 & Simultaneous source disturbances \\
-Intermediate disturbance & 45 & Disturbance within propagation paths \\
-\midrule
-\textbf{Total} & \textbf{136} & Restored controlled protocol \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-The archived scenario-sweep file was used to recover the historical
-scenario structure and parameter selections, but its stored numerical
-values belong to a different recovered dataset generation. Consequently,
-the quantitative results below were recomputed using the validated
-historical reconstructed node and edge inputs rather than copied from the
-mixed-generation archive.
-
-\subsubsection{Source-Severity Response}
-
-The source-severity sweep varies the selected source disturbance over
-$0.25$, $0.50$, $0.75$, and $1.00$ while preserving the remaining
-baseline local disturbances. All five networks show monotone outlet
-response.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.88\textwidth]{figures/figure4_2.jpg}
-\caption{Outlet-risk response to increasing source disturbance severity across N1--N5.}
-\label{fig:source-severity}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\caption{Source-severity response at the lowest and highest tested levels.}
-\label{tab:severity-response}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\textwidth}{@{}lrrrL@{}}
-\toprule
-Network & Outlet at 0.25 & Outlet at 1.00 & Change & Top-three ordering, 0.25 $\rightarrow$ 1.00 \\
-\midrule
-N1 & 0.016800 & 0.067200 & $+0.050400$ & A $>$ B $>$ C $\rightarrow$ A $>$ B $>$ C \\
-N2 & 0.127500 & 0.510000 & $+0.382500$ & A $>$ C $>$ G $\rightarrow$ A $>$ C $>$ G \\
-N3 & 0.085549 & 0.120991 & $+0.035443$ & B $>$ C $>$ E $\rightarrow$ A $>$ C $>$ E \\
-N4 & 0.129511 & 0.410550 & $+0.281039$ & A $>$ D $>$ F $\rightarrow$ A $>$ B $>$ D \\
-N5 & 0.696268 & 0.713972 & $+0.017704$ & N13 $>$ N19 $>$ N10 $\rightarrow$ N1 $>$ N13 $>$ N5 \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-N1 and N2 preserve their top-three ordering, whereas N3, N4, and N5
-exhibit ranking changes. N5 shows only a small outlet increase because
-the varied N1 disturbance is embedded in a network containing other
-active disturbances. Thus, stronger local disturbance is directionally
-monotone, while ranking response depends on the surrounding network
-state.
-
-\subsubsection{$L/C$ Stress Response}
-
-The stress sweep scales all edge loads by $0.50$, $0.75$, $1.00$,
-$1.25$, and $1.50$, after which susceptibility is recomputed as
-$S=\min(1,L/C)$. The outlet response is strongly nonlinear in the more
-convergent networks.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.88\textwidth]{figures/figure4_3.jpg}
-\caption{Outlet-risk response to increasing $L/C$ stress under bounded susceptibility.}
-\label{fig:lc-stress}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\caption{Outlet-risk response across the $L/C$ stress range.}
-\label{tab:lc-stress}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\textwidth}{@{}lrrrL@{}}
-\toprule
-Network & Outlet at $\times0.50$ & Outlet at $\times1.00$ & Outlet at $\times1.50$ & Top-three ordering, $\times0.50\rightarrow\times1.50$ \\
-\midrule
-N1 & 0.001680 & 0.053760 & 0.324000 & A $>$ B $>$ C $\rightarrow$ A $>$ B $>$ C \\
-N2 & 0.051000 & 0.408000 & 0.800000 & A $>$ C $>$ B $\rightarrow$ A $>$ C $>$ G \\
-N3 & 0.007402 & 0.106814 & 0.460077 & A $>$ B $>$ C $\rightarrow$ C $>$ E $>$ G \\
-N4 & 0.026261 & 0.351372 & 0.956000 & A $>$ B $>$ C $\rightarrow$ D $>$ E $>$ F \\
-N5 & 0.025978 & 0.708640 & 0.999998 & N1 $>$ N3 $>$ N2 $\rightarrow$ N19 $>$ N20 $>$ N18 \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-The strongest changes occur in N4 and N5. These values demonstrate the
-compounding effect of increasing susceptibility along multiple recursive
-paths and are not hydraulic failure probabilities. Saturation follows
-from the clipped-linear rule: once an edge reaches $S=1$, further
-increases in $L/C$ cannot increase its susceptibility.
-
-This is edge-susceptibility saturation, not necessarily node-risk
-saturation. With $S_{ij}=1$, an incoming contribution remains
-$Q_{ij}=\tau_{ij}R_i$; the receiving state still depends on transmission,
-upstream states, local disturbance, and all other incoming contributions.
-
-\subsubsection{Disturbance-Location Sensitivity}
-
-The location sweep assigns the same local severity, $B=0.75$, to
-historically selected locations while clearing other local disturbances.
-This isolates the effect of disturbance placement.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.88\textwidth]{figures/figure4_4.jpg}
-\caption{Sensitivity of outlet risk to disturbance location at fixed local severity.}
-\label{fig:blockage-location}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\caption{Range of outlet risk across tested disturbance locations, with tied extrema retained.}
-\label{tab:blockage-location}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrlrr@{}}
-\toprule
-Network & Lowest location & Lowest risk & Highest location & Highest risk & Range \\
-\midrule
-N1 & A  & 0.050400 & E  & 0.600000 & 0.549600 \\
-N2 & B/D/E/F & 0.000000 & H  & 0.750000 & 0.750000 \\
-N3 & E/G & 0.000000 & F  & 0.487500 & 0.487500 \\
-N4 & F  & 0.000000 & E  & 0.562500 & 0.562500 \\
-N5 & N4 & 0.058820 & N3 & 0.619410 & 0.560590 \\
-\bottomrule
-\end{tabular*}
-\end{table}
-
-The large within-network ranges show that equal local severity does not
-imply equal downstream modeled risk. The result directly supports the role
-of topology and downstream connectivity in prioritization: local severity
-alone is insufficient to characterize network-level comparative risk.
-
-\subsubsection{Multi-Source Configurations}
-
-The N3 and N5 experiments activate different subsets of the historical
-source disturbances while preserving each source's baseline severity.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.88\textwidth]{figures/figure4_5.jpg}
-\caption{Outlet-risk response under single- and multi-source configurations in N3 and N5.}
-\label{fig:multi-source}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\caption{Multi-source configuration results for N3 and N5.}
-\label{tab:multi-source}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrl@{}}
-\toprule
-Network & Active sources & Mean risk & Outlet risk & Top-three nodes \\
-\midrule
-N3 & A & 0.226641 & 0.056306 & A $>$ C $>$ E \\
-N3 & B & 0.250959 & 0.073734 & B $>$ C $>$ E \\
-N3 & A+B & 0.420205 & 0.106814 & A $>$ C $>$ B \\
-N5 & N1 & 0.310047 & 0.421144 & N1 $>$ N5 $>$ N8 \\
-N5 & N2 & 0.330667 & 0.529607 & N19 $>$ N16 $>$ N13 \\
-N5 & N3 & 0.363189 & 0.621147 & N10 $>$ N19 $>$ N3 \\
-N5 & N1+N2 & 0.475306 & 0.581552 & N1 $>$ N5 $>$ N16 \\
-N5 & N1+N3 & 0.539799 & 0.671334 & N1 $>$ N19 $>$ N13 \\
-N5 & N2+N3 & 0.503194 & 0.689122 & N13 $>$ N19 $>$ N10 \\
-N5 & N1+N2+N3 & 0.632660 & 0.708640 & N13 $>$ N19 $>$ N16 \\
-\bottomrule
-\end{tabular*}
-\end{table}
-
-Activating both N3 sources raises outlet risk above either single-source
-case. In N5, the single-source cases produce materially different outlet
-risks, and the full configuration reaches 0.7086. Pairwise combinations
-also alter the highest-ranked nodes. The bounded aggregator permits the
-contributions to coexist without exceeding 1, but does not establish
-probabilistic independence.
-
-\subsubsection{Intermediate Disturbance}
-
-The intermediate-disturbance protocol evaluates three selected nodes in
-each network at severities $0.25$, $0.50$, and $0.75$, producing 45
-runs. Baseline local disturbances are retained, so the inserted
-disturbance is evaluated together with inherited risk.
-
-\begin{table}[H]
-\centering
-\caption{Largest outlet-risk response in the intermediate-disturbance tests.}
-\label{tab:intermediate-disturbance}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrlr@{}}
-\toprule
-Network & Baseline outlet & Largest outlet & Scenario & Increase \\
-\midrule
-N1 & 0.053760 & 0.613440 & E=0.75 & $+0.559680$ \\
-N2 & 0.408000 & 0.852000 & H=0.75 & $+0.444000$ \\
-N3 & 0.106814 & 0.160766 & C=0.75 & $+0.053952$ \\
-N4 & 0.351372 & 0.481593 & D=0.75 & $+0.130221$ \\
-N5 & 0.708640 & 0.852160 & N19=0.75 & $+0.143520$ \\
-\bottomrule
-\end{tabular*}
-\end{table}
-
-The effect is highly location-dependent. N1 exhibits a large change when
-a severe disturbance is placed near the downstream end, while N3 shows a
-more modest increase. N5 reaches approximately 0.8522 when N19 is assigned
-$B=0.75$. These results illustrate how a local term can coexist with
-recursively inherited contributions at an already affected node.
-
-\subsection{Comparator Analysis}
-
-Comparator experiments test whether heterogeneous condition-aware
-propagation produces ranking behavior different from simpler alternatives.
-
-\begin{table}[H]
-\centering
-\caption{N5 comparator agreement relative to GBBRPM.}
-\label{tab:comparators}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrr@{}}
-\toprule
-Comparator & Spearman $\rho$ & Top-three Jaccard \\
-\midrule
-Local-only & 0.108627 & 0.0 \\
-Uniform $S=0.25$ & -0.042105 & 0.0 \\
-Uniform $S=0.50$ & 0.150376 & 0.0 \\
-Uniform $S=0.75$ & 0.696241 & 0.5 \\
-\bottomrule
-\end{tabular*}
-\end{table}
-
-Low agreement with the local-only baseline indicates that propagated
-network context substantially changes prioritization. Agreement also
-varies across uniform-susceptibility comparators, showing that ranking
-depends on the heterogeneous edge-condition pattern rather than only on
-the recursive architecture. The relatively higher agreement at uniform
-$S=0.75$ is specific to this N5 configuration and is not evidence that
-this constant is universally preferable.
-
-\subsection{Robustness and Ranking Stability}
-
-Robustness was evaluated at perturbation magnitudes of $\pm5\%$,
-$\pm10\%$, and $\pm20\%$, with 600 trials per level and fixed seed 41.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{figures/paper/fig_drainage_robustness.pdf}
-\caption{Drainage ranking stability under $\pm5\%$, $\pm10\%$, and $\pm20\%$ susceptibility perturbations. Error bars show the reproduced Spearman distribution; the second panel reports top-20\% Jaccard overlap.}
-\label{fig:ranking-robustness}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\caption{Reproduced ranking-robustness summary across 600 trials.}
-\label{tab:robustness}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\textwidth}{@{}l*{5}{>{\centering\arraybackslash}X}@{}}
-\toprule
-Perturbation & Mean Spearman & 5th percentile & 95th percentile & Mean top-three Jaccard & Mean top-20\% Jaccard \\
-\midrule
-$\pm5\%$  & 0.979190 & 0.962331 & 0.992481 & 0.744500 & 0.776000 \\
-$\pm10\%$ & 0.938267 & 0.886289 & 0.974436 & 0.546667 & 0.604873 \\
-$\pm20\%$ & 0.845552 & 0.697067 & 0.935338 & 0.388833 & 0.440823 \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-The results show high stability under small perturbations and progressively
-lower stability as uncertainty increases. Mean Spearman correlation remains
-high even at $\pm20\%$, while priority-set overlap declines more strongly.
-Table~\ref{tab:robustness} reports both top-three and top-20\% overlap;
-the latter corresponds to Figure~\ref{fig:ranking-robustness} and uses a
-nominal set size of four in N5. The overall
-ordering may therefore remain broadly similar even when membership
-among the highest-priority nodes changes. Accordingly, GBBRPM is
-comparatively stable for broad prioritization under modest input uncertainty,
-while exact top-ranked membership becomes more sensitive at larger
-perturbation levels.
-
-\subsection{Mathematical Property Tests}
-
-Randomized property testing was executed across 600 trials. All tested
-cases passed the declared baseline properties.
-
-\begin{table}[H]
-\centering
-\caption{Randomized mathematical property-test results.}
-\label{tab:property-tests}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrr@{}}
-\toprule
-Property & Passes & Total \\
-\midrule
-Boundedness & 600 & 600 \\
-Monotonicity in local disturbance & 600 & 600 \\
-$B=1\Rightarrow R=1$ & 600 & 600 \\
-$S=0$ gates the edge contribution & 600 & 600 \\
-\bottomrule
-\end{tabular*}
-\end{table}
-
-These randomized checks complement the analytical results in Chapter 3.
-They do not prove correctness for every possible implementation or
-extension, but provide computational evidence that the frozen v1
-implementation behaves consistently with its bounded semantics over the
-tested cases.
-
-\subsection{Reconvergence and Dependence Diagnostic}
-
-When one disturbance splits across paths that later reconverge, the local
-bounded aggregator can treat the incoming terms as distinct even though
-they share an origin. The executable diagnostic compares ordinary GBBRPM
-with an ancestry-aware path-pruned counterfactual. Independent source
-lineages retain multiplicative-complement aggregation; overlapping
-lineages are grouped and only the largest incoming contribution in each
-group is retained.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.88\textwidth]{figures/figure4_7.jpg}
-\caption{Overlap-inflation diagnostic for converging and reconverging networks.}
-\label{fig:reconvergence}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\caption{Regenerated reconvergence and overlap-inflation diagnostic.}
-\label{tab:reconvergence}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\textwidth}{@{}l*{5}{>{\centering\arraybackslash}X}@{}}
-\toprule
-Network & Maximum OI & Mean OI & Outlet OI & Outlet GBBRPM & Outlet path-pruned \\
-\midrule
-N3 & 0.000000 & 0.000000 & 0.000000 & 0.106814 & 0.106814 \\
-N4 & 0.189280 & 0.083148 & 0.099372 & 0.351372 & 0.252000 \\
-N5 & 0.439353 & 0.149633 & 0.322637 & 0.708640 & 0.386003 \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-N3 has no overlap inflation because its convergence is driven by
-independent source branches. N4 shows moderate inflation, and N5 shows the
-largest effect. The path-pruned result is not ground truth or a replacement
-formulation; it is a diagnostic counterfactual revealing where shared
-ancestry may be counted through multiple paths. The values are generated by
-\texttt{reconvergence.py} and exported in
-\texttt{results/reconvergence\_summary.csv} and
-\texttt{results/reconvergence\_node\_diagnostic.csv}.
-
-\subsection{Computational Scalability}
-
-The evaluator was timed on sparse DAGs with approximately three edges per
-node. For each size, five warm-up evaluations preceded 30 timed
-repetitions. Because scheduling delays can distort the arithmetic mean,
-the median and interquartile range (IQR) are the primary statistics.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.88\textwidth]{figures/figure4_8.pdf}
-\caption{Median runtime and interquartile range of the one-pass GBBRPM evaluator on sparse DAGs.}
-\label{fig:scalability}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\caption{Scalability measurements after five warm-up runs and 30 repetitions.}
-\label{tab:scalability}
-\small
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rrrrr@{}}
-\toprule
-Nodes & Edges & Median (ms) & IQR (ms) & Mean (ms) \\
-\midrule
-20   & 60   & 1.628378  & 1.499549--1.767802   & 2.616805 \\
-50   & 150  & 1.900651  & 1.880617--2.032984   & 1.971181 \\
-100  & 300  & 2.548793  & 2.520786--2.649607   & 2.623430 \\
-250  & 750  & 4.663104  & 4.434086--4.838490   & 4.697808 \\
-500  & 1500 & 7.876152  & 7.722431--10.143945  & 10.103489 \\
-1000 & 3000 & 16.650025 & 15.479139--28.142643 & 24.144717 \\
-\bottomrule
-\end{tabular*}
-\end{table}
-
-Median runtime increases monotonically from approximately 1.63 ms at 20
-nodes to 16.65 ms at 1000 nodes. Differences between median and mean at
-several sizes reflect isolated timing outliers rather than changes in the
-deterministic result. The observed growth is consistent with the expected
-one-pass $O(|V|+|E|)$ implementation over sparse DAGs, but remains machine-
-and load-dependent. The complete timing distribution is retained in
-\texttt{results/scalability.csv}.
-
-\subsection{SWMM External-Reference Comparison}
-
-A separate SWMM workflow compared GBBRPM downstream-risk patterns with
-hydraulic consequences under 12 controlled conduit-blockage scenarios.
-For each case, conduit area loss $a$ is represented in GBBRPM as reduced
-effective capacity,
-
-\[
-C'_{ij}=(1-a)C_{ij},
-\eqtag{4-3}\]
-
-with reference load held fixed and susceptibility recomputed. Positive
-GBBRPM risk change and positive SWMM maximum-depth or flooding-volume
-change are calculated relative to their respective baselines. Spearman
-correlation is evaluated over the union of nodes with positive change in
-either workflow; top-20\% Jaccard compares their highest-priority
-positive-change sets. Outside-scope share measures positive hydraulic worsening
-outside the blocked edge's target-and-descendant region.
-
-\input{tables/paper/table_drainage_swmm}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.72\textwidth]{figures/paper/fig_drainage_swmm_alignment.pdf}
-\caption{Agreement between GBBRPM priority changes and SWMM hydraulic outcomes across the 12 blockage scenarios.}
-\label{fig:drainage-swmm-alignment}
-\end{figure}
-
-The negative rank correlations and low top-20\% overlaps show that nodes
-with the largest GBBRPM increases generally differ from those with the
-largest positive hydraulic worsening under this protocol. Approximately
-71.20\% of positive maximum-depth worsening and 40.53\% of positive
-flooding-volume worsening occurred outside the strictly downstream GBBRPM
-region. This behavior is consistent with backwater, surcharge, ponding,
-and flow redistribution, which are absent from the downstream-only DAG
-formulation.
-
-The comparison does not isolate which hydraulic mechanisms caused each
-disagreement, so the rank mismatch alone is not evidence of a specific
-physical mechanism.
-
-Earlier thesis material preserved historical rank-correlation and
-top-three values under a different reporting convention. Those values
-are not used as principal regenerated evidence. The reported top-20\%
-overlap and outside-scope shares are reproduced by the explicit current
-workflow. Scenario-level and summary outputs are stored in
-\path{data/swmm/extracted/swmm_comparison_by_scenario.csv} and
-\path{swmm_comparison_summary.csv}.
-
-The mismatch clarifies that GBBRPM v1 is not a surrogate for full
-hydraulic state prediction. Its intended role is lightweight,
-interpretable downstream comparative-risk propagation and prioritization.
-The observed disagreement does not itself validate that role for drainage
-inspection or maintenance decisions; such utility requires separate
-outcome-based evaluation.
-
-\subsection{Software-Dependency Case}
-
-The real Express 4.18.2 dependency topology contains 71 packages and 128
-directed dependency edges. Seven package versions were linked to
-evidence-backed vulnerability advisories and assigned bounded local
-disturbance levels according to the declared severity mapping.
-
-\input{tables/paper/table_software_vulnerabilities}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.92\textwidth]{figures/paper/fig_software_vulnerable_subgraph.pdf}
-\caption{Evidence-backed vulnerable packages and their directed dependency relations to the Express root.}
-\label{fig:software-vulnerable-subgraph}
-\end{figure}
-
-The transmission sweep shows that the Express root risk rises from
-$0.5000$ at $\tau=0$ to $0.9975$ at $\tau=1$. Express moves from rank
-three to rank one by $\tau=0.50$, while the complete ordering remains
-highly stable relative to the $\tau=1$ reference.
-
-The topology also contains reconverging paths: \texttt{qs} reaches Express
-directly and through \texttt{body-parser}, while \texttt{send} reaches it
-directly and through \texttt{serve-static}. These routes carry shared-origin
-influence into separate incoming contributions. The v1 aggregator does
-not correct this dependence, so the high root state may include overlap
-inflation. This case does not quantify its contribution to the reported
-root value. Stable rankings across the transmission sweep do not establish
-that the resulting risk magnitudes are free from this effect.
-
-\input{tables/paper/table_software_sensitivity}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.72\textwidth]{figures/paper/fig_software_tau_sensitivity.pdf}
-\caption{Modeled software risk across the transmission-coefficient sweep.}
-\label{fig:software-tau-sensitivity}
-\end{figure}
-
-This case demonstrates that the same bounded recursive core can operate
-on a real directed dependency topology with a domain-specific
-disturbance mapping. It supports structural applicability and parameter
-sensitivity, not a claim that the risk index predicts future
-exploitation or software incidents.
-
-\subsection{Electrical-Network Case}
-
-\subsubsection{Full-Network Import and Baseline Quality}
-
-The electrical importer produced 187 bus records and 177 active directed
-connections distributed across 10 weak components. The baseline archive
-contained 269 channel files, of which 231 were populated and 38 were
-empty. Empty members were recorded as data-quality outcomes rather than
-treated as parser failures.
-
-\input{tables/paper/table_electrical_baseline}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\textwidth]{figures/paper/fig_electrical_topology_overview.pdf}
-\caption{Imported electrical topology with voltage-instrumented and isolated bus records identified.}
-\label{fig:electrical-topology}
-\end{figure}
-
-Overall timestamp coverage was 98.31\%. The archive contained 54 usable
-voltage channels with mean values from 0.9762 to 1.0431 p.u. Availability
-and missing intervals varied across measurement kinds, and 47 channel
-files remained unmapped under the available meter dictionary.
-
-\input{tables/paper/table_electrical_data_quality}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.68\textwidth]{figures/paper/fig_electrical_baseline_coverage.pdf}
-\caption{Meter-level voltage timestamp coverage during the available normal-operation baseline.}
-\label{fig:electrical-baseline-coverage}
-\end{figure}
-
-Two meters shown as ``No data'' in
-Figure~\ref{fig:electrical-baseline-coverage} lack usable voltage
-coverage; this does not imply that every mapped current or power channel
-for those meters is absent. The requested event windows are listed
-separately because the available baseline covers November 14--15, 2024
-rather than the November 13 switching events.
-
-\input{tables/paper/table_electrical_event_windows}
-
-This first stage therefore verifies topology construction, channel
-mapping, chunked baseline preprocessing, empty-file handling, and
-coverage reporting.
-
-\subsubsection{Component 2 Controlled Instantiation}
-
-The second stage instantiated GBBRPM on an authorized Component 2 extract
-from the Caltech SoCal 28-Bus dataset. Table~\ref{tab:electrical-component2-design}
-summarizes the traceable conversion from topology and phasors to the
-observable model. The complete 13-node, 12-edge component became a
-12-node, 11-edge arborescence after excluding the unobserved
-\texttt{line\_407}. The source and five terminal meters had 24 aligned
-phasor snapshots. Source mean real power was 985.957 kW, compared with
-976.828 kW across the five metered terminal loads; the 9.129 kW residual
-(0.926\% of source real power) was retained as an explicit reconciliation
-residual rather than assigned to an arbitrary node.
-
-\input{tables/paper/table_electrical_component2_design}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.94\textwidth]{figures/paper/fig_electrical_component2_topology.pdf}
-\caption{Observable Component 2 topology and baseline edge susceptibility derived from measured downstream apparent power and declared capacity.}
-\label{fig:electrical-component2-topology}
-\end{figure}
-
-Figure~\ref{fig:electrical-component2-topology} shows that measured
-loading produces heterogeneous electrical susceptibility even though the
-graph is small. The largest baseline susceptibility is 0.395 on
-\texttt{line\_408}, followed by 0.318 on transformer
-\texttt{tr\_121} and 0.308 on source transformer
-\texttt{tr\_117}; the lightly loaded \texttt{line\_416} branch has
-susceptibility 0.014. These values are descriptive loading-to-capacity
-ratios, not empirical failure probabilities.
-
-All 43 controlled runs preserved node risks and edge contributions in
-$[0,1]$. The zero-disturbance reference produced zero risk throughout.
-With a root disturbance of 0.75, the risk sum was 1.186, three nodes
-exceeded 0.05, and the maximum terminal-node risk was 0.029. Raising the
-root disturbance from 0.25 to 1.00 increased risk sum monotonically from
-0.395 to 1.581 and increased the number of affected nodes from two to
-four. Table~\ref{tab:electrical-component2-results} reports selected
-endpoints from all major scenario families.
-
-\input{tables/paper/table_electrical_component2_results}
-
-Uniformly scaling measured edge loads while holding the root disturbance
-at 0.75 produced a monotone increase in propagated risk. Risk sum rose
-from 0.908 at $0.50\times$ measured loading to 1.638 at $1.50\times$,
-while the affected-node count rose from two to five. The maximum risk
-remained 0.75 because the controlled source disturbance was fixed; the
-change occurred in downstream propagation rather than in the injected
-source value.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.78\textwidth]{figures/paper/fig_electrical_load_scale.pdf}
-\caption{Component 2 response to uniform counterfactual scaling of measured edge loading with root disturbance fixed at 0.75.}
-\label{fig:electrical-load-scale}
-\end{figure}
-
-Disturbance placement also changed total propagated risk. At equal local
-severity 0.75, C2\_N02 produced the largest risk sum (1.417), followed by
-C2\_N03 (1.191) and the root C2\_N01 (1.186). C2\_N02 avoids the initial
-attenuation through \texttt{tr\_117} while retaining access to nearly all
-downstream branches. Terminal-node disturbances produced no downstream
-propagation and therefore retained a risk sum of 0.750. This result shows
-why equal local disturbances need not imply equal network-level
-priorities.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.86\textwidth]{figures/paper/fig_electrical_location_effect.pdf}
-\caption{Risk sum under an isolated disturbance of 0.75 at each observable Component 2 node.}
-\label{fig:electrical-location-effect}
-\end{figure}
-
-The uniform transmission sweep provided a second controlled attenuation
-test. With $\tau=0$, only the root retained its local risk and the risk
-sum was 0.750. Increasing $\tau$ to 1 raised risk sum monotonically to
-1.186 and maximum terminal risk to 0.029. In the multi-source family,
-the nested C2\_N02--C2\_N03 pair produced a maximum node risk of 0.599
-and risk sum of 1.582, demonstrating bounded combination of incoming and
-local disturbance. Activating all six internal non-root sources at 0.50
-raised risk sum to 3.754 and affected 10 of 12 nodes. Parallel-source
-cases represent concurrent branch coverage; because Component 2 is an
-arborescence, these runs are not evidence about reconvergent-path
-dependence.
-
-The Component 2 results extend the electrical case beyond importer and
-baseline verification to controlled mechanism and sensitivity evidence on real
-topology and measured normal-operation loading. They still do not validate
-GBBRPM against observed electrical-event outcomes. Such a claim requires
-temporally aligned disturbance labels and independent outcome measurements
-for the requested switching windows.
-
-\subsection{Research Prototype Implementation and Functional Verification}
-
-The GBBRPM research prototype operationalized the frozen evaluator
-through a common validated input workflow and an interactive graph and
-ranking interface. Synthetic mode exposed the five controlled networks;
-imported mode accepted schema-conforming user networks; and operational
-mode remained visibly inactive because no provenance-complete agency
-dataset had been configured. This separation prevented synthetic or
-user-provided fixtures from being mislabeled as operational evidence.
-
-Table~\ref{tab:prototype-verification} reports the functional verification
-outcomes. The frozen N5 fixture reproduced the preserved outlet risk
-$R_{N20}=0.7086404493$ and ranked N13 first. A three-node imported graph
-with $B_A=0.8$, $S_{AB}=0.5$, and $S_{BC}=0.7$ produced
-$R_C=0.28$, matching direct evaluation. Unknown endpoints and cyclic
-inputs were rejected before propagation, and the frontend completed a
-production build. The build emitted a bundle-size optimization warning,
-but no compilation error.
-
-\begin{table}[H]
-\centering
-\caption{Research prototype functional verification.}
-\label{tab:prototype-verification}
-\small
-\begin{tabularx}{\textwidth}{@{}L L L@{}}
-\toprule
-Verification target & Acceptance criterion & Observed result \\
-\midrule
-Controlled inventory & N1--N5 load in fixed order; N5 contains 20 nodes & Passed \\
-Frozen-result reproduction & N5 outlet \(R_{N20}=0.7086404493\) and top node N13 & Passed \\
-Imported explicit-\(S\) graph & Valid \(A\rightarrow B\rightarrow C\) graph returns \(R_C=0.28\) & Passed \\
-Invalid-graph safeguards & Unknown endpoints and directed cycles are rejected & Passed \\
-Frontend production build & TypeScript and Vite compilation complete without errors & Passed with bundle-size warning \\
+\textbf{$H_1$: Bracket Tightness \& Dependence} &
+\textbf{Supported} &
+Matched controls ($n=560$): exact equivalence on independent origins ($\max|R-\pi|=1.11\times 10^{-16}$), shared-origin upper slack up to $0.6499$ at $0<b<1$, exact collapse to $0.0$ at $b=1$. Held-out DAGs ($n=2,880$): mean $R-\pi = 0.0060$ ($86.7\%$ of $R-T=0.0450$ is lower slack $\pi-T=0.0390$); $R-\pi$ scales monotonically with $w$ ($<2\times 10^{-5}$ at $w\le 0.10$ to $0.0222$ at $w=0.75$) and is $9.1\times$ larger at $B=0.50$ than $B=1.00$. \\
+\addlinespace
+\textbf{$H_2$: Fixed-Budget Selection vs.\ Comparators} &
+\textbf{Supported} (with high-overlap reversal caveat) &
+At $f=0.20$ ($n=240$ replicates), $R_j$ achieved lowest regret ($0.00742$), highest capture ($50.59\%$), and highest Spearman $\rho$ ($0.9833$), strictly beating $T_j$ ($0.1483$, $97.5\%$ wins), $H_j$ ($0.2889$, $100.0\%$ wins; avoids $H_j$'s $16.29\%$ $\ge 0.95$ saturation), Abbe ($0.2968$, $98.3\%$), ancestry ($0.5590$, $99.6\%$), local-upstream ($0.9185$, $98.8\%$), and $M_j$ ($0.9332$, $99.6\%$). Honest caveat: interval-resolved reversals occurred in $696/2,880$ scenarios (pooled rate $0.198\%$), concentrated at $w \in \{0.50, 0.75\}$ and $B=0.50$, with $13.30\%$ unresolved pairs at $100\text{k}$ MC. \\
+\addlinespace
+\textbf{$H_3$: Two-Stage Certified Screening} &
+\textbf{Supported} &
+Zero false certifications across $8,640$ held-out evaluations. At $f=0.20$, deterministic resolution jumped from $\mathrm{Res}_{S1}=47.5\%$ to $\mathrm{Res}_{S2}=78.9\%$ ($+31.5\text{ pp}$ contraction) and full certification from $2.43\%$ to $16.25\%$, delivering $2.00\times$ aggregate speedup over full $T_j$ (replicate median $2.24\times$) and $18.6\times$ over $100\text{k}$ MC (scenario median $43.3\times$). Resolution drops to $53.75\%$ at $w=0.75$, delineating where MC escalation remains necessary. \\
+\addlinespace
+\textbf{$H_4$: $W_j$ Width Self-Diagnosis} &
+\textbf{Partially Supported} &
+Strong as a scenario-level reversal alarm: Spearman($W_{\max}$, reversal rate) $= 0.6769$ with $100.0\%$ recall ($0$ false negatives) at $W_{\max}\ge 0.10$ ($72.6\%$ flagged). Weak for within-graph nodewise slack ranking ($\rho = 0.2286$) and continuous regret ($\rho = 0.2815$), because $W_j$ mixes small upper slack ($0.0060$) with $18\times$ larger legitimate multi-branch convergence ($\pi-M=0.1065$). \\
+\addlinespace
+\textbf{$H_5$: Near-Linear Scaling \& Cost} &
+\textbf{Supported} &
+CSR propagation scaled near-linearly against $|V|+|E|$ on sparse DAGs ($|V|=20\dots 1000$: $0.058\to 3.27\text{ ms}$, $b=1.045$, $R^2=0.9982$, $8.3\text{ KB}$) and dense DAGs ($|V|\le 250, |E|\le 7,781$: $b=1.022$, $R^2=0.9974$, $2.4\text{ KB}$), versus full $T_j$ ($b=1.853$, $1,225\text{ ms}$). Paired $100\text{k}$ MC speedups reached $879\times$--$1,103\times$ (CSR) and $17.1\times$--$28.0\times$ (Two-Stage Screening). \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The prototype therefore supports implementation feasibility,
-input-validation traceability, and faithful reuse of the versioned model
-engine. It does not demonstrate production readiness, user acceptance,
-operational data integration, or improved predictive validity. Those are
-separate evaluation questions.
+\subsubsection{Threats to Validity}
 
-\subsection{Integrated Discussion}
-
-Taken together, the experiments and implementation evidence support six principal conclusions.
-First, GBBRPM satisfies its declared bounded and monotone risk-index
-semantics under the tested conditions. Second, graph structure and
-heterogeneous susceptibility materially influence downstream ranking
-beyond local-only scoring. Third, prioritization is generally stable
-under small perturbations but exact top-ranked membership becomes less
-stable under larger uncertainty. Fourth, the SWMM comparison demonstrates
-that the model's value lies in lightweight interpretable propagation and
-prioritization rather than high-fidelity hydraulic reproduction. Fifth,
-the software and electrical cases show that the frozen architecture and
-data pipeline can be mapped to distinct real directed-network structures,
-although their evidence does not establish equal predictive validity. The
-Component 2 suite specifically shows that measured electrical loading can
-parameterize heterogeneous susceptibility and produce expected bounded,
-monotone scenario responses without converting those responses into event
-predictions. Sixth, the research prototype shows that the validated
-workflow can be exposed through a common input contract, explicit graph
-validation, interactive parameter editing, and traceable rankings without
-duplicating the model equation in the interface.
-
-The results support GBBRPM as an integrative graph-risk architecture
-rather than a claim that any individual mechanism is novel. They also
-identify extension targets including calibrated transmission,
-dependence-aware aggregation, cyclic or bidirectional propagation, and
-application-specific parameter estimation.
-
-\subsection{Chapter Summary}
-
-The restored pipeline provides a coherent computational assessment of
-GBBRPM v1 across five controlled synthetic DAGs, 136 controlled scenario
-runs, diagnostic comparators, 600-trial robustness experiments,
-randomized property tests, reconvergence diagnostics, scalability tests,
-and a separate SWMM external-reference workflow. Cross-domain evidence
-adds a 71-package software dependency graph, a 187-bus electrical
-baseline with 269 channel files, and a 12-node observable Component 2
-model evaluated in 43 controlled runs.
-
-The research prototype adds a functionally verified implementation layer:
-the frozen N1--N5 inventory, N5 reference result, valid imported-graph
-evaluation, invalid-graph safeguards, and frontend production build were
-checked successfully. This evidence supports implementation feasibility
-and traceability, not production deployment or usability.
-
-The evidence supports bounded recursive propagation, sensitivity to
-network context, robustness under modest uncertainty, and computational
-tractability while making the limitations of shared-path dependence and
-downstream-only propagation explicit. They also support cross-domain
-instantiability within the tested evidence boundaries while keeping
-electrical event validation pending. These findings provide the basis
-for the conclusions and recommendations in the succeeding chapter.
+Five classes of threats constrain the interpretation of these results:
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+\item \textbf{Construct Validity (Stochastic Reference vs.\ Domain
+Semantics).} The controlled benchmark defines exact probabilities $\pi_j$
+under independent Bernoulli source and edge primitives (Equation~3-10).
+Real drainage blockage ratios, OSV advisory severities, and electrical
+loading ratios are bounded domain indices rather than calibrated
+independent probabilities; tight agreement with $\pi_j$ validates the
+propagation mechanism under its declared reference, not physical
+probability calibration.
+\item \textbf{Internal Validity (Finite-Sample MC Resolution and
+Unresolved Pairs).} Although the $48$ independent $1\text{M}$-trial
+audits confirmed $100.0\%$ inclusion inside $100\text{k}$ Hoeffding
+intervals ($\max|\Delta\hat{\pi}|=0.00475$, zero reversals), $13.30\%$
+of candidate pairs in the primary $2,880$-scenario suite lay within the
+$N=100{,}000$ Hoeffding margin ($h \approx 0.0063$). All interval-based
+claims treat those pairs explicitly as unresolved rather than asserting
+strict order.
+\item \textbf{External Validity (DAG Scope and Domain Gate~B Limits).}
+The frozen core rejects directed cycles, bidirectional backwater, and
+meshed loops by fail-closed design. None of the three real-domain
+topologies passed Gate~B independent outcome validation (DPWH and
+Caltech failed Gate~B; Express was Gate~B N/A), so real-world
+operational prioritization utility remains unestablished pending
+field-verified outcome datasets.
+\item \textbf{Statistical Conclusion Validity (Single-Topology Timing
+and Replicate Dependence).} Held-out benchmark means and standard
+deviations were aggregated over independent graph replicates ($n=240$
+uniform; $n=60$ heterogeneous) to prevent pseudo-replication across
+correlated $(w, B)$ sweeps. Scalability fits were measured on one
+Windows~11 AMD64 workstation; absolute millisecond constants will vary
+across hardware, though asymptotic slopes ($b \approx 1.02$--$1.05$ for
+CSR vs.\ $1.85$ for full $T_j$) reflect structural complexity.
+\item \textbf{Prototype Scope Validity.} Automated functional
+verification ($76/76$ prototype tests) established numerical parity,
+fail-closed validation, and replay traceability in the tested
+environment, not end-user usability, multi-user concurrency, or
+production security hardening.
+\end{enumerate}
